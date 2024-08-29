@@ -1,6 +1,6 @@
 <template>
   <div class="home-wrapper">
-    <h1>首页</h1>
+    <h1> 欢迎您使用后台管理系统！</h1>
   </div>
 </template>
 
