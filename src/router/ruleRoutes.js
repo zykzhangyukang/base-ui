@@ -38,7 +38,7 @@ const ruleRoutes = [
                 component: () => import('@/views/sync/message/index.vue'),
                 meta: {
                     icon: 'el-icon-user',
-                    title: '本地消息记录',
+                    title: '本地消息',
                     permission: '/sync/message'
                 }
             },
@@ -48,7 +48,7 @@ const ruleRoutes = [
                 component: () => import('@/views/sync/callback/index.vue'),
                 meta: {
                     icon: 'el-icon-user',
-                    title: '回调消息记录',
+                    title: '回调消息',
                     permission: '/sync/callback'
                 }
             }

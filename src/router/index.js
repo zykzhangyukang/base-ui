@@ -28,7 +28,7 @@ export const constantRoutes = [
         meta: {title: '401'}
     },
     {
-        path: '404',
+        path: '*',
         name: '404',
         component: () => import('../views/error/404'),
         hidden: true,

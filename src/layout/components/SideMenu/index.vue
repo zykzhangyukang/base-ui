@@ -8,6 +8,7 @@
         background-color="#263238"
         text-color="#fff"
         active-text-color="#409eff"
+        :collapse-transition="false"
       >
         <SideMenuItem
           v-for="route in routes"

@@ -10,7 +10,7 @@ const store = new Vuex.Store({
   modules: {
     app,
     tagsView,
-    permission
+    permission,
   }
 })
 
