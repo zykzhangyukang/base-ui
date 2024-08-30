@@ -31,14 +31,14 @@ const actions = {
         let {result: permission} = await getPermission();
         // 路由比对
         let routers = recursionRouter(permission.menus, ruleRoutes)
-        let MainContainer = DynamicRoutes.find(v => v.path === "");
-        let children = MainContainer.children;
-        children.push(...routers);
+        DynamicRoutes.push(...routers);
         // 设置菜单
-        commit('SET_MENU', children);
+        commit('SET_MENU', DynamicRoutes);
         // 初始化路由
         let initialRoutes = router.options.routes;
-        router.addRoutes(DynamicRoutes);
+        DynamicRoutes.map(e=>{
+            router.addRoute(e);
+        })
         // 设置权限
         commit('SET_PERMISSION', [...initialRoutes , ...DynamicRoutes])
     }
