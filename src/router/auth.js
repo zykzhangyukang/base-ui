@@ -12,7 +12,6 @@ router.beforeEach(async (to, from, next) => {
       next({ path: '/' })
     } else {
       // 用户已经登录 路由的访问权限
-      console.log(store.state)
       if(!store.state.permission.permission){
         await store.dispatch('permission/FETCH_PERMISSION').then(()=>{
           next({

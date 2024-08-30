@@ -43,7 +43,7 @@ export const DynamicRoutes = [
         component: Layout,
         redirect: '/home',
         meta: {
-            title: '首页',
+            title: '系统首页',
             icon: 'vue-dsn-icon-biaoge'
         },
         children: [
@@ -52,7 +52,7 @@ export const DynamicRoutes = [
                 name: 'Home',
                 component: () => import('../views/Home'),
                 meta: {
-                    title: '首页',
+                    title: '系统首页',
                     icon: 'vue-dsn-icon-index',
                     fixed: true
                 }
@@ -64,6 +64,7 @@ export const DynamicRoutes = [
         name: 'Error',
         component: Layout,
         redirect: '/error/401',
+        hidden: true,
         meta: {
             title: '错误页面',
             icon: 'vue-dsn-icon-bug'
