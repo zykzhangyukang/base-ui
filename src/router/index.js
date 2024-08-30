@@ -23,14 +23,14 @@ export const constantRoutes = [
     {
         path: '401',
         name: '401',
-        component: () => import('../views/error-page/401'),
+        component: () => import('../views/error/401'),
         hidden: true,
         meta: {title: '401'}
     },
     {
         path: '404',
         name: '404',
-        component: () => import('../views/error-page/404'),
+        component: () => import('../views/error/404'),
         hidden: true,
         meta: {title: '404'}
     },
@@ -60,27 +60,27 @@ export const DynamicRoutes = [
         ]
     },
     {
-        path: '/error-page',
-        name: 'ErrorPage',
+        path: '/error',
+        name: 'Error',
         component: Layout,
-        redirect: '/error-page/page-401',
+        redirect: '/error/401',
         meta: {
             title: '错误页面',
             icon: 'vue-dsn-icon-bug'
         },
         children: [
             {
-                path: 'page-401',
-                name: 'Page401',
-                component: () => import('../views/error-page/401'),
+                path: '401',
+                name: '401',
+                component: () => import('../views/error/401'),
                 meta: {
                     title: '401页面'
                 }
             },
             {
-                path: 'page-404',
-                name: 'Page404',
-                component: () => import('../views/error-page/404'),
+                path: '404',
+                name: '404',
+                component: () => import('../views/error/404'),
                 meta: {
                     title: '404页面'
                 }

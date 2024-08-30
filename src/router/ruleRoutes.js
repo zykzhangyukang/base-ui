@@ -15,7 +15,7 @@ const ruleRoutes = [
             {
                 path: '/auth/user',
                 name: 'UserList',
-                component: () => import('@/views/auth/UserList.vue'),
+                component: () => import('@/views/auth/user/index.vue'),
                 meta: {
                     icon: 'el-icon-user',
                     title: '用户管理',
@@ -25,7 +25,7 @@ const ruleRoutes = [
             {
                 path: '/auth/role',
                 name: 'RoleList',
-                component: () => import('@/views/auth/RoleList.vue'),
+                component: () => import('@/views/auth/role/index.vue'),
                 meta: {
                     icon: 'el-icon-suitcase-1',
                     title: '角色管理',
@@ -35,7 +35,7 @@ const ruleRoutes = [
             {
                 path: '/auth/resc',
                 name: 'RescList',
-                component: () => import('@/views/auth/RescList.vue'),
+                component: () => import('@/views/auth/resc/index.vue'),
                 meta: {
                     icon: 'el-icon-takeaway-box',
                     title: '资源管理',
@@ -45,7 +45,7 @@ const ruleRoutes = [
             {
                 path: '/auth/func',
                 name: 'FuncList',
-                component: () => import('@/views/auth/FuncList.vue'),
+                component: () => import('@/views/auth/func/index.vue'),
                 meta: {
                     icon: 'el-icon-folder-opened',
                     title: '功能管理',

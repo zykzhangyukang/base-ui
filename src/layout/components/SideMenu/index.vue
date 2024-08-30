@@ -30,7 +30,7 @@ export default {
   computed: {
     ...mapGetters('app', ['collapsed']),
     routes() {
-      return this.$router.options.routes
+      return this.$store.state.permission.menusList
     },
     activeMenu() {
       const route = this.$route
