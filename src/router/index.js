@@ -36,7 +36,7 @@ export const constantRoutes = [
     },
 ]
 
-export const asyncRoutes = [
+export const DynamicRoutes = [
     {
         path: '',
         name: 'Layout',
@@ -55,42 +55,6 @@ export const asyncRoutes = [
                     title: '首页',
                     icon: 'vue-dsn-icon-index',
                     fixed: true
-                }
-            },
-            {
-                path: '/auth/user-list',
-                name: 'UserList',
-                component: () => import('@/views/auth/UserList.vue'),
-                meta: {
-                    icon: 'el-icon-user',
-                    title: '用户管理'
-                }
-            },
-            {
-                path: '/auth/role-list',
-                name: 'RoleList',
-                component: () => import('@/views/auth/RoleList.vue'),
-                meta: {
-                    icon: 'el-icon-suitcase-1',
-                    title: '角色管理'
-                }
-            },
-            {
-                path: '/auth/resc-list',
-                name: 'RescList',
-                component: () => import('@/views/auth/RescList.vue'),
-                meta: {
-                    icon: 'el-icon-takeaway-box',
-                    title: '资源管理'
-                }
-            },
-            {
-                path: '/auth/func-list',
-                name: 'FuncList',
-                component: () => import('@/views/auth/FuncList.vue'),
-                meta: {
-                    icon: 'el-icon-folder-opened',
-                    title: '功能管理'
                 }
             }
         ]
@@ -125,8 +89,8 @@ export const asyncRoutes = [
     }
 ]
 
-const routes = [...constantRoutes, ...asyncRoutes]
-
-export default new Router({
+const routes = [...constantRoutes]
+const router  =new Router({
     routes
-})
+});
+export default router
