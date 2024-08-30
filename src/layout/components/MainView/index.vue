@@ -30,7 +30,7 @@ export default {
 /* fade-transform */
 .fade-transform-leave-active,
 .fade-transform-enter-active {
-  transition: all .5s;
+  transition: all .3s;
 }
 .fade-transform-enter {
   opacity: 0;

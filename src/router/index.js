@@ -42,17 +42,13 @@ export const DynamicRoutes = [
         name: 'Layout',
         component: Layout,
         redirect: '/home',
-        meta: {
-            title: '系统首页',
-            icon: 'vue-dsn-icon-biaoge'
-        },
         children: [
             {
                 path: 'home',
                 name: 'Home',
                 component: () => import('../views/Home'),
                 meta: {
-                    title: '系统首页',
+                    title: '控制台',
                     icon: 'vue-dsn-icon-index',
                     fixed: true
                 }
