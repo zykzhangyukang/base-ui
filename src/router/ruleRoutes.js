@@ -2,10 +2,63 @@ import Layout from "../layout/index";
 
 const ruleRoutes = [
     {
+        path: '/sync',
+        name: 'Sync',
+        component: Layout,
+        redirect: '/sync/result',
+        meta: {
+            title: '同步系统',
+            icon: 'vue-dsn-icon-bug',
+            permission: '/sync'
+        },
+        children: [
+            {
+                path: '/sync/plan',
+                name: 'SyncPlan',
+                component: () => import('@/views/sync/plan/index.vue'),
+                meta: {
+                    icon: 'el-icon-user',
+                    title: '同步计划',
+                    permission: '/sync/plan'
+                }
+            },
+            {
+                path: '/sync/result',
+                name: 'SyncResult',
+                component: () => import('@/views/sync/result/index.vue'),
+                meta: {
+                    icon: 'el-icon-user',
+                    title: '同步记录',
+                    permission: '/sync/result'
+                }
+            },
+            {
+                path: '/sync/message',
+                name: 'SyncMessage',
+                component: () => import('@/views/sync/message/index.vue'),
+                meta: {
+                    icon: 'el-icon-user',
+                    title: '本地消息记录',
+                    permission: '/sync/message'
+                }
+            },
+            {
+                path: '/sync/callback',
+                name: 'SyncCallback',
+                component: () => import('@/views/sync/callback/index.vue'),
+                meta: {
+                    icon: 'el-icon-user',
+                    title: '回调消息记录',
+                    permission: '/sync/callback'
+                }
+            }
+        ]
+    },
+    {
         path: '/auth',
         name: 'Auth',
         component: Layout,
-        redirect: '/auth/user-list',
+        redirect: '/auth/user',
         meta: {
             title: '权限系统',
             icon: 'vue-dsn-icon-bug',
