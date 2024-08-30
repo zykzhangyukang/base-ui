@@ -22,8 +22,7 @@ const mutations = {
     state.visitedViews.splice(index, 1)
   },
   delAllVisitedView(state) {
-    const fixedTags = state.visitedViews.filter(item => item.meta.fixed)
-    state.visitedViews = fixedTags
+    state.visitedViews = state.visitedViews.filter(item => item.meta.fixed)
   },
   delOthersVisitedView(state, view) {
     state.visitedViews = state.visitedViews.filter(item => {

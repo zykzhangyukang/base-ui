@@ -15,3 +15,12 @@ export function getUserInfo(params) {
     params
   })
 }
+
+export function getPermission(data) {
+  return request({
+    url: '/auth/user/permission',
+    method: 'get',
+    data
+  })
+}
+
