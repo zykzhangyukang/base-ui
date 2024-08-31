@@ -58,7 +58,6 @@ const ruleRoutes = [
         path: '/auth',
         name: 'Auth',
         component: Layout,
-        redirect: '/auth/user',
         meta: {
             title: '权限系统',
             icon: 'vue-dsn-icon-xinzeng',

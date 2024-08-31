@@ -1,3 +1,39 @@
+import store from "@/store";
+
+export const adminDomain = "admin";
+
+/**
+ * 格式化显示常量信息
+ * @param group
+ * @param domain
+ * @returns {*|*[]}
+ */
+export function getConst(group,domain) {
+
+  if (!group) {
+    return [];
+  }
+  if(!store.state.permission.const[domain]){
+    return [];
+  }
+  const arr = store.state.permission.const[domain].filter(e => e.group === group);
+  if (arr.length) {
+    return arr[0].itemList;
+  }
+  return [];
+}
+
+
+export function formatConst(list) {
+  const obj = {};
+  list.forEach((ele) => {
+
+    obj[ele.code] = ele.name;
+  })
+  return obj;
+}
+
+
 /**
  * 对象深拷贝
  * @param {Object} source
@@ -6,6 +42,16 @@
 export function deepClone(source) {
   return JSON.parse(JSON.stringify(source))
 }
+
+/**
+ * 驼峰转下划线
+ * @param name
+ * @returns {string}
+ */
+export function toLine(name) {
+  return name.replace(/([A-Z])/g,"_$1").toLowerCase();
+}
+
 
 /**
  * 获取粘贴时的纯文本

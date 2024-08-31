@@ -4,6 +4,25 @@ import Layout from '../layout'
 
 Vue.use(Router)
 
+//解决编程式路由往同一地址跳转时会报错的情况
+const originalPush = Router.prototype.push;
+const originalReplace = Router.prototype.replace;
+//push
+Router.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) {
+        return originalPush.call(this, location, onResolve, onReject);
+    }
+    return originalPush.call(this, location).catch(err => err);
+};
+//replace
+Router.prototype.replace = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) {
+        return originalReplace.call(this, location, onResolve, onReject);
+    }
+    return originalReplace.call(this, location).catch(err => err);
+};
+
+
 /**
  * hidden: true                  如果设置为 true，该项菜单将不会显示在菜单栏中(默认为 false)
  * meta : {
@@ -21,7 +40,7 @@ export const constantRoutes = [
         meta: {title: '登录'}
     },
     {
-        path: '401',
+        path: '/401',
         name: '401',
         component: () => import('../views/error/401'),
         hidden: true,
@@ -55,35 +74,6 @@ export const DynamicRoutes = [
             }
         ]
     },
-    {
-        path: '/error',
-        name: 'Error',
-        component: Layout,
-        redirect: '/error/401',
-        hidden: true,
-        meta: {
-            title: '错误页面',
-            icon: 'vue-dsn-icon-bug'
-        },
-        children: [
-            {
-                path: '401',
-                name: '401',
-                component: () => import('../views/error/401'),
-                meta: {
-                    title: '401页面'
-                }
-            },
-            {
-                path: '404',
-                name: '404',
-                component: () => import('../views/error/404'),
-                meta: {
-                    title: '404页面'
-                }
-            }
-        ]
-    }
 ]
 
 const routes = [...constantRoutes]

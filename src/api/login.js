@@ -24,3 +24,10 @@ export function getPermission(data) {
   })
 }
 
+export function getConstantAll(data) {
+  return request({
+    url: '/auth/const/all',
+    method: 'get'
+  })
+}
+

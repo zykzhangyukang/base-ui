@@ -1,4 +1,4 @@
-import {getPermission} from "@/api/login";
+import {getConstantAll, getPermission} from "@/api/login";
 import router, {DynamicRoutes} from '../../router/index'
 import ruleRoutes from '../../router/ruleRoutes'
 
@@ -6,7 +6,9 @@ const state = {
     // 菜单数据
     menusList: [],
     // 权限数据
-    permission: null
+    permission: null,
+    // 常量数据
+    const:[]
 }
 
 const getters = {}
@@ -23,6 +25,9 @@ const mutations = {
     },
     CLEAR_PERMISSION() {
         state.permission = null;
+    },
+    SET_CONSTANTS(state, constants){
+        state.const = constants;
     }
 }
 
@@ -36,11 +41,14 @@ const actions = {
         commit('SET_MENU', DynamicRoutes);
         // 初始化路由
         let initialRoutes = router.options.routes;
-        DynamicRoutes.map(e => {
-            router.addRoute(e);
+        DynamicRoutes.map(r => {
+            router.addRoute(r);
         })
         // 设置权限
         commit('SET_PERMISSION', [...initialRoutes, ...DynamicRoutes])
+        // 设置常量
+        let {result: consts} = await getConstantAll();
+        commit('SET_CONSTANTS', consts);
     }
 }
 
