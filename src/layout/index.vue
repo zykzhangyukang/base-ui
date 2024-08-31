@@ -120,7 +120,6 @@ export default {
       width: calc(100% - 64px);
     }
     .main-content{
-      background: #eee;
       .el-scrollbar{
         height: calc(100vh - 64px - 40px);
         .scroll-bar;

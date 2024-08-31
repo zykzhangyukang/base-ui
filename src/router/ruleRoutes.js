@@ -8,7 +8,7 @@ const ruleRoutes = [
         redirect: '/sync/result',
         meta: {
             title: '同步系统',
-            icon: 'vue-dsn-icon-bug',
+            icon: 'vue-dsn-icon-tishi2',
             permission: '/sync'
         },
         children: [
@@ -17,7 +17,7 @@ const ruleRoutes = [
                 name: 'SyncPlan',
                 component: () => import('@/views/sync/plan/index.vue'),
                 meta: {
-                    icon: 'el-icon-user',
+                    icon: 'el-icon-setting',
                     title: '同步计划',
                     permission: '/sync/plan'
                 }
@@ -27,7 +27,7 @@ const ruleRoutes = [
                 name: 'SyncResult',
                 component: () => import('@/views/sync/result/index.vue'),
                 meta: {
-                    icon: 'el-icon-user',
+                    icon: 'el-icon-tickets',
                     title: '同步记录',
                     permission: '/sync/result'
                 }
@@ -37,7 +37,7 @@ const ruleRoutes = [
                 name: 'SyncMessage',
                 component: () => import('@/views/sync/message/index.vue'),
                 meta: {
-                    icon: 'el-icon-user',
+                    icon: 'el-icon-monitor',
                     title: '本地消息',
                     permission: '/sync/message'
                 }
@@ -47,7 +47,7 @@ const ruleRoutes = [
                 name: 'SyncCallback',
                 component: () => import('@/views/sync/callback/index.vue'),
                 meta: {
-                    icon: 'el-icon-user',
+                    icon: 'el-icon-alarm-clock',
                     title: '回调消息',
                     permission: '/sync/callback'
                 }
@@ -61,7 +61,7 @@ const ruleRoutes = [
         redirect: '/auth/user',
         meta: {
             title: '权限系统',
-            icon: 'vue-dsn-icon-bug',
+            icon: 'vue-dsn-icon-xinzeng',
             permission: '/auth'
         },
         children: [
