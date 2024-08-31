@@ -212,8 +212,8 @@ export default {
     float: left;
     width: calc(100% - 96px);
     height: 40px;
-    background: #fff;
-    box-shadow: inset 0 0 3px 2px #6464641a;
+    background: #f5f7f9;
+    //box-shadow: inset 0 0 1px 1px #6464641a;
     overflow: hidden;
     .tags-cont {
       position: absolute;

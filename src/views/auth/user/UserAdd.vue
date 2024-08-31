@@ -8,22 +8,24 @@
   >
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="用户账号" prop="username">
-        <el-input v-model="form.username"></el-input>
+        <el-input v-model="form.username"  clearable></el-input>
+      </el-form-item>
+      <el-form-item label="真实姓名" prop="realName">
+        <el-input v-model="form.realName"  clearable></el-input>
       </el-form-item>
       <el-form-item label="用户密码" prop="password">
-        <el-input v-model="form.password"></el-input>
+        <el-input v-model="form.password"  clearable></el-input>
       </el-form-item>
       <el-form-item label="所属部门" prop="deptCode">
         <el-select v-model="form.deptCode" placeholder="">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+          <el-option v-for="item in deptList" :label="item.deptName" :value="item.deptCode" :key="item.deptCode"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="userStatus">
-        <el-radio v-model="form.userStatus" :label="userStatusGName[item.code]" v-for="item in userStatusG" :key="item.code"></el-radio>
+        <el-radio v-model="form.userStatus" :label="item.code" v-for="item in userStatusG" :key="item.code" :value="item.code">{{userStatusGName[item.code]}}</el-radio>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary"  @click="onSubmit">保存</el-button>
+        <el-button type="primary"  @click="onSubmit" :loading="btnLoading">保存</el-button>
         <el-button type="info" @click="resetForm('form')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -32,20 +34,24 @@
 <script>
 
 import {adminDomain, formatConst, getConst} from "@/utils";
+import {getUserDeptList} from "@/api/department";
+import {saveUser} from "@/api/user";
 
 export default {
-  props:['addModalVisible'],
   name: 'UserAdd',
   components: {
   },
   data() {
     return {
       visible:false,
+      btnLoading: false,
+      deptList: [],
       form:{
         username: '',
         password: '',
         deptCode: '',
-        userStatus: null,
+        realName: '',
+        userStatus: 1,
       }
     }
   },
@@ -64,12 +70,22 @@ export default {
     },
     handleOpen(){
       this.visible = true;
+      getUserDeptList().then(res=>{
+        this.deptList = res.result;
+      })
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
     onSubmit(){
-
+      this.btnLoading = true;
+      saveUser(this.form).then(res=>{
+        this.$message.success("保存成功！");
+        this.handleClose();
+        this.$emit('success')
+      }).finally(()=>{
+        this.btnLoading = false;
+      })
     }
   },
   created() {

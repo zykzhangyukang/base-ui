@@ -18,6 +18,30 @@
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-dropdown>
+          <el-button>
+            更多操作<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+              <el-icon class="el-icon-setting"></el-icon>重置密码
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-icon class="el-icon-set-up"></el-icon>分配角色
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-icon class="el-icon-turn-off"></el-icon>切换登录
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-icon class="el-icon-delete"></el-icon>批量删除
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <span @click="handeStatus"><el-icon class="el-icon-warning-outline"></el-icon>启用/禁用</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-form-item>
     </el-form>
     <!-- 表格栏 -->
     <el-table
@@ -27,17 +51,11 @@
         :data="tableData"
         @sort-change="sortChange"
         style="width: 100%"
-        max-height="250"
+        height="600"
     >
       <el-table-column
           type="selection"
           width="55">
-      </el-table-column>
-      <el-table-column
-          prop="userId"
-          label="用户编号"
-          align="center"
-      >
       </el-table-column>
       <el-table-column
           prop="username"
@@ -53,24 +71,19 @@
       >
       </el-table-column>
       <el-table-column
-          prop="deptName"
-          label="所属部门"
-          align="center"
-      >
-      </el-table-column>
-      <el-table-column
           prop="userStatus"
           label="用户状态"
           align="center"
       >
         <template slot-scope="scope">
-          <el-switch
-              v-model="scope.row.userStatus === 1"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-          >
-          </el-switch>
+          <el-tag :type="scope.row.userStatus ===1 ? 'success' : 'danger'">{{userStatusGName[scope.row.userStatus]}}</el-tag>
         </template>
+      </el-table-column>
+      <el-table-column
+          prop="deptName"
+          label="所属部门"
+          align="center"
+      >
       </el-table-column>
       <el-table-column
           prop="createTime"
@@ -86,6 +99,20 @@
           sortable
       >
       </el-table-column>
+      <el-table-column
+          label="操作"
+          align="center"
+      >
+        <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.userId)">编辑</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-popconfirm
+              title="您确定要删除该吗？"
+              @confirm="handeDel(scope.row.userId)">
+            <el-button slot="reference"  type="text" icon="el-icon-delete">删除</el-button>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页栏 -->
     <div class="pagination-wrapper">
@@ -100,18 +127,22 @@
       </el-pagination>
     </div>
     <!-- 添加弹框 -->
-    <user-add ref="userAddRef"></user-add>
+    <user-add ref="addRef" @success="handAddSuccess"></user-add>
+    <!-- 更新弹框-->
+    <user-update ref="updateRef" @success="handUpdateSuccess"></user-update>
   </div>
 </template>
 
 <script>
-import {getUserPage} from "@/api/user";
+import {deleteUser, disableUser, enableUser, getUserPage} from "@/api/user";
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import UserAdd from "@/views/auth/user/UserAdd.vue";
+import UserUpdate from "@/views/auth/user/UserUpdate.vue";
 
 export default {
   components: {
-    UserAdd
+    UserAdd,
+    UserUpdate
   },
   data() {
     return {
@@ -142,8 +173,57 @@ export default {
     }
   },
   methods: {
+    handeStatus(){
+      const data = this.$refs.tableList.selection;
+      if(data.length === 0){
+        return this.$message.warning("请勾选记录后进行操作！");
+      }
+      if(data.length !==1){
+        return this.$message.warning("只支持勾选一条记录操作！");
+      }
+      let rowData = data[0];
+      let type = rowData.userStatus === 0 ? '启用' : '禁用';
+      this.$confirm(`您是否要${type}(${rowData.realName})的账号?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if(type === '启用'){
+          enableUser(rowData.userId).then(res=>{
+            this.$message({
+              type: 'success',
+              message: type+'成功!'
+            });
+            this.onSubmit();
+          })
+        }else if(type === '禁用'){
+          disableUser(rowData.userId).then(res=>{
+            this.$message({
+              type: 'success',
+              message: type+'成功!'
+            });
+            this.onSubmit();
+          })
+        }
+      });
+    },
     handleAdd(){
-      this.$refs.userAddRef.handleOpen();
+      this.$refs.addRef.handleOpen();
+    },
+    handeUpdate(id){
+      this.$refs.updateRef.handleOpen(id);
+    },
+    handeDel(id){
+      deleteUser(id).then(res=>{
+        this.$message.success("删除成功！");
+        this.onSubmit();
+      })
+    },
+    handAddSuccess(){
+      this.onSubmit();
+    },
+    handUpdateSuccess(){
+      this.onSubmit();
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -152,7 +232,7 @@ export default {
       this.searchForm.currentPage = 1
       this.fetchData()
     },
-    sortChange({ column, prop, order }){
+    sortChange({prop, order }){
       this.searchForm.sortField = toLine(prop);
       this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       this.fetchData();
