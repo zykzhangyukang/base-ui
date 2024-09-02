@@ -32,7 +32,7 @@
         :data="tableData"
         @sort-change="sortChange"
         style="width: 100%"
-        height="600"
+        :height="tableHeight"
     >
       <el-table-column
           type="selection"
@@ -132,6 +132,7 @@ export default {
       // 数据总条数
       total: 0,
       // 表格数据数组
+      tableHeight: 0,
       tableData: [],
       tableLoading: true,
       multipleSelection: [],
@@ -144,6 +145,10 @@ export default {
         methodType: ''
       }
     }
+  },
+  mounted() {
+    this.resetTableHeight();
+    window.onresize = this.resetTableHeight;
   },
   computed:{
     methodTypeG(){
@@ -206,6 +211,14 @@ export default {
     handleCurrentChange(val) {
       this.searchForm.currentPage = val;
       this.fetchData();
+    },
+    resetTableHeight(){
+      this.$nextTick(()=>{
+        let tableDom = this.$refs.tableList.$el;
+        let top  = tableDom.getBoundingClientRect().top;
+        let bottom = 100;
+        this.tableHeight = window.innerHeight - top -bottom;
+      })
     }
   },
   created() {
