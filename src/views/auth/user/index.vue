@@ -107,7 +107,7 @@
           <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.userId)">编辑</el-button>
           <el-divider direction="vertical"></el-divider>
           <el-popconfirm
-              title="您确定要删除该吗？"
+              title="您确定要删除该用户吗？"
               @confirm="handeDel(scope.row.userId)">
             <el-button slot="reference"  type="text" icon="el-icon-delete">删除</el-button>
           </el-popconfirm>
