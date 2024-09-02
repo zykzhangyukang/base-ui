@@ -1,5 +1,5 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <div class="table-user-wrapper">
+  <div class="table-role-wrapper">
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="角色名称" prop="roleName">
@@ -171,9 +171,6 @@ export default {
 }
 </script>
 <style lang="less">
-.user-wrapper {
-  margin-top: 20px;
-}
 .pagination-wrapper{
   margin-top: 25px;
   .el-pagination{
