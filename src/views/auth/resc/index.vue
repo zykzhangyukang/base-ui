@@ -49,12 +49,14 @@
           prop="rescUrl"
           label="资源URL"
           align="center"
+          sortable
       >
       </el-table-column>
       <el-table-column
           prop="rescDomain"
           label="所属项目"
           align="center"
+          sortable
       >
         <template slot-scope="scope">
           <span>{{projectDomainGName[scope.row.rescDomain]}}</span>
@@ -64,7 +66,11 @@
           prop="methodType"
           label="方法类型"
           align="center"
+          sortable
       >
+        <template slot-scope="scope">
+          <span>{{methodTypeGName[scope.row.methodType]}}</span>
+        </template>
       </el-table-column>
       <el-table-column
           prop="createTime"
@@ -85,11 +91,11 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)">编辑</el-button>
+          <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.rescId)">编辑</el-button>
           <el-divider direction="vertical"></el-divider>
           <el-popconfirm
               title="您确定要删除该资源吗？"
-              @confirm="handeDel(scope.row.roleId)">
+              @confirm="handeDel(scope.row.rescId)">
             <el-button slot="reference"  type="text" icon="el-icon-delete">删除</el-button>
           </el-popconfirm>
         </template>
@@ -108,23 +114,22 @@
       </el-pagination>
     </div>
     <!-- 添加弹框 -->
-    <role-add ref="addRef" @success="handAddSuccess"></role-add>
+    <resc-add ref="addRef" @success="handAddSuccess"></resc-add>
     <!-- 更新弹框-->
-    <role-update ref="updateRef" @success="handUpdateSuccess"></role-update>
+    <resc-update ref="updateRef" @success="handUpdateSuccess"></resc-update>
   </div>
 </template>
 
 <script>
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
-import RoleAdd from "@/views/auth/role/RoleAdd.vue";
-import RoleUpdate from "@/views/auth/role/RoleUpdate.vue";
-import {deleteRole, getRolePage} from "@/api/role";
-import {getRescPage} from "@/api/resc";
+import RescAdd from "@/views/auth/resc/RescAdd.vue";
+import RescUpdate from "@/views/auth/resc/RescUpdate.vue";
+import {deleteResc, getRescPage} from "@/api/resc";
 
 export default {
   components: {
-    RoleAdd,
-    RoleUpdate
+    RescAdd,
+    RescUpdate
   },
   data() {
     return {
@@ -172,7 +177,7 @@ export default {
       this.$refs.updateRef.handleOpen(id);
     },
     handeDel(id){
-      deleteRole(id).then(res=>{
+      deleteResc(id).then(res=>{
         this.$message.success("删除成功！");
         this.onSubmit();
       })

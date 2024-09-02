@@ -32,7 +32,6 @@ export default {
     return {
       visible:false,
       btnLoading: false,
-      deptList: [],
       form:{
         username: '',
         password: '',
