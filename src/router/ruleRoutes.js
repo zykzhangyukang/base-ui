@@ -103,7 +103,17 @@ const ruleRoutes = [
                     title: '功能管理',
                     permission: '/auth/func'
                 }
-            }
+            },
+            {
+                path: '/auth/log',
+                name: 'LogList',
+                component: () => import('@/views/auth/log/index.vue'),
+                meta: {
+                    icon: 'el-icon-document',
+                    title: '日志管理',
+                    permission: '/auth/log'
+                }
+            },
         ]
     },
 ]
