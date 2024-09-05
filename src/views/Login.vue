@@ -29,7 +29,7 @@
 <script>
 import { login } from '@/api/login'
 import { setToken } from '@/utils/cookie'
-import Background from '../assets/img/login-background.jpg'
+import Background from '../assets/img/login.svg'
 
 export default {
   name: 'Login',
@@ -93,8 +93,9 @@ export default {
     width: 320px;
     padding: 16px 30px;
     background: #fff;
-    border-radius: 4px;
-    box-shadow: 0 15px 30px 0 rgba(0, 0, 1, .1);
+    //border-radius: 4px;
+    box-shadow: 0 15px 30px 0 #eeeeee;
+    border: 1px solid #eeeeee;
     .form-title {
       margin: 0 auto 35px;
       text-align: center;

@@ -67,7 +67,7 @@ export const DynamicRoutes = [
                 name: 'Home',
                 component: () => import('../views/Home'),
                 meta: {
-                    title: '控制台',
+                    title: '系统首页',
                     icon: 'vue-dsn-icon-index',
                     fixed: true
                 }
