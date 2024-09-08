@@ -68,12 +68,14 @@
           prop="realName"
           label="真实名称"
           align="center"
+          sortable
       >
       </el-table-column>
       <el-table-column
           prop="userStatus"
           label="用户状态"
           align="center"
+          sortable
       >
         <template slot-scope="scope">
           <el-tag :type="scope.row.userStatus ===1 ? 'success' : 'danger'">{{userStatusGName[scope.row.userStatus]}}</el-tag>
@@ -83,6 +85,7 @@
           prop="deptName"
           label="所属部门"
           align="center"
+          sortable
       >
       </el-table-column>
       <el-table-column

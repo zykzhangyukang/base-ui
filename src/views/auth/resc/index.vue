@@ -35,10 +35,6 @@
         :height="tableHeight"
     >
       <el-table-column
-          type="selection"
-          width="55">
-      </el-table-column>
-      <el-table-column
           prop="rescName"
           label="资源名称"
           align="center"

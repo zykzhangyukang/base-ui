@@ -31,10 +31,6 @@
         :height="tableHeight"
     >
       <el-table-column
-          type="selection"
-          width="55">
-      </el-table-column>
-      <el-table-column
           prop="logInfo"
           label="日志信息"
           align="center"
