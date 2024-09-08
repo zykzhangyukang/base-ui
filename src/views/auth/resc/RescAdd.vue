@@ -8,10 +8,10 @@
   >
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="资源名称" prop="rescName">
-        <el-input v-model="form.rescName"  clearable></el-input>
+        <el-input v-model="form.rescName"  clearable placeholder="资源名称"></el-input>
       </el-form-item>
       <el-form-item label="资源URL" prop="rescUrl">
-        <el-input v-model="form.rescUrl"  clearable></el-input>
+        <el-input v-model="form.rescUrl"  clearable placeholder="资源URL"></el-input>
       </el-form-item>
       <el-form-item label="请求方式" prop="methodType">
         <el-select v-model="form.methodType" placeholder="请求方式" clearable>

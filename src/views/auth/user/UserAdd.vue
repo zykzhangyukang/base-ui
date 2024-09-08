@@ -8,16 +8,16 @@
   >
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="用户账号" prop="username">
-        <el-input v-model="form.username"  clearable></el-input>
+        <el-input v-model="form.username" placeholder="用户账号"  clearable></el-input>
       </el-form-item>
       <el-form-item label="真实姓名" prop="realName">
-        <el-input v-model="form.realName"  clearable></el-input>
+        <el-input v-model="form.realName" placeholder="真实姓名"  clearable></el-input>
       </el-form-item>
       <el-form-item label="用户密码" prop="password">
-        <el-input v-model="form.password"  clearable></el-input>
+        <el-input v-model="form.password" placeholder="用户密码"  clearable></el-input>
       </el-form-item>
       <el-form-item label="所属部门" prop="deptCode">
-        <el-select v-model="form.deptCode" placeholder="">
+        <el-select v-model="form.deptCode" placeholder="所属部门">
           <el-option v-for="item in deptList" :label="item.deptName" :value="item.deptCode" :key="item.deptCode"></el-option>
         </el-select>
       </el-form-item>
@@ -34,7 +34,7 @@
 <script>
 
 import {adminDomain, formatConst, getConst} from "@/utils";
-import {getUserDeptList} from "@/api/department";
+import {getUserDeptList} from "@/api/dept";
 import {saveUser} from "@/api/user";
 
 export default {
