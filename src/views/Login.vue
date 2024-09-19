@@ -1,5 +1,5 @@
 <template>
-  <div class="login-wrapper" :style="'background-image:url('+ Background +')'">
+  <div class="login-wrapper" :style="'background: #2d3a4b'">
     <div class="form-box">
       <div class="form-title">
         <img src="../assets/img/logo_name.png" alt="icon">
@@ -94,7 +94,7 @@ export default {
     padding: 16px 30px;
     background: #fff;
     //border-radius: 4px;
-    box-shadow: 0 15px 30px 0 #eeeeee;
+    /*box-shadow: 0 1px 1px 0 #eeeeee;*/
     border: 1px solid #eeeeee;
     .form-title {
       margin: 0 auto 35px;
