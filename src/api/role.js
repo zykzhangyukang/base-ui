@@ -37,3 +37,18 @@ export function getRoleDetail(id) {
         method: 'get',
     })
 }
+
+export function getRoleUserUpdateInit(id) {
+    return request({
+        url: '/auth/role/user/update/init?roleId='+id,
+        method: 'get',
+    })
+}
+
+export function updateRoleUser(data) {
+    return request({
+        url: '/auth/role/user/update',
+        method: 'post',
+        data
+    })
+}

@@ -57,13 +57,9 @@
           align="center"
       >
         <template slot-scope="scope">
+          <el-button type="text" icon="el-icon-user" @click="handleUpdateUser(scope.row.roleId)">分配</el-button>
           <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)">编辑</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-popconfirm
-              title="您确定要删除该角色吗？"
-              @confirm="handeDel(scope.row.roleId)">
-            <el-button slot="reference"  type="text" icon="el-icon-delete">删除</el-button>
-          </el-popconfirm>
+          <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.roleId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -83,6 +79,8 @@
     <role-add ref="addRef" @success="handAddSuccess"></role-add>
     <!-- 更新弹框-->
     <role-update ref="updateRef" @success="handUpdateSuccess"></role-update>
+    <!-- 角色分配用户 -->
+    <role-update-user ref="updateUserRef"></role-update-user>
   </div>
 </template>
 
@@ -90,12 +88,14 @@
 import {toLine} from "@/utils";
 import RoleAdd from "@/views/auth/role/RoleAdd.vue";
 import RoleUpdate from "@/views/auth/role/RoleUpdate.vue";
+import RoleUpdateUser from "@/views/auth/role/RoleUpdateUser.vue";
 import {deleteRole, getRolePage} from "@/api/role";
 
 export default {
   components: {
     RoleAdd,
-    RoleUpdate
+    RoleUpdate,
+    RoleUpdateUser
   },
   data() {
     return {
@@ -128,11 +128,20 @@ export default {
     handeUpdate(id){
       this.$refs.updateRef.handleOpen(id);
     },
+    handleUpdateUser(id){
+      this.$refs.updateUserRef.handleOpen(id);
+    },
     handeDel(id){
-      deleteRole(id).then(res=>{
-        this.$message.success("删除成功！");
-        this.onSubmit();
-      })
+      this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteRole(id).then(res=>{
+          this.$message.success("删除成功！");
+          this.onSubmit();
+        })
+      });
     },
     handAddSuccess(){
       this.onSubmit();

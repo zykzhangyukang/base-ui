@@ -82,6 +82,16 @@
         </template>
       </el-table-column>
       <el-table-column
+          prop="roleList"
+          label="角色列表"
+          align="center"
+          show-overflow-tooltip
+      >
+        <template slot-scope="scope">
+          {{scope.row.roleList.map(e=>e.roleName).join(',') || '暂未分配'}}
+        </template>
+      </el-table-column>
+      <el-table-column
           prop="deptName"
           label="所属部门"
           align="center"
@@ -108,12 +118,7 @@
       >
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.userId)">编辑</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-popconfirm
-              title="您确定要删除该用户吗？"
-              @confirm="handeDel(scope.row.userId)">
-            <el-button slot="reference"  type="text" icon="el-icon-delete">删除</el-button>
-          </el-popconfirm>
+          <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.userId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -222,10 +227,16 @@ export default {
       this.$refs.updateRef.handleOpen(id);
     },
     handeDel(id){
-      deleteUser(id).then(res=>{
-        this.$message.success("删除成功！");
-        this.onSubmit();
-      })
+      this.$confirm('此操作将删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteUser(id).then(res=>{
+          this.$message.success("删除成功！");
+          this.onSubmit();
+        })
+      });
     },
     handAddSuccess(){
       this.onSubmit();

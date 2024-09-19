@@ -88,12 +88,7 @@
       >
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.rescId)">编辑</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-popconfirm
-              title="您确定要删除该资源吗？"
-              @confirm="handeDel(scope.row.rescId)">
-            <el-button slot="reference"  type="text" icon="el-icon-delete">删除</el-button>
-          </el-popconfirm>
+          <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.rescId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -121,6 +116,7 @@ import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import RescAdd from "@/views/auth/resc/RescAdd.vue";
 import RescUpdate from "@/views/auth/resc/RescUpdate.vue";
 import {deleteResc, getRescPage} from "@/api/resc";
+import {deleteUser} from "@/api/user";
 
 export default {
   components: {
@@ -173,10 +169,16 @@ export default {
       this.$refs.updateRef.handleOpen(id);
     },
     handeDel(id){
-      deleteResc(id).then(res=>{
-        this.$message.success("删除成功！");
-        this.onSubmit();
-      })
+      this.$confirm('此操作将删除该资源, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteResc(id).then(res=>{
+          this.$message.success("删除成功！");
+          this.onSubmit();
+        })
+      });
     },
     handAddSuccess(){
       this.onSubmit();
