@@ -38,7 +38,7 @@ export function getRoleDetail(id) {
     })
 }
 
-export function getRoleUserUpdateInit(id) {
+export function getRoleUserInit(id) {
     return request({
         url: '/auth/role/user/update/init?roleId='+id,
         method: 'get',

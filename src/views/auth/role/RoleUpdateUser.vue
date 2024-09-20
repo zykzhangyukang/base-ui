@@ -24,7 +24,7 @@
 </template>
 <script>
 
-import {getRoleUserUpdateInit, updateRoleUser} from "@/api/role";
+import {getRoleUserInit, updateRoleUser} from "@/api/role";
 
 export default {
   name: 'RoleUpdateUser',
@@ -53,7 +53,7 @@ export default {
       this.visible = true;
       this.loading = true;
       this.roleId = id;
-      getRoleUserUpdateInit(id).then(res => {
+      getRoleUserInit(id).then(res => {
         const userList = res.result.userList;
         const tempList = [];
         userList.forEach(e => {

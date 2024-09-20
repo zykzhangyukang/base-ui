@@ -29,13 +29,11 @@
 <script>
 import { login } from '@/api/login'
 import { setToken } from '@/utils/cookie'
-import Background from '../assets/img/login.svg'
 
 export default {
   name: 'Login',
   data() {
     return {
-      Background,
       loginForm: {
         username: 'admin',
         password: '123456',
