@@ -9,7 +9,7 @@ const ruleRoutes = [
         meta: {
             title: '同步系统',
             icon: 'vue-dsn-icon-tishi2',
-            permission: '/sync'
+            permission: 'sync_view'
         },
         children: [
             {
@@ -19,7 +19,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-setting',
                     title: '同步计划',
-                    permission: '/sync/plan'
+                    permission: 'sync_plan_view'
                 }
             },
             {
@@ -29,7 +29,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-tickets',
                     title: '同步记录',
-                    permission: '/sync/result'
+                    permission: 'sync_result_view'
                 }
             },
             {
@@ -39,7 +39,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-monitor',
                     title: '本地消息',
-                    permission: '/sync/message'
+                    permission: 'sync_message_view'
                 }
             },
             {
@@ -49,7 +49,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-alarm-clock',
                     title: '回调消息',
-                    permission: '/sync/callback'
+                    permission: 'sync_callback_view'
                 }
             }
         ]
@@ -61,7 +61,7 @@ const ruleRoutes = [
         meta: {
             title: '权限系统',
             icon: 'vue-dsn-icon-xinzeng',
-            permission: '/auth'
+            permission: 'auth_view'
         },
         children: [
             {
@@ -71,7 +71,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-user',
                     title: '用户管理',
-                    permission: '/auth/user'
+                    permission: 'auth_user_view'
                 }
             },
             {
@@ -81,7 +81,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-suitcase-1',
                     title: '角色管理',
-                    permission: '/auth/role'
+                    permission: 'auth_role_view'
                 }
             },
             {
@@ -91,7 +91,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-takeaway-box',
                     title: '资源管理',
-                    permission: '/auth/resc'
+                    permission: 'auth_resc_view'
                 }
             },
             {
@@ -101,7 +101,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-folder-opened',
                     title: '功能管理',
-                    permission: '/auth/func'
+                    permission: 'auth_func_view'
                 }
             },
             {
@@ -111,7 +111,7 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-document',
                     title: '日志管理',
-                    permission: '/auth/log'
+                    permission: 'auth_log_view'
                 }
             },
         ]

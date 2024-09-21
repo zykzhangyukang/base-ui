@@ -7,6 +7,30 @@ export function getFuncTree() {
     })
 }
 
+
+export function saveFunc(data) {
+    return request({
+        url: '/auth/func/save',
+        method: 'post',
+        data
+    })
+}
+
+export function updateFunc(data) {
+    return request({
+        url: '/auth/func/update',
+        method: 'put',
+        data
+    })
+}
+
+export function deleteFunc(funcId) {
+    return request({
+        url: '/auth/func/delete?funcId='+funcId,
+        method: 'delete',
+    })
+}
+
 export function getFuncPage(data) {
     return request({
         url: '/auth/func/page',
@@ -14,3 +38,11 @@ export function getFuncPage(data) {
         data
     })
 }
+
+export function getFuncDetail(id) {
+    return request({
+        url: '/auth/func/detail?funcId='+id,
+        method: 'get',
+    })
+}
+

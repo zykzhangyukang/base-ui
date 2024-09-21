@@ -31,6 +31,13 @@ export function deleteResc(id) {
     })
 }
 
+export function searchResc(keyword) {
+    return request({
+        url: '/auth/resc/search?keyword='+keyword,
+        method: 'get',
+    })
+}
+
 export function getRescDetail(id) {
     return request({
         url: '/auth/resc/detail?rescId='+id,

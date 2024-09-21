@@ -46,27 +46,40 @@
         <!-- 查询栏 -->
         <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
           <el-form-item label="功能名称" prop="funcName">
-            <el-input v-model="searchForm.funcName" placeholder="功能名称" :style="{width : '180px'}"></el-input>
+            <el-input v-model="searchForm.funcName" placeholder="功能名称"></el-input>
           </el-form-item>
           <el-form-item label="功能标识" prop="funcKey">
-            <el-input v-model="searchForm.funcKey" placeholder="功能标识" :style="{width : '180px'}"></el-input>
+            <el-input v-model="searchForm.funcKey" placeholder="功能标识"></el-input>
           </el-form-item>
           <el-form-item label="资源url" prop="rescUrl">
-            <el-input v-model="searchForm.rescUrl" placeholder="资源url" :style="{width : '180px'}"></el-input>
+            <el-input v-model="searchForm.rescUrl" placeholder="资源url"></el-input>
           </el-form-item>
           <el-form-item label="功能类型" prop="funcType">
-            <el-select v-model="searchForm.funcType" placeholder="功能类型" clearable :style="{width : '120px'}">
+            <el-select v-model="searchForm.funcType" placeholder="功能类型" clearable :style="{width : '180px'}">
               <el-option :label="funcTypeGName[item.code]" v-for="item in funcTypeG" :value="item.code" :key="item.code"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="是否显示" prop="hide">
-            <el-select v-model="searchForm.hide" placeholder="是否显示" clearable :style="{width : '120px'}">
+            <el-select v-model="searchForm.hide" placeholder="是否显示" clearable :style="{width : '180px'}">
               <el-option :label="funcHideGName[item.code]" v-for="item in funcHideG" :value="item.code" :key="item.code"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
             <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
+            <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-dropdown>
+              <el-button>
+                更多操作<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>
+                  <el-icon class="el-icon-delete"></el-icon>批量删除
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </el-form-item>
         </el-form>
         <!-- 表格栏 -->
@@ -80,6 +93,10 @@
             :height="tableHeight"
         >
           <el-table-column
+              type="selection"
+              width="55">
+          </el-table-column>
+          <el-table-column
               prop="funcName"
               label="功能名称"
               align="center"
@@ -91,6 +108,7 @@
               label="功能标识"
               align="center"
               sortable
+              show-overflow-tooltip
           >
           </el-table-column>
           <el-table-column
@@ -113,6 +131,8 @@
               sortable
           >
             <template  slot-scope="scope">
+              <el-icon v-if="scope.row.funcType === 'dir'" class="el-icon-folder-opened "></el-icon>
+              <el-icon v-if="scope.row.funcType === 'btn'" class="el-icon-document "></el-icon>
               {{funcTypeGName[scope.row.funcType]}}
             </template>
           </el-table-column>
@@ -140,6 +160,15 @@
               sortable
           >
           </el-table-column>
+          <el-table-column
+              label="操作"
+              align="center"
+          >
+            <template slot-scope="scope">
+              <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.funcId)">编辑</el-button>
+              <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.funcId)">删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <!-- 分页栏 -->
         <div class="pagination-wrapper">
@@ -155,14 +184,25 @@
         </div>
       </el-col>
     </el-row>
+
+    <!-- 添加弹框 -->
+    <func-add ref="addRef" @success="handAddSuccess"></func-add>
+    <!-- 修改弹框 -->
+    <func-update ref="updateRef" @success="handUpdateSuccess"></func-update>
   </div>
 </template>
 
 <script>
-import {getFuncPage, getFuncTree} from "@/api/func";
+import {deleteFunc, getFuncPage, getFuncTree} from "@/api/func";
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
+import FuncAdd from "@/views/auth/func/FuncAdd.vue";
+import FuncUpdate from "@/views/auth/func/FuncUpdate.vue";
 
 export default {
+  components: {
+    FuncAdd,
+    FuncUpdate
+  },
   data() {
     return {
       filterText: '',
@@ -188,6 +228,8 @@ export default {
       tableHeight: 0,
       tableData: [],
       tableLoading: true,
+      // 点击的树节点
+      parentNode: null,
     };
   },
   watch: {
@@ -210,13 +252,37 @@ export default {
     },
   },
   methods: {
+    handeDel(id){
+      this.$confirm('此操作将删除该功能, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteFunc(id).then(res=>{
+          this.$message.success("删除成功！");
+          this.onSubmit();
+        })
+      });
+    },
+    handAddSuccess(){
+      this.onSubmit();
+    },
+    handUpdateSuccess(){
+      this.onSubmit();
+    },
+    handeUpdate(id){
+      this.$refs.updateRef.handleOpen(id);
+    },
+    handleAdd(){
+      this.$refs.addRef.handleOpen(this.parentNode);
+    },
     sortChange({prop, order }){
       this.searchForm.sortField = toLine(prop);
       this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       this.fetchData();
     },
     resetForm(formName) {
-      this.searchForm.parentId = null;
+      this.parentNode = null;
       this.$refs[formName].resetFields();
     },
     onSubmit() {
@@ -224,7 +290,7 @@ export default {
       this.fetchData()
     },
     handleNodeClick(data) {
-      this.searchForm.parentId = data.funcId;
+      this.parentNode = data;
       this.onSubmit();
     },
     fetchTreeData() {
@@ -266,6 +332,11 @@ export default {
       })
     },
     fetchData() {
+      if(this.parentNode && this.parentNode.funcId){
+        this.searchForm.parentId = this.parentNode.funcId;
+      }else {
+        this.searchForm.parentId = null;
+      }
       this.tableLoading = true;
       getFuncPage(this.searchForm).then(res => {
         this.tableData = res.result.dataList;
@@ -302,7 +373,6 @@ export default {
   margin-right: 5px;
   font-size: 18px;
 }
-
 
 /* 滚动条美化 */
 .tree-wrapper::-webkit-scrollbar {
