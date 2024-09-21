@@ -21,10 +21,7 @@
         style="width: 100%"
         :height="tableHeight"
     >
-      <el-table-column
-          type="selection"
-          width="55">
-      </el-table-column>
+
       <el-table-column
           prop="roleName"
           label="角色名称"
@@ -57,9 +54,9 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-user" @click="handleUpdateUser(scope.row.roleId)">分配</el-button>
           <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)">编辑</el-button>
           <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.roleId)">删除</el-button>
+          <el-button type="text" icon="el-icon-setting" @click="handleUpdateUser(scope.row.roleId)">分配</el-button>
         </template>
       </el-table-column>
     </el-table>
