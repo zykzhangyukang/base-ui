@@ -24,6 +24,14 @@ export function updateFunc(data) {
     })
 }
 
+export function updateFuncResc(data) {
+    return request({
+        url: '/auth/func/resc/update',
+        method: 'put',
+        data
+    })
+}
+
 export function deleteFunc(funcId) {
     return request({
         url: '/auth/func/delete?funcId='+funcId,

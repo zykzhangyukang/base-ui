@@ -31,7 +31,13 @@ service.interceptors.response.use(
     const message = data.msg
     if (code === 200) {
       return data
-    } else {
+    } else if(code === 405){
+        Message({
+            type: 'warning',
+            message
+        })
+        return Promise.reject('error')
+    }else {
       Message({
         type: 'error',
         message

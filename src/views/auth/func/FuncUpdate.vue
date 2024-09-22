@@ -2,7 +2,7 @@
   <el-dialog
       title="更新功能"
       :visible.sync="visible"
-      width="30%"
+      width="35%"
       class="dialog-form"
       :before-close="handleClose"
       :close-on-click-modal="false"
@@ -17,8 +17,7 @@
       </el-form-item>
       <el-form-item label="功能类型" prop="funcType">
         <el-select v-model="form.funcType" placeholder="功能类型" clearable>
-          <el-option :label="funcTypeGName[item.code]" v-for="item in funcTypeG" :value="item.code"
-                     :key="item.code"></el-option>
+          <el-option :label="funcTypeGName[item.code]" v-for="item in funcTypeG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="是否可见" prop="hide" v-if="form.funcType === 'dir'">
@@ -82,7 +81,7 @@
           align="center"
           label="操作">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeFuncResc(scope.row.rescId)"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -91,7 +90,7 @@
 <script>
 
 import {adminDomain, formatConst, getConst} from "@/utils";
-import {getFuncDetail, updateFunc} from "@/api/func";
+import {getFuncDetail, updateFunc, updateFuncResc} from "@/api/func";
 import {searchResc} from "@/api/resc";
 
 export default {
@@ -131,17 +130,34 @@ export default {
     },
   },
   methods: {
-    searchSelect(val){
-      if(!val){
+    searchSelect: function (val) {
+      if (!val) {
         return;
       }
       this.searchList = [];
-      this.$message.success("添加："+val)
+      updateFuncResc({type: 'add', funcId: this.form.funcId, rescId: val}).then(res => {
+        const one = this.options.find(e => e.rescId === val);
+        if(one){
+          this.rescVOList.push(one);
+        }
+        this.$message.success("添加成功");
+      })
+    },
+    removeFuncResc(rescId){
+      this.$confirm('此操作移除该功能的资源, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        updateFuncResc({type: 'remove', funcId: this.form.funcId, rescId: rescId}).then(res => {
+          this.rescVOList = this.rescVOList.filter(obj => obj.rescId !== rescId);
+          this.$message.success("移除成功");
+        })
+      });
     },
     remoteMethod(query) {
       if (query !== '') {
         this.searchLoading = true;
-        // 根据url筛选
         searchResc(query).then(res=>{
           this.options = res.result;
         }).finally(()=>{
@@ -174,8 +190,6 @@ export default {
       this.btnLoading = true;
       updateFunc(this.form).then(res => {
         this.$message.success("更新成功！");
-        //this.handleClose();
-        //this.$emit('success')
       }).finally(() => {
         this.btnLoading = false;
       })
