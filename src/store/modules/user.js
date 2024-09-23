@@ -24,7 +24,7 @@ const mutations = {
     CLEAR_USER_INFO(state) {
         state.userInfo = null;
     },
-    SET_TOKEN(state, result){
+    SET_TOKEN(state, result) {
         setAccessToken(result.accessToken)
         setRefreshToken(result.refreshToken)
 
@@ -32,8 +32,7 @@ const mutations = {
         const current = new Date()
         const expireTime = current.setTime(current.getTime() + 1000 * result.expiresIn);
         setExpiresIn(expireTime)
-    },
-    REMOVE_TOKEN(){
+    }, REMOVE_TOKEN() {
         removeRefreshToken();
         removeAccessToken();
         removeExpiresIn();
@@ -57,18 +56,24 @@ const actions = {
             })
         })
     },
-    REFRESH_TOKEN({commit}) {
+    async REFRESH_TOKEN({commit}) {
         return new Promise((resolve, reject) => {
-
+            axios.get(process.env.VUE_APP_BASE_API + '/auth/user/refresh/token', {
+                params: {
+                    refreshToken: getRefreshToken()
+                }
+            }).then(response => {
+                const {result} = response.data;
+                commit('SET_TOKEN', result);
+                resolve(result.accessToken);
+            }).catch(error => {
+                reject(error);
+            });
         });
     }
 }
 
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    mutations,
-    actions
+    namespaced: true, state, getters, mutations, actions
 }

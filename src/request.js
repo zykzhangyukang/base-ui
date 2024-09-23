@@ -1,8 +1,7 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import {Message} from 'element-ui'
 import store from "./store";
-import {getAccessToken, getExpiresIn, getRefreshToken} from './utils/cookie'
-import {queryRefreshToken} from "@/api/login";
+import {getAccessToken, getExpiresIn} from './utils/cookie'
 
 // 创建axios实例
 const service = axios.create({
@@ -23,11 +22,12 @@ service.interceptors.request.use(
             if (isTokenExpiringSoon() && !isRefreshing) {
                 isRefreshing = true;
                 try {
-                    const newToken = await queryRefreshToken(getRefreshToken());
-                    console.log("new-token",newToken)
+
+                    const newToken = await store.dispatch('user/REFRESH_TOKEN');
                     isRefreshing = false;
 
                     // 重新设置新的token，重新发送所有挂起的请求
+                    config.headers['Authorization'] = `Bearer ${newToken}`;
                     requests.forEach(cb => cb(newToken));
                     requests = [];
                 } catch (error) {
