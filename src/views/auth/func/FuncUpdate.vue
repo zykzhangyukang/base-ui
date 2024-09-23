@@ -94,7 +94,7 @@ import {getFuncDetail, updateFunc, updateFuncResc} from "@/api/func";
 import {searchResc} from "@/api/resc";
 
 export default {
-  name: 'RescUpdate',
+  name: 'FuncUpdate',
   components: {},
   data() {
     return {

@@ -40,7 +40,7 @@ import {adminDomain, formatConst, getConst} from "@/utils";
 import {saveFunc} from "@/api/func";
 
 export default {
-  name: 'RescAdd',
+  name: 'FuncAdd',
   components: {
   },
   data() {

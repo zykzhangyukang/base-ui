@@ -118,7 +118,7 @@
           >
             <template  slot-scope="scope">
               <div class="ellipsis">
-                <el-button type="text" size="mini" class="ellipsis-button">
+                <el-button type="text" size="mini" class="ellipsis-button" @click="showRescVoList(scope.row.rescVOList)">
                   {{ scope.row.rescVOList.map(e => e.rescUrl).join(',') || '-' }}
                 </el-button>
               </div>
@@ -189,6 +189,8 @@
     <func-add ref="addRef" @success="handAddSuccess"></func-add>
     <!-- 修改弹框 -->
     <func-update ref="updateRef" @success="handUpdateSuccess"></func-update>
+    <!-- 资源列表 -->
+    <func-resc ref="funcRescRef"></func-resc>
   </div>
 </template>
 
@@ -197,11 +199,13 @@ import {deleteFunc, getFuncPage, getFuncTree} from "@/api/func";
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import FuncAdd from "@/views/auth/func/FuncAdd.vue";
 import FuncUpdate from "@/views/auth/func/FuncUpdate.vue";
+import FuncResc from "@/views/auth/func/FuncResc.vue";
 
 export default {
   components: {
     FuncAdd,
-    FuncUpdate
+    FuncUpdate,
+    FuncResc
   },
   data() {
     return {
@@ -252,6 +256,9 @@ export default {
     },
   },
   methods: {
+    showRescVoList(list){
+      this.$refs.funcRescRef.handleOpen(list);
+    },
     handeDel(id){
       this.$confirm('此操作将删除该功能, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -371,7 +378,7 @@ export default {
 
 .custom-tree-node .icon {
   margin-right: 5px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 /* 滚动条美化 */
