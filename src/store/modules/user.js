@@ -57,19 +57,9 @@ const actions = {
             })
         })
     },
-    async REFRESH_TOKEN({commit}) {
+    REFRESH_TOKEN({commit}) {
         return new Promise((resolve, reject) => {
-            axios.get(process.env.VUE_APP_BASE_API +'/auth/user/refresh/token', {
-                params: {
-                    refreshToken: getRefreshToken()
-                }
-            }).then(response => {
-                const {result} = response.data;
-                commit('SET_TOKEN', result);
-                resolve(result.accessToken);
-            }).catch(error => {
-                reject(error);
-            });
+
         });
     }
 }

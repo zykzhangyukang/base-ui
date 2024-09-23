@@ -24,6 +24,7 @@ router.beforeEach(async (to, from, next) => {
                     })
                 } catch (error) {
                     store.commit('user/REMOVE_TOKEN')
+                    store.commit('user/CLEAR_USER_INFO')
                     next(`/login?redirect=${to.fullPath}`)
                 }
             } else {
