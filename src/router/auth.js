@@ -11,7 +11,6 @@ router.beforeEach(async (to, from, next) => {
         if (to.path === '/login') {
             next({path: '/'})
         } else {
-            console.log(store.state.permission.permission)
             // 用户已经登录 路由的访问权限
             if (!store.state.permission.permission) {
                 try {

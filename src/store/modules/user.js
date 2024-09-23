@@ -64,9 +64,9 @@ const actions = {
                     refreshToken: getRefreshToken()
                 }
             }).then(response => {
-                const {result} = response
+                const {result} = response.data;
                 commit('SET_TOKEN', result);
-                resolve(response.data.accessToken);
+                resolve(result.accessToken);
             }).catch(error => {
                 reject(error);
             });

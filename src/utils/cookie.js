@@ -33,7 +33,7 @@ export function setExpiresIn(seconds) {
 }
 
 export function removeExpiresIn() {
-  return Cookies.set(expiresIn)
+  return Cookies.remove(expiresIn)
 }
 
 export function getExpiresIn() {

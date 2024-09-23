@@ -14,39 +14,39 @@ let requests = [];
 
 // request拦截器设置
 service.interceptors.request.use(
-  config => {
-    if (getAccessToken()) {
-      config.headers['Authorization'] = 'Bearer ' + getAccessToken();
+  async config => {
+      if (getAccessToken()) {
+          config.headers['Authorization'] = 'Bearer ' + getAccessToken();
 
-        if (isTokenExpiringSoon() && !isRefreshing) {
-            isRefreshing = true;
-            store.dispatch('user/REFRESH_TOKEN').then(newToken => {
-                isRefreshing = false;
-                // 重新发送挂起的请求
-                requests.forEach(cb => cb(newToken));
-                requests = []; // 清空挂起的请求
-            }).catch(error => {
-                console.error('刷新Token失败', error);
-                isRefreshing = false;
-                store.commit('user/REMOVE_TOKEN');
-                store.commit('user/CLEAR_USER_INFO');
-                location.reload()
-            });
+          if (isTokenExpiringSoon() && !isRefreshing) {
+              isRefreshing = true;
+              await store.dispatch('user/REFRESH_TOKEN').then(newToken => {
+                  isRefreshing = false;
+                  // 重新发送挂起的请求
+                  requests.forEach(cb => cb(newToken));
+                  requests = []; // 清空挂起的请求
+              }).catch(error => {
+                  console.error('刷新Token失败', error);
+                  isRefreshing = false;
+                  store.commit('user/REMOVE_TOKEN');
+                  store.commit('user/CLEAR_USER_INFO');
+                  location.reload()
+              });
 
-        }else if (isRefreshing) {
+          } else if (isRefreshing) {
 
-            // 请求挂起
-            return new Promise((resolve) => {
-                requests.push((token) => {
-                    config.headers['Authorization'] = 'Bearer ' + token;
-                    resolve(config);
-                });
-            });
-        }
+              // 请求挂起
+              return new Promise((resolve) => {
+                  requests.push((token) => {
+                      config.headers['Authorization'] = 'Bearer ' + token;
+                      resolve(config);
+                  });
+              });
+          }
 
-    }
-    config.headers['Content-Type'] = 'application/json'
-    return config
+      }
+      config.headers['Content-Type'] = 'application/json'
+      return config
   },
   error => {
     console.log(error)
@@ -95,8 +95,8 @@ function isTokenExpiringSoon() {
     if (!expiresIn) {
         return true;
     }
-    console.log("token过期剩余时间:", expiresIn - new Date().getTime() < 15 * 60)
-    return expiresIn - new Date().getTime() < 15 * 60;
+    console.log("token过期剩余时间:", expiresIn - new Date().getTime() )
+    return expiresIn - new Date().getTime() < 15 * 1000 * 60;
 }
 
 
