@@ -13,7 +13,7 @@
 
 <script>
 import Avatar from '../../assets/img/avatar.png'
-import { removeToken } from '@/utils/cookie'
+import { removeAccessToken, removeRefreshToken } from '@/utils/cookie'
 
 export default {
   name: 'UserAvatar',
@@ -37,7 +37,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeToken()
+        removeAccessToken()
+        removeRefreshToken()
         location.reload()
       })
     }

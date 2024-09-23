@@ -28,7 +28,7 @@
 
 <script>
 import { login } from '@/api/login'
-import { setToken } from '@/utils/cookie'
+import {setRefreshToken,setAccessToken} from "../utils/cookie";
 
 export default {
   name: 'Login',
@@ -67,7 +67,8 @@ export default {
           login(data).then(res => {
             console.log(res)
             this.loading = false
-            setToken(res.result.token)
+            setAccessToken(res.result.accessToken);
+            setRefreshToken(res.result.refreshToken)
             this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
             this.loading = false

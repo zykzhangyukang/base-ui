@@ -1,12 +1,12 @@
 import router from './index'
-import {getToken, removeToken} from '@/utils/cookie'
+import {getAccessToken, removeAccessToken, removeRefreshToken} from '@/utils/cookie'
 import store from "../store";
 
 // 白名单列表
 const whiteList = ['/login']
 
 router.beforeEach(async (to, from, next) => {
-    if (getToken()) {
+    if (getAccessToken()) {
         // 已登录且要跳转的是登录页
         if (to.path === '/login') {
             next({path: '/'})
@@ -14,13 +14,17 @@ router.beforeEach(async (to, from, next) => {
             // 用户已经登录 路由的访问权限
             if (!store.state.permission.permission) {
                 try {
+                    // 获取用户信息
+                    await store.dispatch('user/FETCH_USER_INFO');
+                    // 用户权限设置
                     await store.dispatch('permission/FETCH_PERMISSION').then(() => {
                         next({
                             path: to.path
                         })
                     })
                 } catch (error) {
-                    removeToken();
+                    removeAccessToken();
+                    removeRefreshToken()
                     next(`/login?redirect=${to.fullPath}`)
                 }
             } else {
