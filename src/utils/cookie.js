@@ -2,6 +2,7 @@ import Cookies from 'js-cookie'
 
 const accessToken = 'ACCESS_TOKEN'
 const refreshToken = 'REFRESH_TOKEN'
+const expiresIn = 'EXPIRES_IN'
 
 export function getAccessToken() {
   return Cookies.get(accessToken)
@@ -25,5 +26,17 @@ export function setRefreshToken(token) {
 
 export function removeRefreshToken() {
   return Cookies.remove(refreshToken)
+}
+
+export function setExpiresIn(seconds) {
+  return Cookies.set(expiresIn, seconds)
+}
+
+export function removeExpiresIn() {
+  return Cookies.set(expiresIn)
+}
+
+export function getExpiresIn() {
+  return Cookies.get(expiresIn)
 }
 

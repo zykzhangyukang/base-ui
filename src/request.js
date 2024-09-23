@@ -1,20 +1,51 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
-import {getAccessToken} from './utils/cookie'
+import {Message} from 'element-ui'
+import store from "./store";
+import {getAccessToken, getExpiresIn} from './utils/cookie'
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
-  timeout: 120000 // 请求超时时间
+  timeout: 120000
 })
+
+let isRefreshing = false;
+let requests = [];
 
 // request拦截器设置
 service.interceptors.request.use(
   config => {
     if (getAccessToken()) {
-      config.headers['Authorization'] = 'Bearer ' + getAccessToken() // 请求头设置自带 token
+      config.headers['Authorization'] = 'Bearer ' + getAccessToken();
+
+        if (isTokenExpiringSoon() && !isRefreshing) {
+            isRefreshing = true;
+            store.dispatch('user/REFRESH_TOKEN').then(newToken => {
+                isRefreshing = false;
+                // 重新发送挂起的请求
+                requests.forEach(cb => cb(newToken));
+                requests = []; // 清空挂起的请求
+            }).catch(error => {
+                console.error('刷新Token失败', error);
+                isRefreshing = false;
+                store.commit('user/REMOVE_TOKEN');
+                store.commit('user/CLEAR_USER_INFO');
+                location.reload()
+            });
+
+        }else if (isRefreshing) {
+
+            // 请求挂起
+            return new Promise((resolve) => {
+                requests.push((token) => {
+                    config.headers['Authorization'] = 'Bearer ' + token;
+                    resolve(config);
+                });
+            });
+        }
+
     }
-    config.headers['Content-Type'] = 'application/json' // 请求的数据格式为 json
+    config.headers['Content-Type'] = 'application/json'
     return config
   },
   error => {
@@ -56,5 +87,17 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+
+
+function isTokenExpiringSoon() {
+    const expiresIn = getExpiresIn();
+    if (!expiresIn) {
+        return true;
+    }
+    console.log("token过期剩余时间:", expiresIn - new Date().getTime() < 15 * 60)
+    return expiresIn - new Date().getTime() < 15 * 60;
+}
+
 
 export default service

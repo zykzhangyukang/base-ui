@@ -1,5 +1,5 @@
 import router from './index'
-import {getAccessToken, removeAccessToken, removeRefreshToken} from '@/utils/cookie'
+import {getAccessToken} from '@/utils/cookie'
 import store from "../store";
 
 // 白名单列表
@@ -11,6 +11,7 @@ router.beforeEach(async (to, from, next) => {
         if (to.path === '/login') {
             next({path: '/'})
         } else {
+            console.log(store.state.permission.permission)
             // 用户已经登录 路由的访问权限
             if (!store.state.permission.permission) {
                 try {
@@ -23,8 +24,7 @@ router.beforeEach(async (to, from, next) => {
                         })
                     })
                 } catch (error) {
-                    removeAccessToken();
-                    removeRefreshToken()
+                    store.commit('user/REMOVE_TOKEN')
                     next(`/login?redirect=${to.fullPath}`)
                 }
             } else {

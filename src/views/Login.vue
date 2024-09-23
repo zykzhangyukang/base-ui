@@ -63,16 +63,15 @@ export default {
           password: this.loginForm.password
         }
         if (valid) {
-          this.loading = true
-          login(data).then(res => {
-            console.log(res)
-            this.loading = false
-            setAccessToken(res.result.accessToken);
-            setRefreshToken(res.result.refreshToken)
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.loading = false
-          })
+          this.loading = true;
+            this.$store.dispatch('user/LOGIN', data)
+                .then(() => {
+                    this.$router.push({ path: this.redirect || '/' })
+                    this.loading = false
+                })
+                .catch(() => {
+                    this.loading = false
+                })
         }
       })
     }

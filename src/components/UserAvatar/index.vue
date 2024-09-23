@@ -13,7 +13,7 @@
 
 <script>
 import Avatar from '../../assets/img/avatar.png'
-import { removeAccessToken, removeRefreshToken } from '@/utils/cookie'
+import { removeAccessToken, removeRefreshToken, removeExpiresIn } from '@/utils/cookie'
 
 export default {
   name: 'UserAvatar',
@@ -39,6 +39,7 @@ export default {
       }).then(() => {
         removeAccessToken()
         removeRefreshToken()
+        removeExpiresIn();
         location.reload()
       })
     }
