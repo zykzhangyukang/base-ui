@@ -1,14 +1,18 @@
 import {getUserInfo, login} from "../../api/login";
-import {getAccessToken, getRefreshToken, setAccessToken, setRefreshToken, setExpiresIn, removeAccessToken, removeRefreshToken, removeExpiresIn} from "../../utils/cookie";
+import {
+    getRefreshToken,
+    removeAccessToken,
+    removeExpiresIn,
+    removeRefreshToken,
+    setAccessToken,
+    setExpiresIn,
+    setRefreshToken
+} from "../../utils/cookie";
 import axios from 'axios';
 
 const state = {
     // 用户信息
     userInfo: null,
-    // 用户访问令牌
-    accessToken: getAccessToken(),
-    // 用户刷新令牌
-    refreshToken: getRefreshToken()
 }
 
 const getters = {}
