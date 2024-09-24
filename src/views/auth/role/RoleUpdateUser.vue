@@ -18,7 +18,7 @@
     </span>
     <span slot="footer" class="dialog-footer">
     <el-button @click="handleClose">取 消</el-button>
-     <el-button type="primary" @click="onSubmit">保存</el-button>
+     <el-button type="primary" @click="onSubmit" :loading="btnLoading">保存</el-button>
   </span>
   </el-dialog>
 </template>
@@ -70,9 +70,12 @@ export default {
       })
     },
     onSubmit() {
+      this.btnLoading = true;
       updateRoleUser({roleId: this.roleId , userIdList: this.value}).then(res=>{
         this.handleClose();
         this.$message.success("分配用户成功！")
+      }).finally(()=>{
+        this.btnLoading = false;
       })
     }
   },

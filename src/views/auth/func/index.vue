@@ -378,7 +378,7 @@ export default {
 
 .custom-tree-node .icon {
   margin-right: 5px;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 /* 滚动条美化 */
