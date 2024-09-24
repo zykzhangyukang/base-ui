@@ -36,6 +36,16 @@
       >
       </el-table-column>
       <el-table-column
+          prop="userVOList"
+          label="用户列表"
+          align="center"
+          show-overflow-tooltip
+      >
+        <template slot-scope="scope">
+          <span class="userVOList">{{scope.row.userVOList.map(e=>e.realName).join(',') || '暂未分配'}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
           prop="createTime"
           label="创建时间"
           align="center"
@@ -56,7 +66,7 @@
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)">编辑</el-button>
           <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.roleId)">删除</el-button>
-          <el-button type="text" icon="el-icon-notebook-2" @click="handleUpdateUser(scope.row.roleId)">用户</el-button>
+          <el-button type="text" icon="el-icon-lock" @click="handleUpdateUser(scope.row.roleId)">用户</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -77,7 +87,7 @@
     <!-- 更新弹框-->
     <role-update ref="updateRef" @success="handUpdateSuccess"></role-update>
     <!-- 角色分配用户 -->
-    <role-update-user ref="updateUserRef"></role-update-user>
+    <role-update-user ref="updateUserRef" @success="handUpdateSuccess"></role-update-user>
   </div>
 </template>
 
@@ -195,5 +205,8 @@ export default {
   .el-pagination{
     float: right;
   }
+}
+.userVOList{
+  font-size: 11px;
 }
 </style>

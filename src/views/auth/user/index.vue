@@ -88,7 +88,7 @@
           show-overflow-tooltip
       >
         <template slot-scope="scope">
-          {{scope.row.roleList.map(e=>e.roleName).join(',') || '暂未分配'}}
+          <span class="roleList">{{scope.row.roleList.map(e=>e.roleName).join(',') || '暂未分配'}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -293,5 +293,8 @@ export default {
   .el-pagination{
     float: right;
   }
+}
+.roleList{
+  font-size: 11px;
 }
 </style>

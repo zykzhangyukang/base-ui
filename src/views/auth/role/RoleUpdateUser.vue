@@ -74,6 +74,7 @@ export default {
       updateRoleUser({roleId: this.roleId , userIdList: this.value}).then(res=>{
         this.handleClose();
         this.$message.success("分配用户成功！")
+        this.$emit('success')
       }).finally(()=>{
         this.btnLoading = false;
       })

@@ -98,8 +98,7 @@ function isTokenExpiringSoon() {
     if (!expiresIn) {
         return true;
     }
-    console.log("token过期剩余时间:", expiresIn - new Date().getTime());
-    return expiresIn - new Date().getTime() < 20 * 1000;
+    return expiresIn - new Date().getTime() < 15 * 60 * 1000;
 }
 
 export default service;
