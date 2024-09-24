@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {Message} from 'element-ui'
 import store from "./store";
+import router from "./router";
 import {getAccessToken, getExpiresIn} from './utils/cookie'
 
 // 创建axios实例
@@ -33,9 +34,9 @@ service.interceptors.request.use(
                 } catch (error) {
                     console.error('刷新Token失败', error);
                     isRefreshing = false;
-                    store.commit('user/REMOVE_TOKEN');
-                    store.commit('user/CLEAR_USER_INFO');
-                    location.reload();
+                    store.commit('user/REMOVE_TOKEN')
+                    await router.push('/login');
+                    Message.error('会话已过期，请重新登录');
                 }
             } else if (isRefreshing) {
                 // 如果正在刷新token，将当前请求挂起，等刷新完成后继续执行

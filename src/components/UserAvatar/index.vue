@@ -12,10 +12,9 @@
 </template>
 
 <script>
-import Avatar from '../../assets/img/avatar.png'
-import { removeAccessToken, removeRefreshToken, removeExpiresIn } from '@/utils/cookie'
+  import Avatar from '../../assets/img/avatar.png'
 
-export default {
+  export default {
   name: 'UserAvatar',
   data() {
     return {
@@ -37,10 +36,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removeAccessToken()
-        removeRefreshToken()
-        removeExpiresIn();
-        location.reload()
+        this.$store.commit('user/REMOVE_TOKEN');
+        this.$router.push('/login')
       })
     }
   }

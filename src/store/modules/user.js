@@ -21,10 +21,8 @@ const mutations = {
     SET_USER_INFO(state, userInfo) {
         state.userInfo = userInfo;
     },
-    CLEAR_USER_INFO(state) {
-        state.userInfo = null;
-    },
     SET_TOKEN(state, result) {
+        // 设置令牌
         setAccessToken(result.accessToken)
         setRefreshToken(result.refreshToken)
 
@@ -32,10 +30,12 @@ const mutations = {
         const current = new Date()
         const expireTime = current.setTime(current.getTime() + 1000 * result.expiresIn);
         setExpiresIn(expireTime)
-    }, REMOVE_TOKEN() {
+    },
+    REMOVE_TOKEN(state) {
         removeRefreshToken();
         removeAccessToken();
         removeExpiresIn();
+        state.userInfo = null;
     }
 }
 
