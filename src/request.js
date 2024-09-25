@@ -72,7 +72,7 @@ service.interceptors.response.use(
                 message
             });
             return Promise.reject('error');
-        } else {
+        } else if(code === 500){
             Message({
                 type: 'error',
                 message
@@ -85,7 +85,7 @@ service.interceptors.response.use(
         if (!code) {
             Message({
                 type: 'error',
-                message: '接口请求失败'
+                message: '网络异常，请检查网络连接！'
             });
         }
         return Promise.reject(error);
