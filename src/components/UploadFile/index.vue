@@ -4,9 +4,13 @@
                 ref="upload"
                 class="upload-demo"
                 action=""
+                :multiple="false"
                 :before-upload="handleBeforeUpload"
                 :file-list="fileList"
+                :limit="1"
+                :http-request="httpRequest"
                 :show-file-list="false"
+                :auto-upload="false"
         >
             <el-button slot="trigger" type="primary">选择文件</el-button>
 
@@ -31,12 +35,19 @@
         },
         methods: {
             handleBeforeUpload(file) {
-                this.fileList.push(file);
+                if (this.worker) {
+                    this.worker.terminate();
+                    this.worker = null;
+                    this.progressPercent = 0;
+                    this.md5Hash = '';
+                }
                 this.startMD5Calculation(file);
-                return false;
             },
             submitUpload() {
                 this.$refs.upload.submit();
+            },
+            httpRequest(){
+                console.log("上传.....:"+this.md5Hash)
             },
             startMD5Calculation(file) {
                 this.worker = new Md5Worker();
@@ -55,8 +66,14 @@
                     }
                 };
 
+                // 计算文件md5
                 this.worker.postMessage({ file, uid: file.uid });
             },
+        },
+        beforeDestroy() {
+            if (this.worker) {
+                this.worker.terminate();
+            }
         },
     };
 </script>
