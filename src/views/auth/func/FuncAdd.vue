@@ -36,10 +36,9 @@
 </template>
 <script>
 
-import {adminDomain, formatConst, getConst} from "@/utils";
-import {saveFunc} from "@/api/func";
-
-export default {
+  import {adminDomain, formatConst, getConst} from "@/utils";
+  import {saveFunc} from "@/api/func";
+  export default {
   name: 'FuncAdd',
   components: {
   },
