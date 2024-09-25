@@ -25,7 +25,7 @@
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
-    <el-table
+    <my-table
         border
         ref="tableList"
         v-loading="tableLoading"
@@ -87,11 +87,11 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.rescId)">编辑</el-button>
-          <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.rescId)">删除</el-button>
+          <el-button type="text" icon="el-icon-edit-outline" @click="handleUpdate(scope.row.rescId)">编辑</el-button>
+          <el-button type="text" icon="el-icon-delete" @click="handleDel(scope.row.rescId)">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </my-table>
     <!-- 分页栏 -->
     <div class="pagination-wrapper">
       <el-pagination
@@ -116,12 +116,14 @@ import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import RescAdd from "@/views/auth/resc/RescAdd.vue";
 import RescUpdate from "@/views/auth/resc/RescUpdate.vue";
 import {deleteResc, getRescPage} from "@/api/resc";
-import {deleteUser} from "@/api/user";
+import MyTable from '@/components/MyTable/index'
+
 
 export default {
   components: {
     RescAdd,
-    RescUpdate
+    RescUpdate,
+    MyTable
   },
   data() {
     return {
@@ -143,10 +145,6 @@ export default {
       }
     }
   },
-  mounted() {
-    this.resetTableHeight();
-    window.onresize = this.resetTableHeight;
-  },
   computed:{
     methodTypeG(){
       return getConst("method_type", adminDomain)
@@ -165,10 +163,10 @@ export default {
     handleAdd(){
       this.$refs.addRef.handleOpen();
     },
-    handeUpdate(id){
+    handleUpdate(id){
       this.$refs.updateRef.handleOpen(id);
     },
-    handeDel(id){
+    handleDel(id){
       this.$confirm('此操作将删除该资源, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -215,14 +213,6 @@ export default {
       this.searchForm.currentPage = val;
       this.fetchData();
     },
-    resetTableHeight(){
-      this.$nextTick(()=>{
-        let tableDom = this.$refs.tableList.$el;
-        let top  = tableDom.getBoundingClientRect().top;
-        let bottom = 100;
-        this.tableHeight = window.innerHeight - top -bottom;
-      })
-    }
   },
   created() {
     this.fetchData();

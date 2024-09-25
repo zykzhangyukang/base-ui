@@ -37,14 +37,14 @@
               <el-icon class="el-icon-delete"></el-icon>批量删除
             </el-dropdown-item>
             <el-dropdown-item>
-              <span @click="handeStatus"><el-icon class="el-icon-warning-outline"></el-icon>启用/禁用</span>
+              <span @click="handleStatus"><el-icon class="el-icon-warning-outline"></el-icon>启用/禁用</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
-    <el-table
+    <my-table
         border
         ref="tableList"
         v-loading="tableLoading"
@@ -121,7 +121,7 @@
           <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.userId)">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </my-table>
     <!-- 分页栏 -->
     <div class="pagination-wrapper">
       <el-pagination
@@ -146,11 +146,13 @@ import {deleteUser, disableUser, enableUser, getUserPage} from "@/api/user";
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import UserAdd from "@/views/auth/user/UserAdd.vue";
 import UserUpdate from "@/views/auth/user/UserUpdate.vue";
+import MyTable from '@/components/MyTable/index'
 
 export default {
   components: {
     UserAdd,
-    UserUpdate
+    UserUpdate,
+    MyTable
   },
   data() {
     return {
@@ -181,12 +183,8 @@ export default {
       return formatConst(this.userStatusG);
     }
   },
-  mounted() {
-    this.resetTableHeight();
-    window.onresize = this.resetTableHeight;
-  },
   methods: {
-    handeStatus(){
+    handleStatus(){
       const data = this.$refs.tableList.selection;
       if(data.length === 0){
         return this.$message.warning("请勾选记录后进行操作！");
@@ -273,14 +271,6 @@ export default {
       this.searchForm.currentPage = val;
       this.fetchData();
     },
-    resetTableHeight(){
-      this.$nextTick(()=>{
-        let tableDom = this.$refs.tableList.$el;
-        let top  = tableDom.getBoundingClientRect().top;
-        let bottom = 100;
-        this.tableHeight = window.innerHeight - top -bottom;
-      })
-    }
   },
   created() {
     this.fetchData();

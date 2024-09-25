@@ -83,7 +83,7 @@
           </el-form-item>
         </el-form>
         <!-- 表格栏 -->
-        <el-table
+        <my-table
             border
             ref="tableList"
             v-loading="tableLoading"
@@ -165,11 +165,11 @@
               align="center"
           >
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.funcId)">编辑</el-button>
-              <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.funcId)">删除</el-button>
+              <el-button type="text" icon="el-icon-edit-outline" @click="handleUpdate(scope.row.funcId)">编辑</el-button>
+              <el-button type="text" icon="el-icon-delete" @click="handleDel(scope.row.funcId)">删除</el-button>
             </template>
           </el-table-column>
-        </el-table>
+        </my-table>
         <!-- 分页栏 -->
         <div class="pagination-wrapper">
           <el-pagination
@@ -200,12 +200,14 @@ import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import FuncAdd from "@/views/auth/func/FuncAdd.vue";
 import FuncUpdate from "@/views/auth/func/FuncUpdate.vue";
 import FuncResc from "@/views/auth/func/FuncResc.vue";
+import MyTable from '@/components/MyTable/index'
 
 export default {
   components: {
     FuncAdd,
     FuncUpdate,
-    FuncResc
+    FuncResc,
+    MyTable
   },
   data() {
     return {
@@ -259,7 +261,7 @@ export default {
     showRescVoList(list){
       this.$refs.funcRescRef.handleOpen(list);
     },
-    handeDel(id){
+    handleDel(id){
       this.$confirm('此操作将删除该功能, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -277,7 +279,7 @@ export default {
     handUpdateSuccess(){
       this.onSubmit();
     },
-    handeUpdate(id){
+    handleUpdate(id){
       this.$refs.updateRef.handleOpen(id);
     },
     handleAdd(){
@@ -330,14 +332,6 @@ export default {
       this.searchForm.currentPage = val;
       this.fetchData();
     },
-    resetTableHeight() {
-      this.$nextTick(() => {
-        let tableDom = this.$refs.tableList.$el;
-        let top = tableDom.getBoundingClientRect().top;
-        let bottom = 100;
-        this.tableHeight = window.innerHeight - top - bottom;
-      })
-    },
     fetchData() {
       if(this.parentNode && this.parentNode.funcId){
         this.searchForm.parentId = this.parentNode.funcId;
@@ -352,10 +346,6 @@ export default {
         this.tableLoading = false;
       })
     },
-  },
-  mounted() {
-    this.resetTableHeight();
-    window.onresize = this.resetTableHeight;
   },
   created() {
     this.fetchTreeData();

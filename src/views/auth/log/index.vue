@@ -21,7 +21,7 @@
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
-    <el-table
+    <my-table
         border
         ref="tableList"
         v-loading="tableLoading"
@@ -92,7 +92,7 @@
           sortable
       >
       </el-table-column>
-    </el-table>
+    </my-table>
     <!-- 分页栏 -->
     <div class="pagination-wrapper">
       <el-pagination
@@ -111,9 +111,11 @@
 <script>
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import {getLogPage} from "@/api/log";
+import MyTable from '@/components/MyTable/index'
 
 export default {
   components: {
+    MyTable
   },
   data() {
     return {
@@ -146,10 +148,6 @@ export default {
       return formatConst(this.logLevelG);
     },
   },
-  mounted() {
-    this.resetTableHeight();
-    window.onresize = this.resetTableHeight;
-  },
   methods: {
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -180,14 +178,6 @@ export default {
       this.searchForm.currentPage = val;
       this.fetchData();
     },
-    resetTableHeight(){
-      this.$nextTick(()=>{
-        let tableDom = this.$refs.tableList.$el;
-        let top  = tableDom.getBoundingClientRect().top;
-        let bottom = 100;
-        this.tableHeight = window.innerHeight - top -bottom;
-      })
-    }
   },
   created() {
     this.fetchData();

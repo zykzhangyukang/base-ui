@@ -12,7 +12,7 @@
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
-    <el-table
+    <my-table
         border
         ref="tableList"
         v-loading="tableLoading"
@@ -69,7 +69,7 @@
           <el-button type="text" icon="el-icon-lock" @click="handleUpdateUser(scope.row.roleId)">用户</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </my-table>
     <!-- 分页栏 -->
     <div class="pagination-wrapper">
       <el-pagination
@@ -97,12 +97,14 @@ import RoleAdd from "@/views/auth/role/RoleAdd.vue";
 import RoleUpdate from "@/views/auth/role/RoleUpdate.vue";
 import RoleUpdateUser from "@/views/auth/role/RoleUpdateUser.vue";
 import {deleteRole, getRolePage} from "@/api/role";
+import MyTable from '@/components/MyTable/index'
 
 export default {
   components: {
     RoleAdd,
     RoleUpdate,
-    RoleUpdateUser
+    RoleUpdateUser,
+    MyTable
   },
   data() {
     return {
@@ -123,10 +125,6 @@ export default {
     }
   },
   computed:{
-  },
-  mounted() {
-    this.resetTableHeight();
-    window.onresize = this.resetTableHeight;
   },
   methods: {
     handleAdd(){
@@ -185,14 +183,6 @@ export default {
       this.searchForm.currentPage = val;
       this.fetchData();
     },
-    resetTableHeight(){
-      this.$nextTick(()=>{
-        let tableDom = this.$refs.tableList.$el;
-        let top  = tableDom.getBoundingClientRect().top;
-        let bottom = 100;
-        this.tableHeight = window.innerHeight - top -bottom;
-      })
-    }
   },
   created() {
     this.fetchData();
