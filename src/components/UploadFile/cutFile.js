@@ -1,5 +1,5 @@
 import Worker from 'worker-loader!@/components/UploadFile/worker.js';
-export const CHUNK_SIZE = 1024 * 1024 * 5;
+export const CHUNK_SIZE = 1024 * 1024;
 
 export async function cutFile(file) {
     return new Promise(resolve => {

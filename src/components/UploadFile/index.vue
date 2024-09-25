@@ -19,6 +19,8 @@
 <script>
     import SparkMD5 from 'spark-md5';
     import {cutFile} from "./cutFile";
+    import {uploadFileChunk} from "../../api/file";
+
     export default {
         data() {
             return {
@@ -27,18 +29,33 @@
             };
         },
         methods: {
-            async httpRequest(option){
+            async httpRequest(option) {
                 const spark = new SparkMD5.ArrayBuffer();
-                let chunkList = await cutFile(option.file);
-                chunkList.forEach(e=>{
+                const chunkList = await cutFile(option.file);
+                // 计算整个文件的 hash
+                chunkList.forEach(e => {
                     spark.append(e.hash);
-                })
-                let hash = spark.end();
-                this.uploadChunks(hash, chunkList);
+                });
+                const hash = spark.end();
+                // 逐个上传分片
+                for (const chunk of chunkList) {
+                    await this._uploadChunk(hash, chunk);
+                }
             },
-            uploadChunks(){
-
-            }
+            async _uploadChunk(hash, chunk) {
+                console.log(chunk)
+                const formData = new FormData();
+                formData.append('hash', hash)
+                formData.append('file', chunk.blob)
+                formData.append('num', chunk.index)
+                try {
+                    const response = await uploadFileChunk(formData);
+                    console.log('Chunk uploaded successfully:', response);
+                } catch (error) {
+                    console.error('Error uploading chunk:', error);
+                    // 可以添加重试逻辑或其他处理逻辑
+                }
+            },
         },
         created() {
         }
