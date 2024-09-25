@@ -5,90 +5,48 @@
                 class="upload-demo"
                 action=""
                 :multiple="false"
-                :before-upload="handleBeforeUpload"
-                :file-list="fileList"
                 :limit="1"
-                :http-request="httpRequest"
+                :file-list="fileList"
                 :show-file-list="false"
-                :auto-upload="false"
+                :auto-upload="true"
+                :http-request="httpRequest"
         >
             <el-button slot="trigger" type="primary">选择文件</el-button>
-
-            <el-button v-if="fileList.length > 0" type="success" @click="submitUpload">上传</el-button>
-            <div v-if="progressPercent !== 0" class="progress-info">进度: {{ progressPercent }}%</div>
-            <div v-if="md5Hash" class="md5-info">MD5: {{ md5Hash }}</div>
         </el-upload>
     </div>
 </template>
 
 <script>
-    import Md5Worker from 'worker-loader!@/components/UploadFile/md5-worker.js';
-
+    import SparkMD5 from 'spark-md5';
+    import {cutFile} from "./cutFile";
     export default {
         data() {
             return {
-                fileList: [],
                 worker: null,
-                progressPercent: 0,
-                md5Hash: '',
+                fileList: []
             };
         },
         methods: {
-            handleBeforeUpload(file) {
-                if (this.worker) {
-                    this.worker.terminate();
-                    this.worker = null;
-                    this.progressPercent = 0;
-                    this.md5Hash = '';
-                }
-                this.startMD5Calculation(file);
+            async httpRequest(option){
+                const spark = new SparkMD5.ArrayBuffer();
+                let chunkList = await cutFile(option.file);
+                chunkList.forEach(e=>{
+                    spark.append(e.hash);
+                })
+                let hash = spark.end();
+                this.uploadChunks(hash, chunkList);
             },
-            submitUpload() {
-                this.$refs.upload.submit();
-            },
-            httpRequest(){
-                console.log("上传.....:"+this.md5Hash)
-            },
-            startMD5Calculation(file) {
-                this.worker = new Md5Worker();
+            uploadChunks(){
 
-                this.worker.onmessage = (e) => {
-                    const { status, uid, md5, percent, error } = e.data;
-
-                    if (status === 'progress') {
-                        this.progressPercent = percent;
-                    } else if (status === 'success') {
-                        this.md5Hash = md5;
-                        this.worker.terminate();
-                    } else if (status === 'failed') {
-                        this.md5Hash = `计算失败: ${error}`;
-                        this.worker.terminate();
-                    }
-                };
-
-                // 计算文件md5
-                this.worker.postMessage({ file, uid: file.uid });
-            },
-        },
-        beforeDestroy() {
-            if (this.worker) {
-                this.worker.terminate();
             }
         },
+        created() {
+        }
     };
 </script>
 
 <style scoped>
     .upload-demo {
         margin: 20px;
-    }
-
-    .progress-info {
-        margin-top: 10px;
-    }
-
-    .md5-info {
-        margin-top: 10px;
-        font-weight: bold;
     }
 </style>
