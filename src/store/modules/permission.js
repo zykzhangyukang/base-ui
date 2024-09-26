@@ -11,7 +11,14 @@ const state = {
     const:[]
 }
 
-const getters = {}
+const getters = {
+    btnPermissions: state => {
+        if (state.permission != null && state.permission.buttons != null && state.permission.buttons.length > 0) {
+            return state.permission.buttons
+        }
+        return [];
+    }
+}
 
 const mutations = {
     SET_MENU(state, menusList) {
