@@ -6,6 +6,10 @@ import store from "../store";
 const whiteList = ['/login']
 
 router.beforeEach(async (to, from, next) => {
+
+    // 改变页面标题
+    document.title = getPageTitle(to.meta.title || to.name)
+
     if (getAccessToken()) {
         // 已登录且要跳转的是登录页
         if (to.path === '/login') {
@@ -46,3 +50,13 @@ router.beforeEach(async (to, from, next) => {
         }
     }
 })
+
+
+
+function getPageTitle(pageTitle) {
+    let titleStr = ''
+    if (pageTitle) {
+        titleStr += `${pageTitle}`
+    }
+    return titleStr + ' - ' + '后台管理手脚架'
+}
