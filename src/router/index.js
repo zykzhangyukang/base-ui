@@ -22,7 +22,6 @@ Router.prototype.replace = function push(location, onResolve, onReject) {
     return originalReplace.call(this, location).catch(err => err);
 };
 
-
 /**
  * hidden: true                  如果设置为 true，该项菜单将不会显示在菜单栏中(默认为 false)
  * meta : {
