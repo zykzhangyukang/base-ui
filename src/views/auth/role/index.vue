@@ -66,7 +66,7 @@
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)">编辑</el-button>
           <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.roleId)">删除</el-button>
-          <el-button type="text" icon="el-icon-lock" @click="handleUpdateUser(scope.row.roleId)">用户</el-button>
+          <el-button type="text" icon="el-icon-document" @click="handleUpdateUser(scope.row.roleId)">用户</el-button>
         </template>
       </el-table-column>
     </my-table>

@@ -16,6 +16,12 @@
       <el-form-item label="用户密码" prop="password">
         <el-input v-model="form.password" placeholder="用户密码"  clearable></el-input>
       </el-form-item>
+      <el-form-item label="联系方式" prop="phone">
+        <el-input v-model="form.phone" placeholder="联系方式"  clearable></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱地址" prop="email">
+        <el-input v-model="form.email" placeholder="邮箱地址"  clearable></el-input>
+      </el-form-item>
       <el-form-item label="所属部门" prop="deptId">
         <el-select v-model="form.deptId" placeholder="所属部门">
           <el-option v-for="item in deptList" :label="item.deptName" :value="item.deptId" :key="item.deptId"></el-option>
@@ -52,6 +58,8 @@ export default {
         deptId: null,
         realName: '',
         userStatus: 1,
+        phone: '',
+        email: ''
       }
     }
   },
