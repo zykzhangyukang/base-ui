@@ -24,6 +24,7 @@
 import SparkMD5 from 'spark-md5';
 import {cutFile} from "./cutFile";
 import {uploadFileChunk} from "@/api/file";
+import {uploadFileChunkStart} from "../../api/file";
 
 export default {
   data() {
@@ -43,17 +44,23 @@ export default {
     },
     async httpRequest(option) {
       this.loading = true;
-      const chunkList = await cutFile(option.file).finally(() => {
+      let file = option.file;
+      const chunkList = await cutFile(file).finally(() => {
         this.loading = false;
       });
       chunkList.forEach(e => {
         this.spark.append(e.hash);
       });
       const hash = this.spark.end();
+
+      const {result: uploadId} = await this._uploadStart(file);
+      console.log(uploadId)
+
       for (const chunk of chunkList) {
          await this._uploadChunk(hash, chunk);
       }
     },
+    // 上传分片文件
     async _uploadChunk(hash, chunk) {
       const formData = new FormData();
       formData.append('hash', hash)
@@ -61,6 +68,12 @@ export default {
       formData.append('index', chunk.index)
       return uploadFileChunk(formData);
     },
+    // 开始上传分片
+    async _uploadStart(file) {
+      const formData = new FormData();
+      formData.append('fileName', file.name)
+      return uploadFileChunkStart(formData);
+    }
   },
   created() {
   }
