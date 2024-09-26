@@ -197,6 +197,5 @@ export default {
   }
 }
 .userVOList{
-  font-size: 11px;
 }
 </style>

@@ -52,6 +52,7 @@
         @sort-change="sortChange"
         style="width: 100%"
         :height="tableHeight"
+        @selection-change="handleSelectionChange"
     >
       <el-table-column
           type="selection"
@@ -78,6 +79,12 @@
           show-overflow-tooltip
           sortable
       >
+        >
+        <template slot-scope="scope">
+          <span>
+              {{scope.row.phone}}
+          </span>
+        </template>
       </el-table-column>
       <el-table-column
           prop="email"
@@ -131,13 +138,10 @@
       <el-table-column
           label="操作"
           align="center"
-          fixed="right"
-          width="200"
       >
         <template slot-scope="scope">
           <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.userId)">编辑</el-button>
           <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.userId)">删除</el-button>
-          <el-button type="text" icon="el-icon-document" >角色</el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -204,14 +208,13 @@ export default {
   },
   methods: {
     handleStatus(){
-      const data = this.$refs.tableList.selection;
-      if(data.length === 0){
+      if(this.multipleSelection.length === 0){
         return this.$message.warning("请勾选记录后进行操作！");
       }
-      if(data.length !==1){
+      if(this.multipleSelection.length !==1){
         return this.$message.warning("只支持勾选一条记录操作！");
       }
-      let rowData = data[0];
+      let rowData = this.multipleSelection[0];
       let type = rowData.userStatus === 0 ? '启用' : '禁用';
       this.$confirm(`您是否要${type}(${rowData.realName})的账号?`, '提示', {
         confirmButtonText: '确定',
@@ -236,6 +239,9 @@ export default {
           })
         }
       });
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
     },
     handleAdd(){
       this.$refs.addRef.handleOpen();
@@ -304,6 +310,5 @@ export default {
   }
 }
 .roleList{
-  font-size: 11px;
 }
 </style>
