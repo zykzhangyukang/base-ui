@@ -14,9 +14,9 @@
         <el-form-item label="真实姓名" prop="realName">
           <el-input v-model="form.realName" placeholder="真实姓名"  clearable></el-input>
         </el-form-item>
-        <el-form-item label="所属部门" prop="deptCode">
-          <el-select v-model="form.deptCode" placeholder="所属部门">
-            <el-option v-for="item in deptList" :label="item.deptName" :value="item.deptCode" :key="item.deptCode"></el-option>
+        <el-form-item label="所属部门" prop="deptId">
+          <el-select v-model="form.deptId" placeholder="所属部门">
+            <el-option v-for="item in deptList" :label="item.deptName" :value="item.deptId" :key="item.deptId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="userStatus">

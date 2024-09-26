@@ -16,9 +16,9 @@
       <el-form-item label="用户密码" prop="password">
         <el-input v-model="form.password" placeholder="用户密码"  clearable></el-input>
       </el-form-item>
-      <el-form-item label="所属部门" prop="deptCode">
-        <el-select v-model="form.deptCode" placeholder="所属部门">
-          <el-option v-for="item in deptList" :label="item.deptName" :value="item.deptCode" :key="item.deptCode"></el-option>
+      <el-form-item label="所属部门" prop="deptId">
+        <el-select v-model="form.deptId" placeholder="所属部门">
+          <el-option v-for="item in deptList" :label="item.deptName" :value="item.deptId" :key="item.deptId"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="userStatus">
@@ -49,7 +49,7 @@ export default {
       form:{
         username: '',
         password: '',
-        deptCode: '',
+        deptId: null,
         realName: '',
         userStatus: 1,
       }

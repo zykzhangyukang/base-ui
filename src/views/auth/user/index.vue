@@ -72,6 +72,22 @@
       >
       </el-table-column>
       <el-table-column
+          prop="phone"
+          label="手机号"
+          align="center"
+          show-overflow-tooltip
+          sortable
+      >
+      </el-table-column>
+      <el-table-column
+          prop="email"
+          label="邮箱"
+          show-overflow-tooltip
+          align="center"
+          sortable
+      >
+      </el-table-column>
+      <el-table-column
           prop="userStatus"
           label="用户状态"
           align="center"
