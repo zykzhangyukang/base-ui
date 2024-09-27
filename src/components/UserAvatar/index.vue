@@ -37,7 +37,7 @@
         type: 'warning'
       }).then(() => {
         this.$store.commit('user/REMOVE_TOKEN');
-        this.$router.push('/login')
+        window.location.reload();
       })
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="home-wrapper">
-    <h1 style="text-align: center;margin-top: 100px;font-size: 24px;font-weight: 600">欢迎您({{userInfo.username}} )使用系统！</h1>
+    <h1 style="text-align: center;margin-top: 100px;font-size: 20px">{{userInfo.realName}}你好，欢迎您使用系统！</h1>
   </div>
 </template>
 

@@ -25,7 +25,7 @@ const mutations = {
         state.menusList = menusList;
     },
     CLEAR_MENU(state) {
-        state.menusList = null;
+        state.menusList = [];
     },
     SET_PERMISSION(state, permission) {
         state.permission = permission;

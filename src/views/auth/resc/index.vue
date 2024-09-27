@@ -32,7 +32,6 @@
         :data="tableData"
         @sort-change="sortChange"
         style="width: 100%"
-        :height="tableHeight"
     >
       <el-table-column
           prop="rescName"
@@ -131,7 +130,6 @@ export default {
       // 数据总条数
       total: 0,
       // 表格数据数组
-      tableHeight: 0,
       tableData: [],
       tableLoading: true,
       multipleSelection: [],

@@ -1,5 +1,13 @@
 import request from '../request'
 
+export function switchUserLogin(data) {
+    return request({
+        url: '/auth/user/switch/login',
+        method: 'post',
+        data
+    })
+}
+
 export function getUserPage(data) {
     return request({
         url: '/auth/user/page',
@@ -50,3 +58,19 @@ export function getUserDetail(id) {
         method: 'get',
     })
 }
+
+export function getUserRoleInit(id) {
+    return request({
+        url: '/auth/user/role/update/init?userId='+id,
+        method: 'get',
+    })
+}
+
+export function updateUserRole(data) {
+    return request({
+        url: '/auth/user/role/update',
+        method: 'put',
+        data
+    })
+}
+

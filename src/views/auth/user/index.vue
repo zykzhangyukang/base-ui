@@ -19,7 +19,7 @@
         <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
       </el-form-item>
       <el-form-item>
-        <el-dropdown>
+        <el-dropdown @command="handleCommand" trigger="click">
           <el-button>
             更多操作<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
@@ -27,17 +27,17 @@
             <el-dropdown-item>
               <el-icon class="el-icon-setting"></el-icon>重置密码
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item command="updateUserRole">
               <el-icon class="el-icon-set-up"></el-icon>分配角色
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item command="switchUserLogin">
               <el-icon class="el-icon-turn-off"></el-icon>切换登录
             </el-dropdown-item>
             <el-dropdown-item>
               <el-icon class="el-icon-delete"></el-icon>批量删除
             </el-dropdown-item>
-            <el-dropdown-item>
-              <span @click="handleStatus"><el-icon class="el-icon-warning-outline"></el-icon>启用/禁用</span>
+            <el-dropdown-item command="updateUserStatus">
+              <el-icon class="el-icon-warning-outline"></el-icon>启用/禁用
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -51,7 +51,6 @@
         :data="tableData"
         @sort-change="sortChange"
         style="width: 100%"
-        :height="tableHeight"
         @selection-change="handleSelectionChange"
     >
       <el-table-column
@@ -87,14 +86,6 @@
         </template>
       </el-table-column>
       <el-table-column
-          prop="email"
-          label="邮箱"
-          show-overflow-tooltip
-          align="center"
-          sortable
-      >
-      </el-table-column>
-      <el-table-column
           prop="userStatus"
           label="用户状态"
           align="center"
@@ -102,16 +93,6 @@
       >
         <template slot-scope="scope">
           <el-tag :type="scope.row.userStatus ===1 ? 'success' : 'danger'">{{userStatusGName[scope.row.userStatus]}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-          prop="roleList"
-          label="角色列表"
-          align="center"
-          show-overflow-tooltip
-      >
-        <template slot-scope="scope">
-          <span class="roleList">{{scope.row.roleList.map(e=>e.roleName).join(',') || '暂未分配'}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -140,8 +121,8 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.userId)">编辑</el-button>
-          <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.userId)">删除</el-button>
+          <el-button  size="mini" icon="el-icon-edit-outline"  @click="handeUpdate(scope.row.userId)"></el-button>
+          <el-button size="mini"  icon="el-icon-delete"  @click="handeDel(scope.row.userId)"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -161,6 +142,8 @@
     <user-add ref="addRef" @success="handAddSuccess"></user-add>
     <!-- 更新弹框-->
     <user-update ref="updateRef" @success="handUpdateSuccess"></user-update>
+    <!-- 用户分配角色 -->
+    <user-update-role ref="updateRoleRef" @success="handUpdateSuccess"></user-update-role>
   </div>
 </template>
 
@@ -170,12 +153,15 @@ import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import UserAdd from "@/views/auth/user/UserAdd.vue";
 import UserUpdate from "@/views/auth/user/UserUpdate.vue";
 import MyTable from '@/components/MyTable/index'
+import UserUpdateRole from "@/views/auth/user/UserUpdateRole.vue";
+import store from "@/store";
 
 export default {
   components: {
     UserAdd,
     UserUpdate,
-    MyTable
+    MyTable,
+    UserUpdateRole
   },
   data() {
     return {
@@ -183,7 +169,6 @@ export default {
       // 数据总条数
       total: 0,
       // 表格数据数组
-      tableHeight: 0,
       tableData: [],
       tableLoading: true,
       multipleSelection: [],
@@ -207,12 +192,44 @@ export default {
     }
   },
   methods: {
-    handleStatus(){
-      if(this.multipleSelection.length === 0){
-        return this.$message.warning("请勾选记录后进行操作！");
+    handleCommand(command){
+      if(command === 'updateUserStatus'){
+        return  this.handleUpdateUserStatus();
       }
+      if(command === 'updateUserRole'){
+        this.handleUpdateRole();
+      }
+      if(command === 'switchUserLogin'){
+        this.handleSwitchUserLogin();
+      }
+    },
+    handleSwitchUserLogin() {
+      if (this.multipleSelection.length !== 1) {
+        return this.$message.warning("请勾选一条记录进行操作！");
+      }
+      let rowData = this.multipleSelection[0];
+      this.$confirm(`您确定要切换用户【${rowData.realName}】的账号登录吗？`, '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const loading = this.$message.info({
+          message: '切换登录中',
+          iconClass: 'el-icon-loading',
+          duration: 0
+        })
+        store.dispatch('user/SWITCH_USER_LOGIN', this.multipleSelection[0].username).then(res => {
+          if(res.code === 200){
+            window.location.reload();
+          }
+        }).finally(()=>{
+          loading.close();
+        })
+      });
+    },
+    handleUpdateUserStatus(){
       if(this.multipleSelection.length !==1){
-        return this.$message.warning("只支持勾选一条记录操作！");
+        return this.$message.warning("请勾选一条记录进行操作！");
       }
       let rowData = this.multipleSelection[0];
       let type = rowData.userStatus === 0 ? '启用' : '禁用';
@@ -239,6 +256,12 @@ export default {
           })
         }
       });
+    },
+    handleUpdateRole(){
+      if(this.multipleSelection.length !==1){
+        return this.$message.warning("请勾选一条记录进行操作！");
+      }
+      this.$refs.updateRoleRef.handleOpen(this.multipleSelection[0].userId);
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;

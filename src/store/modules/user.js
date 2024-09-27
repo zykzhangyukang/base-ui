@@ -1,4 +1,4 @@
-import {getUserInfo, login} from "../../api/login";
+import {getUserInfo, login} from "@/api/login";
 import {
     getRefreshToken,
     removeAccessToken,
@@ -7,8 +7,10 @@ import {
     setAccessToken,
     setExpiresIn,
     setRefreshToken
-} from "../../utils/cookie";
+} from "@/utils/cookie";
 import axios from 'axios';
+import {switchUserLogin} from "@/api/user";
+import store from "@/store";
 
 const state = {
     // 用户信息
@@ -31,11 +33,10 @@ const mutations = {
         const expireTime = current.setTime(current.getTime() + 1000 * result.expiresIn);
         setExpiresIn(expireTime)
     },
-    REMOVE_TOKEN(state) {
+    REMOVE_TOKEN() {
         removeRefreshToken();
         removeAccessToken();
         removeExpiresIn();
-        state.userInfo = null;
     }
 }
 
@@ -70,6 +71,16 @@ const actions = {
                 reject(error);
             });
         });
+    },
+    async SWITCH_USER_LOGIN({commit, state}, username){
+        return new Promise((resolve, reject) => {
+            switchUserLogin({username: username.trim()}).then(response => {
+                commit('SET_TOKEN', response.result);
+                resolve(response);
+            }).catch(error => {
+                reject(error)
+            })
+        })
     }
 }
 

@@ -48,7 +48,7 @@ export function getRoleUserInit(id) {
 export function updateRoleUser(data) {
     return request({
         url: '/auth/role/user/update',
-        method: 'post',
+        method: 'put',
         data
     })
 }
