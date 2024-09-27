@@ -1,7 +1,7 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div class="table-user-wrapper">
     <!-- 查询栏 -->
-    <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
+    <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm" v-permission="['admin', 'editor']">
       <el-form-item label="用户账号" prop="username">
         <el-input v-model="searchForm.username" placeholder="用户账号"></el-input>
       </el-form-item>

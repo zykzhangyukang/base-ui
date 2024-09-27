@@ -12,9 +12,8 @@
         :before-upload="beforeUpload"
         :on-change="handleUploadChange"
     >
-      <el-button slot="trigger" type="primary" :loading="loading" icon="el-icon-upload">
-        <span v-if="!loading">选择文件</span>
-        <span v-else>解析中...</span>
+      <el-button slot="trigger" type="primary" icon="el-icon-upload">
+         选择文件
       </el-button>
     </el-upload>
   </div>
@@ -43,18 +42,21 @@ export default {
     beforeUpload(file){
     },
     async httpRequest(option) {
-      this.loading = true;
+      const loading = this.$message.warning({
+        message: '解析中',
+        iconClass: 'el-icon-loading',
+        duration: 0
+      })
+      // 文件切片
       let file = option.file;
-      const chunkList = await cutFile(file).finally(() => {
-        this.loading = false;
-      });
+      const chunkList = await cutFile(file).finally(() => {loading.close();});
       chunkList.forEach(e => {
         this.spark.append(e.hash);
       });
       const hash = this.spark.end();
 
+      // 开始上传任务
       const {result: uploadId} = await this._uploadStart(file);
-      console.log(uploadId)
 
       for (const chunk of chunkList) {
          await this._uploadChunk(hash, chunk);
