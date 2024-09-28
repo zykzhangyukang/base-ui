@@ -155,8 +155,13 @@ export default {
       this.fetchData()
     },
     sortChange({prop, order }){
-      this.searchForm.sortField = toLine(prop);
-      this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
+      if(order){
+        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
+      }else {
+        this.searchForm.sortField = '';
+        this.searchForm.sortType = '';
+      }
       this.fetchData();
     },
     fetchData() {

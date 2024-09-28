@@ -63,9 +63,9 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button type="text" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)">编辑</el-button>
-          <el-button type="text" icon="el-icon-delete" @click="handeDel(scope.row.roleId)">删除</el-button>
-          <el-button type="text" icon="el-icon-document" @click="handleUpdateUser(scope.row.roleId)">用户</el-button>
+          <el-button size="mini" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)"></el-button>
+          <el-button size="mini" icon="el-icon-delete" @click="handeDel(scope.row.roleId)"></el-button>
+          <el-button size="mini" icon="el-icon-user" @click="handleUpdateUser(scope.row.roleId)"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -160,8 +160,13 @@ export default {
       this.fetchData()
     },
     sortChange({prop, order }){
-      this.searchForm.sortField = toLine(prop);
-      this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
+      if(order){
+        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
+      }else {
+        this.searchForm.sortField = '';
+        this.searchForm.sortType = '';
+      }
       this.fetchData();
     },
     fetchData() {

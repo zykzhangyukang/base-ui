@@ -1,5 +1,6 @@
 /* 引入自定义滑动条样式 */
 @import "./scroll-bar";
+@import "./variables";
 
 .side-menu-wrapper {
   /* el-scrollbar引用自定义滑动 父类必设高度 */
@@ -39,12 +40,12 @@
           .el-submenu {
             .side-menu-item .el-submenu__title,
             .el-menu-item {
-              background: #202b30!important;
+              background: @subMenuBg!important;
             }
             /* 三级菜单颜色 */
             .el-submenu {
               .el-menu-item {
-                background: #1d272b!important;
+                //background: #1d272b!important;
               }
             }
             /* 三级菜单hover样式-较特殊 */
@@ -61,7 +62,7 @@
             &:hover,
             &.is-active {
               .icon, span {
-                color: #409eff;
+                color: @menuActiveText;
               }
             }
             &:hover {

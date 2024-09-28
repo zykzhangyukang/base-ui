@@ -164,8 +164,8 @@
               align="center"
           >
             <template slot-scope="scope">
-              <el-button type="text" icon="el-icon-edit-outline" @click="handleUpdate(scope.row.funcId)">编辑</el-button>
-              <el-button type="text" icon="el-icon-delete" @click="handleDel(scope.row.funcId)">删除</el-button>
+              <el-button size="mini" icon="el-icon-edit-outline" @click="handleUpdate(scope.row.funcId)"></el-button>
+              <el-button size="mini" icon="el-icon-delete" @click="handleDel(scope.row.funcId)"></el-button>
             </template>
           </el-table-column>
         </my-table>
@@ -284,8 +284,13 @@ export default {
       this.$refs.addRef.handleOpen(this.parentNode);
     },
     sortChange({prop, order }){
-      this.searchForm.sortField = toLine(prop);
-      this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
+      if(order){
+        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
+      }else {
+        this.searchForm.sortField = '';
+        this.searchForm.sortType = '';
+      }
       this.fetchData();
     },
     resetForm(formName) {

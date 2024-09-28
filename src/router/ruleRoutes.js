@@ -8,7 +8,7 @@ const ruleRoutes = [
         redirect: '/sync/result',
         meta: {
             title: '同步系统',
-            icon: 'vue-dsn-icon-tishi2',
+            icon: 'vue-icon-yuebaobiao',
             permission: 'sync_view'
         },
         children: [
@@ -60,7 +60,7 @@ const ruleRoutes = [
         component: Layout,
         meta: {
             title: '权限系统',
-            icon: 'vue-dsn-icon-xinzeng',
+            icon: 'vue-icon-a-1_shenpi',
             permission: 'auth_view'
         },
         children: [

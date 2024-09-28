@@ -67,7 +67,7 @@ export const DynamicRoutes = [
                 component: () => import('../views/Home'),
                 meta: {
                     title: '系统首页',
-                    icon: 'vue-dsn-icon-index',
+                    icon: 'vue-icon-a-1_daohang-dakai-54',
                     fixed: true
                 }
             }
