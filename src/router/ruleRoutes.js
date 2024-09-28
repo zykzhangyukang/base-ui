@@ -2,6 +2,78 @@ import Layout from "../layout/index";
 
 const ruleRoutes = [
     {
+        path: '/auth',
+        name: 'Auth',
+        component: Layout,
+        meta: {
+            title: '权限系统',
+            icon: 'vue-icon-a-1_shenpi',
+            permission: 'auth_view'
+        },
+        children: [
+            {
+                path: '/auth/user',
+                name: 'UserList',
+                component: () => import('@/views/auth/user/index.vue'),
+                meta: {
+                    icon: 'el-icon-user',
+                    title: '用户管理',
+                    permission: 'auth_user_view'
+                }
+            },
+            {
+                path: '/auth/role',
+                name: 'RoleList',
+                component: () => import('@/views/auth/role/index.vue'),
+                meta: {
+                    icon: 'el-icon-suitcase-1',
+                    title: '角色管理',
+                    permission: 'auth_role_view'
+                },
+            },
+            {
+                path: '/auth/role/func',
+                name: 'RoleFuncUpdate',
+                component: () => import('@/views/auth/role/RoleUpdateFunc.vue'),
+                meta: {
+                    icon: 'el-icon-suitcase-1',
+                    title: '角色更新功能',
+                    permission: 'auth_role_func_view'
+                },
+            },
+            {
+                path: '/auth/resc',
+                name: 'RescList',
+                component: () => import('@/views/auth/resc/index.vue'),
+                meta: {
+                    icon: 'el-icon-takeaway-box',
+                    title: '资源管理',
+                    permission: 'auth_resc_view'
+                }
+            },
+            {
+                path: '/auth/func',
+                name: 'FuncList',
+                component: () => import('@/views/auth/func/index.vue'),
+                meta: {
+                    icon: 'el-icon-folder-opened',
+                    title: '功能管理',
+                    permission: 'auth_func_view'
+                }
+            },
+            {
+                path: '/auth/log',
+                name: 'LogList',
+                component: () => import('@/views/auth/log/index.vue'),
+                meta: {
+                    icon: 'el-icon-document',
+                    title: '日志管理',
+                    permission: 'auth_log_view'
+                }
+            },
+        ]
+    },
+    {
         path: '/sync',
         name: 'Sync',
         component: Layout,
@@ -53,69 +125,7 @@ const ruleRoutes = [
                 }
             }
         ]
-    },
-    {
-        path: '/auth',
-        name: 'Auth',
-        component: Layout,
-        meta: {
-            title: '权限系统',
-            icon: 'vue-icon-a-1_shenpi',
-            permission: 'auth_view'
-        },
-        children: [
-            {
-                path: '/auth/user',
-                name: 'UserList',
-                component: () => import('@/views/auth/user/index.vue'),
-                meta: {
-                    icon: 'el-icon-user',
-                    title: '用户管理',
-                    permission: 'auth_user_view'
-                }
-            },
-            {
-                path: '/auth/role',
-                name: 'RoleList',
-                component: () => import('@/views/auth/role/index.vue'),
-                meta: {
-                    icon: 'el-icon-suitcase-1',
-                    title: '角色管理',
-                    permission: 'auth_role_view'
-                }
-            },
-            {
-                path: '/auth/resc',
-                name: 'RescList',
-                component: () => import('@/views/auth/resc/index.vue'),
-                meta: {
-                    icon: 'el-icon-takeaway-box',
-                    title: '资源管理',
-                    permission: 'auth_resc_view'
-                }
-            },
-            {
-                path: '/auth/func',
-                name: 'FuncList',
-                component: () => import('@/views/auth/func/index.vue'),
-                meta: {
-                    icon: 'el-icon-folder-opened',
-                    title: '功能管理',
-                    permission: 'auth_func_view'
-                }
-            },
-            {
-                path: '/auth/log',
-                name: 'LogList',
-                component: () => import('@/views/auth/log/index.vue'),
-                meta: {
-                    icon: 'el-icon-document',
-                    title: '日志管理',
-                    permission: 'auth_log_view'
-                }
-            },
-        ]
-    },
+    }
 ]
 
 export default ruleRoutes

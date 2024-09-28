@@ -42,15 +42,14 @@ const actions = {
     async FETCH_PERMISSION({commit, state}) {
         let {result: permission} = await getPermission();
         // 路由比对
-        let routers = recursionRouter(permission.menus, ruleRoutes);
-        DynamicRoutes.push(...routers);
+        let userRouterList = recursionRouter(permission.menus, ruleRoutes);
+        DynamicRoutes.push(...userRouterList);
         // 设置菜单
         commit('SET_MENU', DynamicRoutes);
         // 初始化路由
         let initialRoutes = router.options.routes;
-        DynamicRoutes.map(r => {
-            router.addRoute(r);
-        })
+        // 添加动态路由
+        router.$addRoutes(DynamicRoutes);
         // 设置权限
         commit('SET_PERMISSION', [...initialRoutes, ...DynamicRoutes])
         // 设置常量

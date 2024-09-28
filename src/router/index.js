@@ -42,41 +42,51 @@ export const constantRoutes = [
         path: '/401',
         name: '401',
         component: () => import('../views/error/401'),
-        hidden: true,
-        meta: {title: '401'}
+        meta: {title: '401'},
     },
     {
-        path: '*',
+        path: '/404',
         name: '404',
         component: () => import('../views/error/404'),
-        hidden: true,
-        meta: {title: '404'}
+        meta: {title: '404'},
     },
 ]
 
 export const DynamicRoutes = [
     {
-        path: '',
+        path: '/',
         name: 'Layout',
         component: Layout,
-        redirect: '/home',
+        redirect: '/dashboard',
         children: [
             {
-                path: 'home',
-                name: 'Home',
-                component: () => import('../views/Home'),
+                path: 'dashboard',
+                name: 'Dashboard',
+                component: () => import('../views/Dashboard.vue'),
                 meta: {
-                    title: '系统首页',
+                    title: '首页',
                     icon: 'vue-icon-a-1_daohang-dakai-54',
                     fixed: true
                 }
             }
         ]
     },
+    // 接口获取动态路由。
 ]
 
 const routes = [...constantRoutes]
-const router  =new Router({
+const router = new Router({
     routes
 });
+router.$addRoutes = (params) => {
+    params.forEach((route) => {
+        router.addRoute(route);
+    })
+    // 匹配所以重定向最后添加
+    router.addRoute({
+        path: "/:pathMatch(.*)",
+        name: 'Redirect',
+        redirect: '/dashboard'
+    });
+};
 export default router
