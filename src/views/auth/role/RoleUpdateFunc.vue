@@ -1,8 +1,17 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading">
+    <div class="header">
+      <div class="role-info">
+        {{roleName}}：
+        <span class="user-info">{{userList.map(e=>e.realName).join(',')}}</span>
+      </div>
+      <div class="button-wrapper" style="display: flex; align-items: center; margin-left: auto;">
+        <el-button type='primary'>保存</el-button>
+        <el-button type="info" @click="$router.push('/auth/role')">返回</el-button>
+      </div>
+    </div>
     <span v-for="(item,index) in allTreeList" :key="index"  class="routeList-box">
       <el-tree
-          v-loading="loading"
           ref="tree"
           class="el-tree"
           show-checkbox
@@ -29,6 +38,8 @@ export default {
     return {
       loading: false,
       allTreeList:[],
+      roleName: '',
+      userList: [],
       defaultProps: {
         children: 'children',
         label: 'funcName',
@@ -44,6 +55,8 @@ export default {
       this.loading = true;
       getRoleFuncInit(roleId).then(res=>{
          this.allTreeList = res.result.allTreeList;
+         this.roleName = res.result.roleName;
+         this.userList = res.result.userList;
         this.$nextTick(() => {
           this.changeCss()
         })
@@ -58,22 +71,19 @@ export default {
     },
     renderContent(h, { node, data, store }) {
       let classname = '';
-      let icon = data.funcType === 'dir' ? 'el-icon-folder-opened' : 'el-icon-document';
+      let icon = '';
 
-      // 根据展开状态选择图标
-      if (node.isLeaf) {
-        icon = 'el-icon-document';
-      } else if (node.expanded) {
-        icon = 'el-icon-folder-opened';
-      } else {
-        icon = 'el-icon-folder';
-      }
 
       // 根据节点层级判断是否应用样式或图标
-      if (node.level === 4) {
+      if (data.funcType === 'btn') {
         classname = 'foo';
-      } else if (node.level === 3 && node.childNodes.length === 0) {
-        classname = 'foo';
+        icon = 'el-icon-document';
+      }else {
+        if (node.expanded) {
+          icon = 'el-icon-folder-opened';
+        } else {
+          icon = 'el-icon-folder';
+        }
       }
 
       // 渲染图标和文本
@@ -101,6 +111,30 @@ export default {
 </script>
 
 <style scoped lang="less">
+.header {
+  display: flex; /* 使用 Flexbox 布局 */
+  align-items: flex-start; /* 对齐方式 */
+  margin-bottom: 10px; /* 角色信息和按钮之间的间距 */
+}
+
+.role-info {
+  flex: 1;
+  margin-right: 20px;
+  font-weight: 600;
+}
+.user-info{
+  font-size: 12px;
+  margin-right: 5px;
+  color:#2d8cf0;
+  font-weight: normal;
+  cursor: pointer;
+  width: 50%;
+  overflow: hidden;
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
 // 树样式
 .el-tree {
   ::v-deep .el-tree-node {
