@@ -39,16 +39,26 @@ export const constantRoutes = [
         meta: {title: '登录'}
     },
     {
-        path: '/401',
-        name: '401',
-        component: () => import('../views/error/401'),
-        meta: {title: '401'},
-    },
-    {
-        path: '/404',
-        name: '404',
-        component: () => import('../views/error/404'),
-        meta: {title: '404'},
+        path: '/error',
+        name: 'ErrorLayout',
+        component: Layout,
+        redirect: '/error/404',
+        children: [
+            {
+                path: '404',
+                name: '404',
+                hidden: true,
+                component: () => import('../views/error/404'),
+                meta: {title: '页面不存在'},
+            },
+            {
+                path: '401',
+                name: '401',
+                component: () => import('../views/error/401'),
+                hidden: true,
+                meta: {title: '页面无权限'},
+            },
+        ]
     },
 ]
 
@@ -64,7 +74,7 @@ export const DynamicRoutes = [
                 name: 'Dashboard',
                 component: () => import('../views/Dashboard.vue'),
                 meta: {
-                    title: '首页',
+                    title: '控制台',
                     icon: 'vue-icon-a-1_daohang-dakai-54',
                     fixed: true
                 }
@@ -86,7 +96,7 @@ router.$addRoutes = (params) => {
     router.addRoute({
         path: "/:pathMatch(.*)",
         name: 'Redirect',
-        redirect: '/dashboard'
+        redirect: '/error/404'
     });
 };
 export default router

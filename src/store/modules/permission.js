@@ -59,19 +59,30 @@ const actions = {
 }
 
 function recursionRouter(userRouter = [], allRouter = []) {
-    const realRouters = [];
-    userRouter.forEach((item, index) => {
-        allRouter.forEach((v, i) => {
-            if (item.key === v.meta.permission) {
-                if (item.children && item.children.length > 0) {
-                    v.children = recursionRouter(item.children, v.children);
-                }
-                realRouters.push(v);
-            }
-        })
-    })
-    return realRouters;
+    const menuKeyList = extractKeys(userRouter);
+    return filterRouters(allRouter, menuKeyList);
 }
+
+// 提取用户所有有权限访问的 key
+function extractKeys(routes = []) {
+    return routes.reduce((keys, route) => {
+        keys.push(route.key);
+        if (route.children) keys.push(...extractKeys(route.children));
+        return keys;
+    }, []);
+}
+
+// 根据权限 key 过滤路由
+function filterRouters(routes = [], keys = []) {
+    return routes.filter(route => {
+        if (keys.includes(route.meta.permission)) {
+            if (route.children) route.children = filterRouters(route.children, keys);
+            return true;
+        }
+        return false;
+    });
+}
+
 
 export default {
     namespaced: true,

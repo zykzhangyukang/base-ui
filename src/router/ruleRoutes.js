@@ -12,7 +12,7 @@ const ruleRoutes = [
         },
         children: [
             {
-                path: '/auth/user',
+                path: 'user',
                 name: 'UserList',
                 component: () => import('@/views/auth/user/index.vue'),
                 meta: {
@@ -22,7 +22,7 @@ const ruleRoutes = [
                 }
             },
             {
-                path: '/auth/role',
+                path: 'role',
                 name: 'RoleList',
                 component: () => import('@/views/auth/role/index.vue'),
                 meta: {
@@ -32,17 +32,18 @@ const ruleRoutes = [
                 },
             },
             {
-                path: '/auth/role/func',
+                path: 'role-func',
                 name: 'RoleFuncUpdate',
                 component: () => import('@/views/auth/role/RoleUpdateFunc.vue'),
+                hidden: true,
                 meta: {
                     icon: 'el-icon-suitcase-1',
                     title: '角色更新功能',
-                    permission: 'auth_role_func_view'
+                    permission: 'auth_role_func_view',
                 },
             },
             {
-                path: '/auth/resc',
+                path: 'resc',
                 name: 'RescList',
                 component: () => import('@/views/auth/resc/index.vue'),
                 meta: {
@@ -52,7 +53,7 @@ const ruleRoutes = [
                 }
             },
             {
-                path: '/auth/func',
+                path: 'func',
                 name: 'FuncList',
                 component: () => import('@/views/auth/func/index.vue'),
                 meta: {
@@ -62,13 +63,13 @@ const ruleRoutes = [
                 }
             },
             {
-                path: '/auth/log',
+                path: 'log',
                 name: 'LogList',
                 component: () => import('@/views/auth/log/index.vue'),
                 meta: {
                     icon: 'el-icon-document',
                     title: '日志管理',
-                    permission: 'auth_log_view'
+                    permission: 'auth_log_view',
                 }
             },
         ]
