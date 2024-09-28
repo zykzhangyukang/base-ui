@@ -6,18 +6,19 @@
         <span class="user-info">{{userList.map(e=>e.realName).join(',')}}</span>
       </div>
       <div class="button-wrapper" style="display: flex; align-items: center; margin-left: auto;">
-        <el-button type='primary'>保存</el-button>
+        <el-button type='primary' @click="handleSave">保存</el-button>
         <el-button type="info" @click="$router.push('/auth/role')">返回</el-button>
       </div>
     </div>
     <span v-for="(item,index) in allTreeList" :key="index"  class="routeList-box">
       <el-tree
-          ref="tree"
+          :ref="'tree' + index"
           class="el-tree"
           show-checkbox
           :expand-on-click-node="false"
-          node-key="id"
+          node-key="funcId"
           :indent="0"
+          :default-checked-keys="funcIdList"
           :data="[item]"
           :props="defaultProps"
           :highlight-current="true"
@@ -31,14 +32,16 @@
 </template>
 
 <script>
-import {getRoleFuncInit} from "@/api/role";
+import {getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck} from "@/api/role";
 
 export default {
   data() {
     return {
       loading: false,
       allTreeList:[],
+      funcIdList: [],
       roleName: '',
+      roleId: null,
       userList: [],
       defaultProps: {
         children: 'children',
@@ -50,13 +53,65 @@ export default {
      this.fetchData();
   },
   methods:{
+    handleSave() {
+      let allCheckedNodes = [];
+      let allHalfCheckedNodes = [];
+
+      // 遍历所有 `el-tree` 组件的 ref
+      this.allTreeList.forEach((item, index) => {
+        const treeRef = this.$refs['tree' + index];
+        if (treeRef && treeRef[0]) {  // 由于 `ref` 是数组形式，需要取第一个元素
+          // 获取勾选的节点
+          const checkedNodes = treeRef[0].getCheckedNodes();
+          allCheckedNodes = allCheckedNodes.concat(checkedNodes);
+
+          // 获取半选的节点
+          const halfCheckedNodes = treeRef[0].getHalfCheckedNodes();
+          allHalfCheckedNodes = allHalfCheckedNodes.concat(halfCheckedNodes);
+        }
+      });
+      // 处理勾选的节点，例如提取 ID 列表
+      const checkedFuncIds = allCheckedNodes.map(node => node.funcId);
+      const halfCheckedFuncIds = allHalfCheckedNodes.map(node => node.funcId);
+
+      const funcIdList = [...checkedFuncIds, ...halfCheckedFuncIds];
+      roleFuncUpdateCheck({roleId: this.roleId, funcIdList}).then(res=>{
+        const insertList = res.result.insertList;
+        const delList = res.result.delList;
+
+        // 提示新增和删除功能的列表
+        const insertStr = insertList.length > 0 ? insertList.map(item => item.funcName).join(', ') : '无';
+        const delStr = delList.length > 0 ? delList.map(item => item.funcName).join(', ') : '无';
+
+        // 使用 Element UI 弹框提示
+        this.$alert(
+            `<strong>新增功能:</strong> ${insertStr}<br><strong>删除功能:</strong> ${delStr}`,
+            '操作结果',
+            {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: '确定',
+              type: 'warning',
+            }
+        ).then(res=>{
+          this.loading = true;
+          roleFuncUpdate({roleId: this.roleId, funcIdList}).then(res=>{
+            this.$message.success('分配功能成功！');
+          }).finally(res=>{
+            this.loading = false;
+          })
+        });
+      })
+
+    },
      fetchData(){
       const  roleId = this.$route.params.id;
       this.loading = true;
       getRoleFuncInit(roleId).then(res=>{
          this.allTreeList = res.result.allTreeList;
          this.roleName = res.result.roleName;
+         this.roleId = res.result.roleId;
          this.userList = res.result.userList;
+         this.funcIdList = res.result.funcIdList;
         this.$nextTick(() => {
           this.changeCss()
         })

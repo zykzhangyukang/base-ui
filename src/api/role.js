@@ -60,3 +60,19 @@ export function getRoleFuncInit(id) {
     })
 }
 
+export function roleFuncUpdate(data) {
+    return request({
+        url: '/auth/role/func/update',
+        method: 'put',
+        data
+    })
+}
+
+export function roleFuncUpdateCheck(data) {
+    return request({
+        url: '/auth/role/func/update/check',
+        method: 'post',
+        data
+    })
+}
+
