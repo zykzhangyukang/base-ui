@@ -37,7 +37,7 @@
       >
       </el-table-column>
       <el-table-column
-          prop="username"
+          prop="realName"
           label="操作人"
           align="center"
           sortable

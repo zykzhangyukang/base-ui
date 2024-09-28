@@ -6,6 +6,7 @@
     </div>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="userCenter">个人中心</el-dropdown-item>
+      <el-dropdown-item command="clearCache">清除缓存</el-dropdown-item>
       <el-dropdown-item command="loginOut">退出登录</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -49,7 +50,6 @@
   float: left;
   width: 48px;
   padding: 3px 0 3px 20px;
-  margin-left: 20px;
   cursor: pointer;
   .avatar-box {
     outline: none;

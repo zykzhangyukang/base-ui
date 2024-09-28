@@ -123,6 +123,7 @@
         <template slot-scope="scope">
           <el-button  size="mini" icon="el-icon-edit-outline"  @click="handeUpdate(scope.row.userId)"></el-button>
           <el-button size="mini"  icon="el-icon-delete"  @click="handeDel(scope.row.userId)"></el-button>
+          <el-button size="mini"  icon="el-icon-setting"  @click="handleUpdateRole(scope.row.userId)"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -257,11 +258,14 @@ export default {
         }
       });
     },
-    handleUpdateRole(){
-      if(this.multipleSelection.length !==1){
-        return this.$message.warning("请勾选一条记录进行操作！");
+    handleUpdateRole(userId){
+      if(!userId){
+        if(this.multipleSelection.length !==1){
+          return this.$message.warning("请勾选一条记录进行操作！");
+        }
+        userId = this.multipleSelection[0].userId;
       }
-      this.$refs.updateRoleRef.handleOpen(this.multipleSelection[0].userId);
+      this.$refs.updateRoleRef.handleOpen(userId);
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;

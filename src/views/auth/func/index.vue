@@ -76,7 +76,7 @@
               </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>
-                  <el-icon class="el-icon-delete"></el-icon>批量删除
+                  <el-icon class="el-icon-folder-delete"></el-icon>清空资源
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
