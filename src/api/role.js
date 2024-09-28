@@ -52,3 +52,11 @@ export function updateRoleUser(data) {
         data
     })
 }
+
+export function getRoleFuncInit(id) {
+    return request({
+        url: '/auth/role/func/update/init?roleId='+id,
+        method: 'get',
+    })
+}
+

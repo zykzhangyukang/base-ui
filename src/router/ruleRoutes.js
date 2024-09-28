@@ -32,7 +32,7 @@ const ruleRoutes = [
                 },
             },
             {
-                path: 'role-func',
+                path: 'role/func/:id',
                 name: 'RoleFuncUpdate',
                 component: () => import('@/views/auth/role/RoleUpdateFunc.vue'),
                 hidden: true,

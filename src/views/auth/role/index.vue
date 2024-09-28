@@ -65,7 +65,7 @@
         <template slot-scope="scope">
           <el-button size="mini" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)"></el-button>
           <el-button size="mini" icon="el-icon-delete" @click="handeDel(scope.row.roleId)"></el-button>
-          <el-button size="mini" icon="el-icon-folder-opened" ></el-button>
+          <el-button size="mini" icon="el-icon-folder-opened" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)" ></el-button>
         </template>
       </el-table-column>
     </my-table>
