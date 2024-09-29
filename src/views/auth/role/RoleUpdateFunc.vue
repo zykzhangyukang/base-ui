@@ -2,286 +2,241 @@
   <div class="container" v-loading="loading">
     <div class="header">
       <div class="role-info">
-        {{roleName}}：
-        <span class="user-info">{{userList.map(e=>e.realName).join(',')}}</span>
+        {{ roleName }}：
+        <span class="user-info">{{ userList.map(e => e.realName).join(', ') }}</span>
       </div>
       <div class="button-wrapper" style="display: flex; align-items: center; margin-left: auto;">
         <el-button type='primary' @click="handleSave">保存</el-button>
         <el-button type="info" @click="$router.push('/auth/role')">返回</el-button>
       </div>
     </div>
-    <span v-for="(item,index) in allTreeList" :key="index"  class="routeList-box">
+
+    <span v-for="(item, index) in allTreeList" :key="index" class="routeList-box">
       <el-tree
-          :ref="'tree' + index"
-          class="el-tree"
-          show-checkbox
-          :expand-on-click-node="false"
-          node-key="funcId"
-          :indent="0"
-          :data="[item]"
-          :props="defaultProps"
-          :highlight-current="true"
-          :default-expand-all="true"
-          :render-content="renderContent"
-          @node-expand="handleExpand"
-      >
-      </el-tree>
+              :ref="'tree' + index"
+              class="el-tree"
+              show-checkbox
+              :expand-on-click-node="false"
+              node-key="funcId"
+              :indent="0"
+              :data="[item]"
+              :props="defaultProps"
+              :highlight-current="true"
+              :default-expand-all="true"
+              :render-content="renderContent"
+              @node-expand="handleExpand"
+      />
     </span>
   </div>
 </template>
 
 <script>
-import {getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck} from "@/api/role";
+  import { getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck } from "@/api/role";
 
-export default {
-  data() {
-    return {
-      loading: false,
-      allTreeList:[],
-      funcIdList: [],
-      roleName: '',
-      roleId: null,
-      userList: [],
-      defaultProps: {
-        children: 'children',
-        label: 'funcName',
-      }
-    }
-  },
-  async created() {
-     await this.fetchData();
-  },
-  methods:{
-    handleSave() {
-      let allCheckedNodes = [];
-      let allHalfCheckedNodes = [];
-
-      // 遍历所有 `el-tree` 组件的 ref
-      this.allTreeList.forEach((item, index) => {
-        const treeRef = this.$refs['tree' + index];
-        if (treeRef && treeRef[0]) {  // 由于 `ref` 是数组形式，需要取第一个元素
-          // 获取勾选的节点
-          const checkedNodes = treeRef[0].getCheckedNodes();
-          allCheckedNodes = allCheckedNodes.concat(checkedNodes);
-
-          // 获取半选的节点
-          const halfCheckedNodes = treeRef[0].getHalfCheckedNodes();
-          allHalfCheckedNodes = allHalfCheckedNodes.concat(halfCheckedNodes);
-        }
-      });
-      // 处理勾选的节点，例如提取 ID 列表
-      const checkedFuncIds = allCheckedNodes.map(node => node.funcId);
-      const halfCheckedFuncIds = allHalfCheckedNodes.map(node => node.funcId);
-
-      const funcIdList = [...checkedFuncIds, ...halfCheckedFuncIds];
-      roleFuncUpdateCheck({roleId: this.roleId, funcIdList}).then(res=>{
-        const insertList = res.result.insertList;
-        const delList = res.result.delList;
-
-        // 提示新增和删除功能的列表
-        const insertStr = insertList.length > 0 ? insertList.map(item => item.funcName).join(', ') : '无';
-        const delStr = delList.length > 0 ? delList.map(item => item.funcName).join(', ') : '无';
-
-        // 使用 Element UI 弹框提示
-        this.$alert(
-            `<strong>新增功能:</strong> ${insertStr}<br><strong>删除功能:</strong> ${delStr}`,
-            '操作结果',
-            {
-              dangerouslyUseHTMLString: true,
-              confirmButtonText: '确定',
-              type: 'warning',
-            }
-        ).then(res=>{
-          this.loading = true;
-          roleFuncUpdate({roleId: this.roleId, funcIdList}).then(res=>{
-            this.$message.success('分配功能成功！');
-            this.fetchData();
-          }).finally(res=>{
-            this.loading = false;
-          })
-        });
-      })
-
-    },
-    async fetchData() {
-      const roleId = this.$route.params.id;
-      this.loading = true;
-
-      try {
-        const res = await getRoleFuncInit(roleId);
-        const { allTreeList, roleName, userList, funcIdList } = res.result;
-
-        this.allTreeList = allTreeList;
-        this.roleName = roleName;
-        this.roleId = roleId;
-        this.userList = userList;
-        this.funcIdList = funcIdList;
-
-        await this.$nextTick();
-        this.changeCss();
-
-        // 设置勾选的值
-        this.allTreeList.forEach((item, index) => {
-          const treeRef = this.$refs['tree' + index];
-          if (treeRef && treeRef[0]) {
-
-            // 获取所有的父节点id
-            const  parentIdList = this.getParentIds([item]);
-            //只需要叶子节点的id
-            let childrenIdList = this.funcIdList.filter(id => ! parentIdList.includes(id) );
-            treeRef[0].setCheckedKeys(childrenIdList);
-          }
-        });
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
-    getParentIds(item) {
-      const parentIdsSet = new Set(); // 使用 Set 避免重复的 parentId
-
-      const traverse = (nodes) => {
-        nodes.forEach(node => {
-          if (node.parentId !== null) {
-            parentIdsSet.add(node.parentId);
-          }
-          if (node.children && node.children.length > 0) {
-            traverse(node.children);
-          }
-        });
+  export default {
+    data() {
+      return {
+        loading: false,
+        allTreeList: [],
+        funcIdList: [],
+        roleName: '',
+        roleId: null,
+        userList: [],
+        defaultProps: {
+          children: 'children',
+          label: 'funcName',
+        },
       };
-      traverse(item);
-      return  Array.from(parentIdsSet);
     },
-    handleExpand() {
-      this.$nextTick(() => {
-        this.changeCss()
-      })
+    async created() {
+      await this.fetchData();
     },
-    renderContent(h, { node, data, store }) {
-      let classname = '';
-      let icon = '';
+    methods: {
+      async handleSave() {
+        const allCheckedNodes = [];
+        const allHalfCheckedNodes = [];
 
+        // 遍历所有 `el-tree` 组件的 ref
+        this.allTreeList.forEach((_, index) => {
+          const treeRef = this.$refs[`tree${index}`]?.[0];
+          if (treeRef) {
+            allCheckedNodes.push(...treeRef.getCheckedNodes());
+            allHalfCheckedNodes.push(...treeRef.getHalfCheckedNodes());
+          }
+        });
 
-      // 根据节点层级判断是否应用样式或图标
-      if (data.funcType === 'btn') {
-        classname = 'foo';
-        icon = 'el-icon-document';
-      }else {
-        if (node.expanded) {
-          icon = 'el-icon-folder-opened';
-        } else {
-          icon = 'el-icon-folder';
+        const funcIdList = [...new Set([
+          ...allCheckedNodes.map(node => node.funcId),
+          ...allHalfCheckedNodes.map(node => node.funcId),
+        ])];
+
+        const { result } = await roleFuncUpdateCheck({ roleId: this.roleId, funcIdList });
+        const insertStr = result.insertList.length ? result.insertList.map(item => item.funcName).join(', ') : '无';
+        const delStr = result.delList.length ? result.delList.map(item => item.funcName).join(', ') : '无';
+
+        await this.$alert(
+                `<strong>新增功能:</strong> ${insertStr}<br><strong>删除功能:</strong> ${delStr}`,
+                '操作结果',
+                {
+                  dangerouslyUseHTMLString: true,
+                  confirmButtonText: '确定',
+                  type: 'warning',
+                }
+        );
+
+        this.loading = true;
+        try {
+          await roleFuncUpdate({ roleId: this.roleId, funcIdList });
+          this.$message.success('分配功能成功！');
+          await this.fetchData();
+        } finally {
+          this.loading = false;
         }
-      }
+      },
 
-      // 渲染图标和文本
-      return h(
-          'p',
-          { class: classname },
-          [
-            h('i', { class: icon }),  // 图标元素
-            h('span', node.label)     // 节点标签
-          ]
-      );
-    },
-    changeCss() {
-      const levelName = document.getElementsByClassName('foo');
-      for (let i = 0; i < levelName.length; i++) {
-        levelName[i].parentNode.style.cssFloat = 'left';
-        levelName[i].parentNode.style.styleFloat = 'left';
-        levelName[i].parentNode.onmouseover = function() {
-          this.style.backgroundColor = '#fff'
+      async fetchData() {
+        const roleId = this.$route.params.id;
+        this.loading = true;
+
+        try {
+          const { result } = await getRoleFuncInit(roleId);
+          this.allTreeList = result.allTreeList;
+          this.roleName = result.roleName;
+          this.roleId = roleId;
+          this.userList = result.userList;
+          this.funcIdList = result.funcIdList;
+
+          await this.$nextTick();
+          this.changeCss();
+
+          // 回显子节点
+          this.allTreeList.forEach((item, index) => {
+            const treeRef = this.$refs[`tree${index}`]?.[0];
+            if (treeRef) {
+              const parentIdList = this.getParentIds([item]);
+              const childrenIdList = this.funcIdList.filter(id => !parentIdList.includes(id));
+              treeRef.setCheckedKeys(childrenIdList);
+            }
+          });
+        } catch (error) {
+          console.error('Failed to fetch data:', error);
+        } finally {
+          this.loading = false;
         }
-      }
-    }
-  }
-};
+      },
+
+      getParentIds(item) {
+        const parentIdsSet = new Set();
+
+        const traverse = (nodes) => {
+          nodes.forEach(node => {
+            if (node.parentId !== null) {
+              parentIdsSet.add(node.parentId);
+            }
+            if (node.children) {
+              traverse(node.children);
+            }
+          });
+        };
+
+        traverse(item);
+        return Array.from(parentIdsSet);
+      },
+
+      handleExpand() {
+        this.$nextTick(this.changeCss);
+      },
+
+      renderContent(h, { node, data }) {
+        const icon = data.funcType === 'btn' ? 'el-icon-document' : (node.expanded ? 'el-icon-folder-opened' : 'el-icon-folder');
+        return h(
+                'p',
+                { class: data.funcType === 'btn' ? 'foo' : '' },
+                [h('i', { class: icon }), h('span', node.label)]
+        );
+      },
+
+      changeCss() {
+        const levelName = document.getElementsByClassName('foo');
+        Array.from(levelName).forEach(element => {
+          element.parentNode.style.cssFloat = 'left';
+          element.parentNode.style.styleFloat = 'left';
+          element.parentNode.onmouseover = () => { this.style.backgroundColor = '#fff'; };
+        });
+      },
+    },
+  };
 </script>
 
 <style scoped lang="less">
-.header {
-  display: flex; /* 使用 Flexbox 布局 */
-  align-items: flex-start; /* 对齐方式 */
-  margin-bottom: 10px; /* 角色信息和按钮之间的间距 */
-}
-
-.role-info {
-  flex: 1;
-  margin-right: 20px;
-  font-weight: 600;
-}
-.user-info{
-  font-size: 12px;
-  margin-right: 5px;
-  color:#2d8cf0;
-  font-weight: normal;
-  cursor: pointer;
-  width: 50%;
-  overflow: hidden;
-  display: inline-block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  vertical-align: bottom;
-}
-// 树样式
-.el-tree {
-  ::v-deep .el-tree-node {
-    position: relative;
-    padding-left: 20px; // 缩进量
-  }
-  ::v-deep .el-tree-node__children {
-    padding-left: 20px; // 缩进量
+  .header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
   }
 
-  // 竖线
-  ::v-deep .el-tree-node::before {
-    content: "";
-    height: 100%;
-    width: 1px;
-    position: absolute;
-    left: -3px;
-    top: -26px;
-    border-width: 1px;
-    border-left: 1px dashed #ccc;
+  .role-info {
+    flex: 1;
+    margin-right: 20px;
+    font-weight: 600;
   }
 
-  // 当前层最后⼀个节点的竖线⾼度固定
-  ::v-deep .el-tree-node:last-child::before {
-    height: 38px; // 可以⾃⼰调节到合适数值
+  .user-info {
+    font-size: 12px;
+    margin-right: 5px;
+    color: #2d8cf0;
+    font-weight: normal;
+    cursor: pointer;
+    width: 50%;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
   }
 
-  // 横线
-  ::v-deep .el-tree-node::after {
-    content: "";
-    width: 24px;
-    height: 20px;
-    position: absolute;
-    left: -3px;
-    top: 12px;
-    border-width: 1px;
-    border-top: 1px dashed #ccc;
-  }
-
-  // 去掉最顶层的虚线，放最下⾯样式才不会被上⾯的覆盖了
-  & > ::v-deep .el-tree-node::after {
-    border-top: none;
-  }
-
-  & > ::v-deep .el-tree-node::before {
-    border-left: none;
-  }
-
-  // 展开关闭的icon
-  ::v-deep .el-tree-node__expand-icon {
-    font-size: 16px;
-
-    // 叶⼦节点（⽆⼦节点）
-    ::v-deep &.is-leaf {
-      color: transparent;
-       //display: none; // 也可以去掉
+  .el-tree {
+    ::v-deep .el-tree-node {
+      position: relative;
+      padding-left: 20px;
+    }
+    ::v-deep .el-tree-node__children {
+      padding-left: 20px;
+    }
+    ::v-deep .el-tree-node::before {
+      content: "";
+      height: 100%;
+      width: 1px;
+      position: absolute;
+      left: -3px;
+      top: -26px;
+      border-width: 1px;
+      border-left: 1px dashed #ccc;
+    }
+    ::v-deep .el-tree-node:last-child::before {
+      height: 38px;
+    }
+    ::v-deep .el-tree-node::after {
+      content: "";
+      width: 24px;
+      height: 20px;
+      position: absolute;
+      left: -3px;
+      top: 12px;
+      border-width: 1px;
+      border-top: 1px dashed #ccc;
+    }
+    & > ::v-deep .el-tree-node::after {
+      border-top: none;
+    }
+    & > ::v-deep .el-tree-node::before {
+      border-left: none;
+    }
+    ::v-deep .el-tree-node__expand-icon {
+      font-size: 16px;
+      ::v-deep &.is-leaf {
+        color: transparent;
+      }
     }
   }
-}
 </style>
