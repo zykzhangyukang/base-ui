@@ -18,7 +18,6 @@
           :expand-on-click-node="false"
           node-key="funcId"
           :indent="0"
-          :default-checked-keys="funcIdList"
           :data="[item]"
           :props="defaultProps"
           :highlight-current="true"
@@ -50,7 +49,7 @@ export default {
     }
   },
   async created() {
-     this.fetchData();
+     await this.fetchData();
   },
   methods:{
     handleSave() {
@@ -96,6 +95,7 @@ export default {
           this.loading = true;
           roleFuncUpdate({roleId: this.roleId, funcIdList}).then(res=>{
             this.$message.success('分配功能成功！');
+            this.fetchData();
           }).finally(res=>{
             this.loading = false;
           })
@@ -103,21 +103,56 @@ export default {
       })
 
     },
-     fetchData(){
-      const  roleId = this.$route.params.id;
+    async fetchData() {
+      const roleId = this.$route.params.id;
       this.loading = true;
-      getRoleFuncInit(roleId).then(res=>{
-         this.allTreeList = res.result.allTreeList;
-         this.roleName = res.result.roleName;
-         this.roleId = res.result.roleId;
-         this.userList = res.result.userList;
-         this.funcIdList = res.result.funcIdList;
-        this.$nextTick(() => {
-          this.changeCss()
-        })
-      }).finally(()=>{
+
+      try {
+        const res = await getRoleFuncInit(roleId);
+        const { allTreeList, roleName, userList, funcIdList } = res.result;
+
+        this.allTreeList = allTreeList;
+        this.roleName = roleName;
+        this.roleId = roleId;
+        this.userList = userList;
+        this.funcIdList = funcIdList;
+
+        await this.$nextTick();
+        this.changeCss();
+
+        // 设置勾选的值
+        this.allTreeList.forEach((item, index) => {
+          const treeRef = this.$refs['tree' + index];
+          if (treeRef && treeRef[0]) {
+
+            // 获取所有的父节点id
+            const  parentIdList = this.getParentIds([item]);
+            //只需要叶子节点的id
+            let childrenIdList = this.funcIdList.filter(id => ! parentIdList.includes(id) );
+            treeRef[0].setCheckedKeys(childrenIdList);
+          }
+        });
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
         this.loading = false;
-      })
+      }
+    },
+    getParentIds(item) {
+      const parentIdsSet = new Set(); // 使用 Set 避免重复的 parentId
+
+      const traverse = (nodes) => {
+        nodes.forEach(node => {
+          if (node.parentId !== null) {
+            parentIdsSet.add(node.parentId);
+          }
+          if (node.children && node.children.length > 0) {
+            traverse(node.children);
+          }
+        });
+      };
+      traverse(item);
+      return  Array.from(parentIdsSet);
     },
     handleExpand() {
       this.$nextTick(() => {
