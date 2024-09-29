@@ -32,6 +32,7 @@
 
 <script>
   import { getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck } from "@/api/role";
+  import {mapMutations} from "vuex";
 
   export default {
     data() {
@@ -52,6 +53,7 @@
       await this.fetchData();
     },
     methods: {
+      ...mapMutations(['delVisitedView']),
       async handleSave() {
         const allCheckedNodes = [];
         const allHalfCheckedNodes = [];
@@ -88,7 +90,8 @@
         try {
           await roleFuncUpdate({ roleId: this.roleId, funcIdList });
           this.$message.success('分配功能成功！');
-          await this.fetchData();
+          this.delVisitedView('/auth/role/func')
+          this.$router.push('/auth/role')
         } finally {
           this.loading = false;
         }
@@ -161,7 +164,6 @@
         Array.from(levelName).forEach(element => {
           element.parentNode.style.cssFloat = 'left';
           element.parentNode.style.styleFloat = 'left';
-          element.parentNode.onmouseover = () => { this.style.backgroundColor = '#fff'; };
         });
       },
     },

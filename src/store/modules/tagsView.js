@@ -1,5 +1,6 @@
 const state = {
-  visitedViews: []
+  visitedViews: [],
+  cachedViews: []
 }
 
 const getters = {
@@ -15,11 +16,21 @@ const mutations = {
       })
     )
   },
+  addCacheView: (state, view) => {
+    if (state.cachedViews.includes(view.name)) return
+    if (!view.meta.noCache) {
+      state.cachedViews.push(view.name)
+    }
+  },
   delVisitedView(state, view) {
     const index = state.visitedViews.findIndex(item => {
       return item.path === view.path
     })
     state.visitedViews.splice(index, 1)
+  },
+  delCacheView: (state, view) => {
+    const index = state.cachedViews.indexOf(view.name)
+    index > -1 && state.cachedViews.splice(index, 1)
   },
   delAllVisitedView(state) {
     state.visitedViews = state.visitedViews.filter(item => item.meta.fixed)
