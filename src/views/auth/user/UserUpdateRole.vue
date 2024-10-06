@@ -24,7 +24,8 @@
 </template>
 <script>
 
-import {getUserRoleInit, updateUserRole} from "@/api/user";
+
+import {getUserRoleInit, updateUserRole} from "@/api/auth";
 
 export default {
   name: 'RoleUpdateUser',

@@ -31,8 +31,8 @@
 </template>
 
 <script>
-  import { getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck } from "@/api/role";
   import {mapMutations} from "vuex";
+  import {getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck} from "@/api/auth";
 
   export default {
     data() {
@@ -73,27 +73,40 @@
         ])];
 
         const { result } = await roleFuncUpdateCheck({ roleId: this.roleId, funcIdList });
-        const insertStr = result.insertList.length ? result.insertList.map(item => item.funcName).join(', ') : '无';
-        const delStr = result.delList.length ? result.delList.map(item => item.funcName).join(', ') : '无';
+        const insertStr = result.insertList.length ? result.insertList.map(item => item.funcName).join(', ') : '';
+        const delStr = result.delList.length ? result.delList.map(item => item.funcName).join(', ') : '';
 
-        await this.$alert(
-                `<strong>新增功能:</strong> ${insertStr}<br><strong>删除功能:</strong> ${delStr}`,
-                '操作结果',
-                {
-                  dangerouslyUseHTMLString: true,
-                  confirmButtonText: '确定',
-                  type: 'warning',
-                }
-        );
+        // 如果新增和删除都为空，则不弹窗或显示提示
+        if (insertStr || delStr) {
+          const message = `
+              ${insertStr ? `<strong style="color: #19be6b">新增功能:</strong> ${insertStr}<br>` : ''}
+              ${delStr ? `<strong style="color: #ed4014">删除功能:</strong> ${delStr}` : ''}
+            `;
 
-        this.loading = true;
-        try {
-          await roleFuncUpdate({ roleId: this.roleId, funcIdList });
-          this.$message.success('分配功能成功！');
-          this.delVisitedView('/auth/role/func')
-          this.$router.push('/auth/role')
-        } finally {
-          this.loading = false;
+          await this.$alert(
+              message,
+              '操作结果',
+              {
+                dangerouslyUseHTMLString: true,
+                confirmButtonText: '确定',
+                type: 'warning',
+              }
+          );
+
+          this.loading = true;
+          try {
+            await roleFuncUpdate({ roleId: this.roleId, funcIdList });
+            this.$message.success('分配功能成功！');
+            await this.fetchData();
+          } finally {
+            this.loading = false;
+          }
+        } else {
+          // 可选：如果没有任何变化，显示默认提示
+          await this.$message({
+            message: '没有功能变更。',
+            type: 'warning'
+          });
         }
       },
 

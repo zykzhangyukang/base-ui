@@ -35,7 +35,7 @@ export default {
     height: 22px;
     font-size: 100px;
     vertical-align: middle;
-    transition: transform .2s ease;
+    transition: transform .1s ease;
   }
   &.vertical {
     .icon {

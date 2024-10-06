@@ -37,7 +37,7 @@
 <script>
 
   import {adminDomain, formatConst, getConst} from "@/utils";
-  import {saveFunc} from "@/api/func";
+  import {saveFunc} from "@/api/auth";
   export default {
   name: 'FuncAdd',
   components: {

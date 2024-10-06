@@ -23,7 +23,8 @@
 </template>
 <script>
 
-import {getRoleDetail, updateRole} from "@/api/role";
+
+import {getRoleDetail, updateRole} from "@/api/auth";
 
 export default {
   name: 'RoleUpdate',

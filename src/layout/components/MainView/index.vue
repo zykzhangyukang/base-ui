@@ -1,7 +1,7 @@
 <template>
   <div class="main-view">
     <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedViews">
+      <keep-alive>
         <router-view :key="key" />
       </keep-alive>
     </transition>
@@ -16,7 +16,7 @@ export default {
       return this.$store.state.tagsView.cachedViews
     },
     key() {
-      return this.$route.path
+      return this.$route.fullPath
     }
   }
 }
@@ -30,7 +30,7 @@ export default {
 /* fade-transform */
 .fade-transform-leave-active,
 .fade-transform-enter-active {
-  transition: all .2s;
+  transition: all .15s;
 }
 .fade-transform-enter {
   opacity: 0;

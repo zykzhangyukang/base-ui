@@ -18,7 +18,8 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-user',
                     title: '用户管理',
-                    permission: 'auth_user_view'
+                    permission: 'auth_user_view',
+                    keepAlive: true
                 }
             },
             {
@@ -28,7 +29,8 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-suitcase-1',
                     title: '角色管理',
-                    permission: 'auth_role_view'
+                    permission: 'auth_role_view',
+                    keepAlive: true
                 },
             },
             {
@@ -40,6 +42,7 @@ const ruleRoutes = [
                     icon: 'el-icon-suitcase-1',
                     title: '角色更新功能',
                     permission: 'auth_role_func_view',
+                    keepAlive: false
                 },
             },
             {
@@ -49,7 +52,8 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-takeaway-box',
                     title: '资源管理',
-                    permission: 'auth_resc_view'
+                    permission: 'auth_resc_view',
+                    keepAlive: true
                 }
             },
             {
@@ -59,7 +63,8 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-folder-opened',
                     title: '功能管理',
-                    permission: 'auth_func_view'
+                    permission: 'auth_func_view',
+                    keepAlive: true
                 }
             },
             {
@@ -70,6 +75,7 @@ const ruleRoutes = [
                     icon: 'el-icon-document',
                     title: '日志管理',
                     permission: 'auth_log_view',
+                    keepAlive: true
                 }
             },
         ]
@@ -92,7 +98,8 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-setting',
                     title: '同步计划',
-                    permission: 'sync_plan_view'
+                    permission: 'sync_plan_view',
+                    keepAlive: true
                 }
             },
             {
@@ -102,7 +109,8 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-tickets',
                     title: '同步记录',
-                    permission: 'sync_result_view'
+                    permission: 'sync_result_view',
+                    keepAlive: true
                 }
             },
             {
@@ -112,7 +120,8 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-monitor',
                     title: '本地消息',
-                    permission: 'sync_message_view'
+                    permission: 'sync_message_view',
+                    keepAlive: true
                 }
             },
             {
@@ -122,7 +131,8 @@ const ruleRoutes = [
                 meta: {
                     icon: 'el-icon-alarm-clock',
                     title: '回调消息',
-                    permission: 'sync_callback_view'
+                    permission: 'sync_callback_view',
+                    keepAlive: true
                 }
             }
         ]

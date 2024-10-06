@@ -34,7 +34,7 @@
 <script>
 
 import {adminDomain, formatConst, getConst} from "@/utils";
-import {getRescDetail, updateResc} from "@/api/resc";
+import {getRescDetail, updateResc} from "@/api/auth";
 
 export default {
   name: 'RescUpdate',

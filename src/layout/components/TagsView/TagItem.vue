@@ -49,6 +49,8 @@ export default {
     .tag-item-dot {
       background: #409eff;
     }
+    background: #ecf5ff!important;
+    color: #409eff!important;
   }
 }
 </style>

@@ -40,8 +40,7 @@
 <script>
 
 import {adminDomain, formatConst, getConst} from "@/utils";
-import {getUserDeptList} from "@/api/dept";
-import {saveUser} from "@/api/user";
+import {getUserDeptList, saveUser} from "@/api/auth";
 
 export default {
   name: 'UserAdd',

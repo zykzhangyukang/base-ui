@@ -63,9 +63,9 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button size="mini" icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)"></el-button>
-          <el-button size="mini" icon="el-icon-delete" @click="handeDel(scope.row.roleId)"></el-button>
-          <el-button size="mini" icon="el-icon-folder-opened" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)" ></el-button>
+          <el-button size="mini" plain icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)"></el-button>
+          <el-button size="mini" plain icon="el-icon-delete" @click="handeDel(scope.row.roleId)"></el-button>
+          <el-button size="mini" plain icon="el-icon-setting" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)" ></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -95,8 +95,8 @@ import {toLine} from "@/utils";
 import RoleAdd from "@/views/auth/role/RoleAdd.vue";
 import RoleUpdate from "@/views/auth/role/RoleUpdate.vue";
 import RoleUpdateUser from "@/views/auth/role/RoleUpdateUser.vue";
-import {deleteRole, getRolePage} from "@/api/role";
 import MyTable from '@/components/MyTable/index'
+import {deleteRole, getRolePage} from "@/api/auth";
 
 export default {
   components: {

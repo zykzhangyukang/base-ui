@@ -12,7 +12,7 @@
           <el-option :label="logLevelGName[item.code]" v-for="item in logLevelG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="IP" prop="ipAddress">
+      <el-form-item label="IP地址" prop="ipAddress">
         <el-input v-model="searchForm.ipAddress" placeholder="IP地址"></el-input>
       </el-form-item>
       <el-form-item>
@@ -109,8 +109,8 @@
 
 <script>
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
-import {getLogPage} from "@/api/log";
 import MyTable from '@/components/MyTable/index'
+import {getLogPage} from "@/api/auth";
 
 export default {
   components: {

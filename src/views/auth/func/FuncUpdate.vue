@@ -90,8 +90,7 @@
 <script>
 
 import {adminDomain, formatConst, getConst} from "@/utils";
-import {getFuncDetail, updateFunc, updateFuncResc} from "@/api/func";
-import {searchResc} from "@/api/resc";
+import {getFuncDetail, searchResc, updateFunc, updateFuncResc} from "@/api/auth";
 
 export default {
   name: 'FuncUpdate',

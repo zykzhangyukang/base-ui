@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import { login } from '@/api/login'
-import {setRefreshToken,setAccessToken} from "../utils/cookie";
 
 export default {
   name: 'Login',

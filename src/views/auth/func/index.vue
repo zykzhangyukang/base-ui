@@ -164,8 +164,8 @@
               align="center"
           >
             <template slot-scope="scope">
-              <el-button size="mini" icon="el-icon-edit-outline" @click="handleUpdate(scope.row.funcId)"></el-button>
-              <el-button size="mini" icon="el-icon-delete" @click="handleDel(scope.row.funcId)"></el-button>
+              <el-button size="mini" plain icon="el-icon-edit-outline" @click="handleUpdate(scope.row.funcId)"></el-button>
+              <el-button size="mini" plain icon="el-icon-delete" @click="handleDel(scope.row.funcId)"></el-button>
             </template>
           </el-table-column>
         </my-table>
@@ -194,12 +194,12 @@
 </template>
 
 <script>
-import {deleteFunc, getFuncPage, getFuncTree} from "@/api/func";
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import FuncAdd from "@/views/auth/func/FuncAdd.vue";
 import FuncUpdate from "@/views/auth/func/FuncUpdate.vue";
 import FuncResc from "@/views/auth/func/FuncResc.vue";
 import MyTable from '@/components/MyTable/index'
+import {deleteFunc, getFuncPage, getFuncTree} from "@/api/auth";
 
 export default {
   components: {

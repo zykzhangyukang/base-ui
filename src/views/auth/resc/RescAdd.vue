@@ -32,8 +32,8 @@
 </template>
 <script>
 
-import {saveResc} from "@/api/resc";
 import {adminDomain, formatConst, getConst} from "@/utils";
+import {saveResc} from "@/api/auth";
 
 export default {
   name: 'RescAdd',

@@ -38,8 +38,7 @@
 <script>
 
 import {adminDomain, formatConst, getConst} from "@/utils";
-import {getUserDeptList} from "@/api/dept";
-import {getUserDetail, updateUser} from "@/api/user";
+import {getUserDeptList, getUserDetail, updateUser} from "@/api/auth";
 
 export default {
   name: 'UserUpdate',

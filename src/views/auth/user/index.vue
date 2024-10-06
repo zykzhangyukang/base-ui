@@ -92,7 +92,8 @@
           sortable
       >
         <template slot-scope="scope">
-          <el-tag :type="scope.row.userStatus ===1 ? 'success' : 'danger'">{{userStatusGName[scope.row.userStatus]}}</el-tag>
+          <span style="color: #19be6b" v-if="scope.row.userStatus ===1 ">启用</span>
+          <span style="color: #ed4014" v-else>禁用</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -121,9 +122,9 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button  size="mini" icon="el-icon-edit-outline"  @click="handeUpdate(scope.row.userId)"></el-button>
-          <el-button size="mini"  icon="el-icon-delete"  @click="handeDel(scope.row.userId)"></el-button>
-          <el-button size="mini"  icon="el-icon-setting"  @click="handleUpdateRole(scope.row.userId)"></el-button>
+          <el-button  size="mini" plain icon="el-icon-edit-outline"  @click="handeUpdate(scope.row.userId)"></el-button>
+          <el-button size="mini"  plain icon="el-icon-delete"  @click="handeDel(scope.row.userId)"></el-button>
+          <el-button size="mini"  plain icon="el-icon-setting"  @click="handleUpdateRole(scope.row.userId)"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -149,13 +150,13 @@
 </template>
 
 <script>
-import {deleteUser, disableUser, enableUser, getUserPage} from "@/api/user";
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import UserAdd from "@/views/auth/user/UserAdd.vue";
 import UserUpdate from "@/views/auth/user/UserUpdate.vue";
 import MyTable from '@/components/MyTable/index'
 import UserUpdateRole from "@/views/auth/user/UserUpdateRole.vue";
 import store from "@/store";
+import {deleteUser, disableUser, enableUser, getUserPage} from "@/api/auth";
 
 export default {
   components: {

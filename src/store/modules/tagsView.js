@@ -15,22 +15,22 @@ const mutations = {
         title: view.meta.title || 'no-title'
       })
     )
-  },
-  addCacheView: (state, view) => {
-    if (state.cachedViews.includes(view.name)) return
-    if (!view.meta.noCache) {
-      state.cachedViews.push(view.name)
-    }
+    // 添加缓存
+    if(!view.meta.keepAlive) return
+    if(state.cachedViews.some(v=>v.fullPath === view.fullPath)) return
+    state.cachedViews.push(view);
   },
   delVisitedView(state, view) {
     const index = state.visitedViews.findIndex(item => {
       return item.path === view.path
     })
     state.visitedViews.splice(index, 1)
-  },
-  delCacheView: (state, view) => {
-    const index = state.cachedViews.indexOf(view.name)
-    index > -1 && state.cachedViews.splice(index, 1)
+    // 删除缓存
+    if(!view.meta.keepAlive) return;
+    const cacheIndex = state.cachedViews.findIndex(v => v.fullPath === view.fullPath)
+    if(cacheIndex >=0){
+      state.cachedViews.splice(cacheIndex, 1)
+    }
   },
   delAllVisitedView(state) {
     state.visitedViews = state.visitedViews.filter(item => item.meta.fixed)

@@ -86,8 +86,8 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button size="mini" icon="el-icon-edit-outline" @click="handleUpdate(scope.row.rescId)"></el-button>
-          <el-button size="mini" icon="el-icon-delete" @click="handleDel(scope.row.rescId)"></el-button>
+          <el-button size="mini" plain icon="el-icon-edit-outline" @click="handleUpdate(scope.row.rescId)"></el-button>
+          <el-button size="mini" plain icon="el-icon-delete" @click="handleDel(scope.row.rescId)"></el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -114,8 +114,8 @@
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import RescAdd from "@/views/auth/resc/RescAdd.vue";
 import RescUpdate from "@/views/auth/resc/RescUpdate.vue";
-import {deleteResc, getRescPage} from "@/api/resc";
 import MyTable from '@/components/MyTable/index'
+import {deleteResc, getRescPage} from "@/api/auth";
 
 
 export default {
