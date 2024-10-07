@@ -15,3 +15,35 @@ export function savePlan(data) {
         data
     })
 }
+
+export function updatePlan(data) {
+    return request({
+        url: '/sync/plan/update',
+        method: 'put',
+        data
+    })
+}
+
+export function deletePlan(uuid) {
+    return request({
+        url: '/sync/plan/delete?uuid='+uuid,
+        method: 'delete',
+    })
+}
+
+
+export function updatePlanStatus(data) {
+    return request({
+        url: '/sync/plan/update/status',
+        method: 'put',
+        data
+    })
+}
+
+
+export function getPlanContent(uuid) {
+    return request({
+        url: '/sync/plan/detail?uuid='+uuid,
+        method: 'get',
+    })
+}

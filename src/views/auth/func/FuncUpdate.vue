@@ -171,6 +171,7 @@ export default {
       this.options = [];
       this.searchList = [];
       this.resetForm('form');
+      this.$emit('success')
     },
     async handleOpen(id) {
       this.visible = true;

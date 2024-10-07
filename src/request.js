@@ -72,25 +72,21 @@ service.interceptors.response.use(
                 message
             });
             return Promise.reject('error');
-        } else if(code === 500){
-            Message({
-                type: 'error',
-                message
-            });
-            return Promise.reject('error');
         }
     },
     error => {
-        const code = error.response?.data?.status;
+        const code = error.response?.data?.code;
         if (!code) {
             Message({
-                type: 'error',
-                message: '网络异常，请检查网络连接！'
+                type: 'error', message: '网络异常，请检查网络连接！'
+            });
+        } else if (code === 500) {
+            Message({
+                type: 'error', message: '服务器未知异常，请联系管理员处理！'
             });
         }
         return Promise.reject(error);
-    }
-);
+    });
 
 // 判断token是否即将过期
 function isTokenExpiringSoon() {

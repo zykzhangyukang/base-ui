@@ -74,7 +74,7 @@ export const DynamicRoutes = [
                 name: 'Dashboard',
                 component: () => import('../views/Dashboard.vue'),
                 meta: {
-                    title: '控制台',
+                    title: '系统首页',
                     icon: 'vue-icon-a-1_daohang-dakai-54',
                     fixed: true
                 }

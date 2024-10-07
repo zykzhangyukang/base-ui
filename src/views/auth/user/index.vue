@@ -72,6 +72,17 @@
       >
       </el-table-column>
       <el-table-column
+          prop="userStatus"
+          label="用户状态"
+          align="center"
+          sortable
+      >
+        <template slot-scope="scope">
+          <span style="color: #19be6b" v-if="scope.row.userStatus ===1 ">启用</span>
+          <span style="color: #ed4014" v-else>禁用</span>
+        </template>
+      </el-table-column>
+      <el-table-column
           prop="phone"
           label="手机号"
           align="center"
@@ -83,17 +94,6 @@
           <span>
               {{scope.row.phone}}
           </span>
-        </template>
-      </el-table-column>
-      <el-table-column
-          prop="userStatus"
-          label="用户状态"
-          align="center"
-          sortable
-      >
-        <template slot-scope="scope">
-          <span style="color: #19be6b" v-if="scope.row.userStatus ===1 ">启用</span>
-          <span style="color: #ed4014" v-else>禁用</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -122,9 +122,9 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button  size="mini" plain icon="el-icon-edit-outline"  @click="handeUpdate(scope.row.userId)"></el-button>
-          <el-button size="mini"  plain icon="el-icon-delete"  @click="handeDel(scope.row.userId)"></el-button>
-          <el-button size="mini"  plain icon="el-icon-setting"  @click="handleUpdateRole(scope.row.userId)"></el-button>
+          <el-button  size="mini"  type="text"   @click="handeUpdate(scope.row.userId)">编辑</el-button>
+          <el-button size="mini"   type="text"   @click="handeDel(scope.row.userId)">删除</el-button>
+          <el-button size="mini"   type="text"    @click="handleUpdateRole(scope.row.userId)">分配角色</el-button>
         </template>
       </el-table-column>
     </my-table>

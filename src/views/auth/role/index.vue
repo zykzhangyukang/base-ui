@@ -63,9 +63,9 @@
           align="center"
       >
         <template slot-scope="scope">
-          <el-button size="mini" plain icon="el-icon-edit-outline" @click="handeUpdate(scope.row.roleId)"></el-button>
-          <el-button size="mini" plain icon="el-icon-delete" @click="handeDel(scope.row.roleId)"></el-button>
-          <el-button size="mini" plain icon="el-icon-setting" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)" ></el-button>
+          <el-button size="mini" type="text" @click="handeUpdate(scope.row.roleId)">编辑</el-button>
+          <el-button size="mini" type="text" @click="handeDel(scope.row.roleId)">删除</el-button>
+          <el-button size="mini" type="text" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)" >功能</el-button>
         </template>
       </el-table-column>
     </my-table>

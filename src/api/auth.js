@@ -45,6 +45,13 @@ export function saveFunc(data) {
     })
 }
 
+export function funcRescRemove(id) {
+    return request({
+        url: '/auth/func/resc/remove?funcId='+id,
+        method: 'delete',
+    })
+}
+
 export function updateFunc(data) {
     return request({
         url: '/auth/func/update',

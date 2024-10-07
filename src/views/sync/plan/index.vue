@@ -6,17 +6,17 @@
         <el-input v-model="searchForm.planCode" placeholder="计划编号"></el-input>
       </el-form-item>
       <el-form-item label="计划状态" prop="status">
-        <el-select v-model="searchForm.status" placeholder="计划状态" clearable :style="{width : '180px'}">
+        <el-select v-model="searchForm.status" placeholder="计划状态" clearable :style="{width : '150px'}">
           <el-option :label="planStatusGName[item.code]" v-for="item in planStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="源系统" prop="srcProject">
-        <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable :style="{width : '180px'}">
+        <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable :style="{width : '150px'}">
           <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="目标系统" prop="destProject">
-        <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable :style="{width : '180px'}">
+        <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable :style="{width : '150px'}">
           <el-option :label="destProjectGName[item.code]" v-for="item in destProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
@@ -48,7 +48,7 @@
           sortable
       >
         <template slot-scope="scope">
-          <el-button type="text" size="mini">{{scope.row.planCode}}</el-button>
+          <el-button type="text" @click="$refs.planContentRef.handleOpen(scope.row.uuid)">{{scope.row.planCode}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -57,8 +57,13 @@
           align="center"
       >
         <template slot-scope="scope">
-          <span style="color: #19be6b" v-if="scope.row.status ==='normal' ">启用</span>
-          <span style="color: #ed4014" v-else>禁用</span>
+          <el-switch
+              width="30"
+              v-model="scope.row.status ==='normal' "
+              active-color="#19be6b"
+              @change="((val)=>{changeStatus(val,scope.row.uuid)})"
+              >
+          </el-switch>
         </template>
       </el-table-column>
       <el-table-column
@@ -105,6 +110,15 @@
           sortable
       >
       </el-table-column>
+      <el-table-column
+          label="操作"
+          align="center"
+      >
+        <template slot-scope="scope">
+          <el-button size="mini" type="text" @click="handleUpdate(scope.row.uuid)">编辑</el-button>
+          <el-button size="mini" type="text" @click="handleDel(scope.row.uuid)">删除</el-button>
+        </template>
+      </el-table-column>
     </my-table>
     <!-- 分页栏 -->
     <div class="pagination-wrapper">
@@ -121,22 +135,25 @@
     <!-- 添加弹框 -->
     <plan-add ref="addRef" @success="handAddSuccess"></plan-add>
     <!-- 更新弹框-->
-    <role-update ref="updateRef" @success="handUpdateSuccess"></role-update>
+    <plan-update ref="updateRef" @success="handUpdateSuccess"></plan-update>
+    <!-- 查看内容 -->
+    <plan-content ref="planContentRef"></plan-content>
   </div>
 </template>
 
 <script>
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import PlanAdd from "@/views/sync/plan/PlanAdd.vue";
-import RoleUpdate from "@/views/auth/role/RoleUpdate.vue";
+import PlanContent from "@/views/sync/plan/PlanContent.vue";
+import PlanUpdate from "@/views/sync/plan/PlanUpdate.vue";
 import MyTable from '@/components/MyTable/index'
-import {deleteRole} from "@/api/auth";
-import {getPlanPage} from "@/api/sync";
+import {deletePlan, getPlanPage, updatePlanStatus} from "@/api/sync";
 
 export default {
   components: {
     PlanAdd,
-    RoleUpdate,
+    PlanContent,
+    PlanUpdate,
     MyTable
   },
   data() {
@@ -179,23 +196,36 @@ export default {
     },
   },
   methods: {
-    handleAdd(){
-      this.$refs.addRef.handleOpen();
-    },
-    handeUpdate(id){
-      this.$refs.updateRef.handleOpen(id);
-    },
-    handeDel(id){
-      this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
+    changeStatus(status, uuid) {
+      let msg = status ? '启用' : '禁用';
+      this.$confirm('此操作将' + msg + '该同步计划, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteRole(id).then(res=>{
+        updatePlanStatus({uuid: uuid, status: status ? 'normal' : 'forbid'}).then(res => {
+          this.$message.success(msg + "成功！");
+          this.onSubmit();
+        })
+      });
+    },
+    handleDel(uuid){
+      this.$confirm('此操作将删除该同步计划, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletePlan(uuid).then(res=>{
           this.$message.success("删除成功！");
           this.onSubmit();
         })
       });
+    },
+    handleAdd(){
+      this.$refs.addRef.handleOpen();
+    },
+    handleUpdate(uuid){
+      this.$refs.updateRef.handleOpen(uuid);
     },
     handAddSuccess(){
       this.onSubmit();

@@ -70,12 +70,12 @@
             <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
           </el-form-item>
           <el-form-item>
-            <el-dropdown>
+            <el-dropdown @command="handleCommand">
               <el-button>
                 更多操作<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>
+                <el-dropdown-item command="clearResc">
                   <el-icon class="el-icon-folder-delete"></el-icon>清空资源
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -90,6 +90,7 @@
             :data="tableData"
             @sort-change="sortChange"
             style="width: 100%"
+            @selection-change="handleSelectionChange"
         >
           <el-table-column
               type="selection"
@@ -164,8 +165,8 @@
               align="center"
           >
             <template slot-scope="scope">
-              <el-button size="mini" plain icon="el-icon-edit-outline" @click="handleUpdate(scope.row.funcId)"></el-button>
-              <el-button size="mini" plain icon="el-icon-delete" @click="handleDel(scope.row.funcId)"></el-button>
+              <el-button size="mini" type="text" @click="handleUpdate(scope.row.funcId)">编辑</el-button>
+              <el-button size="mini" type="text" @click="handleDel(scope.row.funcId)">删除</el-button>
             </template>
           </el-table-column>
         </my-table>
@@ -199,7 +200,7 @@ import FuncAdd from "@/views/auth/func/FuncAdd.vue";
 import FuncUpdate from "@/views/auth/func/FuncUpdate.vue";
 import FuncResc from "@/views/auth/func/FuncResc.vue";
 import MyTable from '@/components/MyTable/index'
-import {deleteFunc, getFuncPage, getFuncTree} from "@/api/auth";
+import {deleteFunc, funcRescRemove, getFuncPage, getFuncTree} from "@/api/auth";
 
 export default {
   components: {
@@ -230,6 +231,7 @@ export default {
       // 数据总条数
       total: 0,
       // 表格数据数组
+      multipleSelection: [],
       tableData: [],
       tableLoading: true,
       // 点击的树节点
@@ -256,6 +258,9 @@ export default {
     },
   },
   methods: {
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
     showRescVoList(list){
       this.$refs.funcRescRef.handleOpen(list);
     },
@@ -282,6 +287,24 @@ export default {
     },
     handleAdd(){
       this.$refs.addRef.handleOpen(this.parentNode);
+    },
+    handleCommand(command) {
+      if (command === 'clearResc') {
+        if (this.multipleSelection.length !== 1) {
+          return this.$message.warning("请勾选一条记录进行操作！");
+        }
+        let rowData = this.multipleSelection[0];
+        this.$confirm('此操作将清空绑定的资源, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          funcRescRemove(rowData.funcId).then(res => {
+            this.$message.success('清空资源成功！');
+            this.fetchData();
+          })
+        });
+      }
     },
     sortChange({prop, order }){
       if(order){

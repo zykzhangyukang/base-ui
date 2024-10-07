@@ -84,10 +84,11 @@
       <el-table-column
           label="操作"
           align="center"
+          width="150px"
       >
         <template slot-scope="scope">
-          <el-button size="mini" plain icon="el-icon-edit-outline" @click="handleUpdate(scope.row.rescId)"></el-button>
-          <el-button size="mini" plain icon="el-icon-delete" @click="handleDel(scope.row.rescId)"></el-button>
+          <el-button size="mini" type="text"  @click="handleUpdate(scope.row.rescId)">编辑</el-button>
+          <el-button size="mini" type="text"  @click="handleDel(scope.row.rescId)">删除</el-button>
         </template>
       </el-table-column>
     </my-table>
