@@ -1,5 +1,28 @@
 import request from "@/request";
 
+export function repeatSync(uuid) {
+    return request({
+        url: '/sync/result/repeat/sync?uuid='+uuid,
+        method: 'put',
+    })
+}
+
+export function signSuccess(uuid) {
+    return request({
+        url: '/sync/result/sign/success?uuid='+uuid,
+        method: 'put',
+    })
+}
+
+
+export function getResultPage(data) {
+    return request({
+        url: '/sync/result/page',
+        method: 'post',
+        data
+    })
+}
+
 export function getPlanPage(data) {
     return request({
         url: '/sync/plan/page',

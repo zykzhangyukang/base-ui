@@ -45,11 +45,12 @@
       <el-table-column
           prop="planCode"
           label="计划编号"
-          align="center"
           sortable
+          width="180px"
+          show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <el-button type="text" @click="$refs.planContentRef.handleOpen(scope.row.uuid)">{{scope.row.planCode}}</el-button>
+          <el-button type="text" @click="$refs.planContentRef.handleOpen(scope.row.uuid)">{{scope.row.planCode}}</el-button>  <el-icon class="el-icon-document-copy"></el-icon>
         </template>
       </el-table-column>
       <el-table-column
