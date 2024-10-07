@@ -42,7 +42,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="搜索关键词" prop="keywords" >
-        <el-input v-model="searchForm.keywords" placeholder="消息内容，同步内容" :style="{width : '250px'}"></el-input>
+        <el-input v-model="searchForm.keywords" placeholder="计划名称，消息内容，同步内容" :style="{width : '250px'}"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="searchLoading">查询</el-button>
@@ -67,12 +67,11 @@
       <el-table-column
           prop="planCode"
           label="计划编号"
-          sortable
           width="180px"
           show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <el-button  type="text" @click="$refs.planContentRef.handleOpen(scope.row.planUuid)">{{scope.row.planCode}}</el-button> <el-icon class="el-icon-document-copy"  v-if="scope.row.planCode"></el-icon>
+          <a  style="color: #2d8cf0" @click="$refs.planContentRef.handleOpen(scope.row.planUuid)">{{scope.row.planCode}}</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -125,7 +124,7 @@
       >
         <template  slot-scope="scope">
           <div class="ellipsis">
-            <span  class="ellipsis-button" v-html="scope.row.hlsSyncContent || scope.row.syncContent">
+            <span  class="ellipsis-button" v-html="scope.row.hlsSyncContent || scope.row.syncContent" @click="$refs.syncContentRef.handleOpen(scope.row.syncContent)">
             </span>
           </div>
         </template>
@@ -137,7 +136,7 @@
       >
         <template  slot-scope="scope">
           <div class="ellipsis">
-             <span  class="ellipsis-button" v-html="scope.row.hlsMsgContent || scope.row.msgContent">
+             <span  class="ellipsis-button" v-html="scope.row.hlsMsgContent || scope.row.msgContent" @click="$refs.msgContentRef.handleOpen(scope.row.msgContent)">
             </span>
           </div>
         </template>
@@ -146,6 +145,7 @@
           prop="repeatCount"
           label="重试次数"
           align="center"
+          sortable
       >
       </el-table-column>
       <el-table-column
@@ -186,6 +186,10 @@
     </div>
     <!-- 查看内容 -->
     <plan-content ref="planContentRef"></plan-content>
+    <!-- 查看同步内容 -->
+    <sync-content ref="syncContentRef"></sync-content>
+    <!-- 查看同步内容 -->
+    <msg-content ref="msgContentRef"></msg-content>
   </div>
 </template>
 
@@ -195,12 +199,16 @@ import PlanAdd from "@/views/sync/plan/PlanAdd.vue";
 import PlanContent from "@/views/sync/plan/PlanContent.vue";
 import PlanUpdate from "@/views/sync/plan/PlanUpdate.vue";
 import MyTable from '@/components/MyTable/index'
+
 import {getResultPage, repeatSync, signSuccess} from "@/api/sync";
-import {disableUser, enableUser} from "@/api/auth";
+import SyncContent from "@/views/sync/result/SyncContent.vue";
+import MsgContent from "@/views/sync/result/MsgContent.vue";
 
 export default {
-  name: 'SyncPlan',
+  name: 'SyncResult',
   components: {
+    SyncContent,
+    MsgContent,
     PlanAdd,
     PlanContent,
     PlanUpdate,
@@ -408,6 +416,7 @@ export default {
   text-align: center; /* 如果需要文字对齐左边 */
   color: #2d8cf0;
   cursor: pointer;
+  font-family: Arial,serif;
 }
 
 </style>

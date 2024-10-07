@@ -124,7 +124,7 @@
         <template slot-scope="scope">
           <el-button  size="mini"  type="text"   @click="handeUpdate(scope.row.userId)">编辑</el-button>
           <el-button size="mini"   type="text"   @click="handeDel(scope.row.userId)">删除</el-button>
-          <el-button size="mini"   type="text"    @click="handleUpdateRole(scope.row.userId)">分配角色</el-button>
+          <el-button size="mini"   type="text"    @click="handleUpdateRole(scope.row.userId)">角色</el-button>
         </template>
       </el-table-column>
     </my-table>

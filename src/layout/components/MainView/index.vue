@@ -1,7 +1,7 @@
 <template>
   <div class="main-view">
     <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedViews">
+      <keep-alive :include="cachedViews" :max="20">
         <router-view :key="key" />
       </keep-alive>
     </transition>

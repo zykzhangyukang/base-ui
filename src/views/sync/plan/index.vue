@@ -10,6 +10,12 @@
           <el-option :label="planStatusGName[item.code]" v-for="item in planStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="源数据库" prop="srcDb">
+        <el-input v-model="searchForm.srcDb" placeholder="源数据库"></el-input>
+      </el-form-item>
+      <el-form-item label="目标数据库" prop="destDb">
+        <el-input v-model="searchForm.destDb" placeholder="目标数据库"></el-input>
+      </el-form-item>
       <el-form-item label="源系统" prop="srcProject">
         <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable >
           <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code"></el-option>
@@ -24,7 +30,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-        <el-button type="warning" icon="el-icon-refresh" @click="handleRefresh" :loading="refreshLoading">刷新缓存</el-button>
+        <el-button type="success" @click="handleRefresh" :loading="refreshLoading">刷新缓存</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -50,7 +56,7 @@
           show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <el-button type="text" @click="$refs.planContentRef.handleOpen(scope.row.uuid)">{{scope.row.planCode}}</el-button>  <el-icon class="el-icon-document-copy"></el-icon>
+          <a  style="color: #2d8cf0" @click="$refs.planContentRef.handleOpen(scope.row.uuid)">{{scope.row.planCode}}</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -175,6 +181,8 @@ export default {
         status: '',
         srcProject: '',
         destProject: '',
+        srcDb: '',
+        destDb: ''
       },
       refreshLoading: false,
     }
@@ -298,7 +306,5 @@ export default {
   .el-pagination{
     float: right;
   }
-}
-.userVOList{
 }
 </style>

@@ -104,10 +104,15 @@
           }
         } else {
           // 可选：如果没有任何变化，显示默认提示
-          await this.$message({
-            message: '没有功能变更。',
-            type: 'warning'
-          });
+          await this.$alert(
+              '您当前的操作，没有功能变更！',
+              '操作结果',
+              {
+                dangerouslyUseHTMLString: false,
+                confirmButtonText: '确定',
+                type: 'warning',
+              }
+          );
         }
       },
 

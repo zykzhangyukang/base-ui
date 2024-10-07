@@ -43,7 +43,6 @@
       <el-table-column
           prop="rescUrl"
           label="资源URL"
-          align="center"
           sortable
       >
       </el-table-column>
@@ -84,7 +83,6 @@
       <el-table-column
           label="操作"
           align="center"
-          width="150px"
       >
         <template slot-scope="scope">
           <el-button size="mini" type="text"  @click="handleUpdate(scope.row.rescId)">编辑</el-button>
