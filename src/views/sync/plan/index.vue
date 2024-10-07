@@ -6,17 +6,17 @@
         <el-input v-model="searchForm.planCode" placeholder="计划编号"></el-input>
       </el-form-item>
       <el-form-item label="计划状态" prop="status">
-        <el-select v-model="searchForm.status" placeholder="计划状态" clearable :style="{width : '150px'}">
+        <el-select v-model="searchForm.status" placeholder="计划状态" clearable >
           <el-option :label="planStatusGName[item.code]" v-for="item in planStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="源系统" prop="srcProject">
-        <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable :style="{width : '150px'}">
+        <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable >
           <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="目标系统" prop="destProject">
-        <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable :style="{width : '150px'}">
+        <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable >
           <el-option :label="destProjectGName[item.code]" v-for="item in destProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
@@ -24,6 +24,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+        <el-button type="warning" icon="el-icon-refresh" @click="handleRefresh" :loading="refreshLoading">刷新缓存</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -147,9 +148,10 @@ import PlanAdd from "@/views/sync/plan/PlanAdd.vue";
 import PlanContent from "@/views/sync/plan/PlanContent.vue";
 import PlanUpdate from "@/views/sync/plan/PlanUpdate.vue";
 import MyTable from '@/components/MyTable/index'
-import {deletePlan, getPlanPage, updatePlanStatus} from "@/api/sync";
+import {deletePlan, getPlanPage, refreshPlan, updatePlanStatus} from "@/api/sync";
 
 export default {
+  name: 'SyncPlan',
   components: {
     PlanAdd,
     PlanContent,
@@ -172,7 +174,8 @@ export default {
         status: '',
         srcProject: '',
         destProject: '',
-      }
+      },
+      refreshLoading: false,
     }
   },
   computed:{
@@ -218,6 +221,21 @@ export default {
         deletePlan(uuid).then(res=>{
           this.$message.success("删除成功！");
           this.onSubmit();
+        })
+      });
+    },
+    handleRefresh(){
+      this.$confirm('是否刷新同步计划缓存?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.refreshLoading = true;
+        refreshPlan().then(res => {
+          this.$message.success("刷新缓存成功！");
+          this.onSubmit();
+        }).finally(()=>{
+          this.refreshLoading = false;
         })
       });
     },

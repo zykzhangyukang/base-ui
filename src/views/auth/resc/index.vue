@@ -120,6 +120,7 @@ import {deleteResc, getRescPage} from "@/api/auth";
 
 
 export default {
+  name: 'RescList',
   components: {
     RescAdd,
     RescUpdate,

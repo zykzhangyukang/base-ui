@@ -159,6 +159,7 @@ import store from "@/store";
 import {deleteUser, disableUser, enableUser, getUserPage} from "@/api/auth";
 
 export default {
+  name: 'UserList',
   components: {
     UserAdd,
     UserUpdate,

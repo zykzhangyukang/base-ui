@@ -18,7 +18,7 @@ const mutations = {
     // 添加缓存
     if(!view.meta.keepAlive) return
     if(state.cachedViews.some(v=>v.fullPath === view.fullPath)) return
-    state.cachedViews.push(view);
+    state.cachedViews.push(view.name);
   },
   delVisitedView(state, view) {
     const index = state.visitedViews.findIndex(item => {
@@ -27,7 +27,7 @@ const mutations = {
     state.visitedViews.splice(index, 1)
     // 删除缓存
     if(!view.meta.keepAlive) return;
-    const cacheIndex = state.cachedViews.findIndex(v => v.fullPath === view.fullPath)
+    const cacheIndex = state.cachedViews.findIndex(v => v === view.name)
     if(cacheIndex >=0){
       state.cachedViews.splice(cacheIndex, 1)
     }

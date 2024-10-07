@@ -113,6 +113,7 @@ import MyTable from '@/components/MyTable/index'
 import {getLogPage} from "@/api/auth";
 
 export default {
+  name: 'LogList',
   components: {
     MyTable
   },

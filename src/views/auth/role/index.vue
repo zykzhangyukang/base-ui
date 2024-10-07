@@ -99,6 +99,7 @@ import MyTable from '@/components/MyTable/index'
 import {deleteRole, getRolePage} from "@/api/auth";
 
 export default {
+  name: 'RoleList',
   components: {
     RoleAdd,
     RoleUpdate,

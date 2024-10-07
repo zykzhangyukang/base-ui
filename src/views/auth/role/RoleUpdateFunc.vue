@@ -35,6 +35,7 @@
   import {getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck} from "@/api/auth";
 
   export default {
+    name: 'RoleFuncUpdate',
     data() {
       return {
         loading: false,

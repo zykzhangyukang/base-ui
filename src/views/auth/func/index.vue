@@ -203,6 +203,7 @@ import MyTable from '@/components/MyTable/index'
 import {deleteFunc, funcRescRemove, getFuncPage, getFuncTree} from "@/api/auth";
 
 export default {
+  name: 'FuncList',
   components: {
     FuncAdd,
     FuncUpdate,

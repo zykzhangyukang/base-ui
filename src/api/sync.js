@@ -31,6 +31,13 @@ export function deletePlan(uuid) {
     })
 }
 
+export function refreshPlan() {
+    return request({
+        url: '/sync/plan/refresh',
+        method: 'put',
+    })
+}
+
 
 export function updatePlanStatus(data) {
     return request({

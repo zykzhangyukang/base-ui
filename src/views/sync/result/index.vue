@@ -1,7 +1,11 @@
 <template>
-  <h1>同步记录</h1>
+  <div class="table-result-wrapper">
+
+  </div>
 </template>
 
 <style scoped lang="less">
 
 </style>
+<script setup>
+</script>
