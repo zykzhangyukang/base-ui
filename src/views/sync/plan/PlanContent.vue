@@ -51,7 +51,7 @@ export default {
   overflow-x: auto;
   overflow-y: auto;
   font-family: Candara, serif;
-  background: #F2F6FC;
+  background: #f8f8f9;
   padding: 5px;
   border-radius: 5px;
   max-height: 600px;

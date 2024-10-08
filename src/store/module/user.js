@@ -7,7 +7,7 @@ import {
     setAccessToken,
     setExpiresIn,
     setRefreshToken,
-} from "../../utils/cookie";
+} from "@/utils/cookie";
 import axios from 'axios';
 
 const state = {

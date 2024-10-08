@@ -1,5 +1,16 @@
 import request from "@/request";
 
+/**
+ * 数据校验
+ */
+export const validResultData = data => {
+    return request({
+        url: `/sync/result/valid/data`,
+        method: 'post',
+        data
+    })
+}
+
 export function repeatSync(uuid) {
     return request({
         url: '/sync/result/repeat/sync?uuid='+uuid,

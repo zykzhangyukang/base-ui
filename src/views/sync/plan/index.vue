@@ -30,7 +30,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-        <el-button type="success" @click="handleRefresh" :loading="refreshLoading">刷新缓存</el-button>
+        <el-button type="warning" @click="handleRefresh" :loading="refreshLoading">刷新缓存</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->

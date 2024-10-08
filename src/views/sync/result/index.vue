@@ -47,8 +47,9 @@
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="searchLoading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-        <el-button type="success" @click="handleRepeatSync" :loading="repeatSyncLoading">重新同步</el-button>
-        <el-button type="success" @click="handleSignSuccess" :loading="signSuccessLoading">标记成功</el-button>
+        <el-button plain @click="handleRepeatSync" :loading="repeatSyncLoading">重新同步</el-button>
+        <el-button plain @click="handleSignSuccess" :loading="signSuccessLoading">标记成功</el-button>
+        <el-button plain @click="handleValidResultData">数据校验</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -190,6 +191,8 @@
     <sync-content ref="syncContentRef"></sync-content>
     <!-- 查看同步内容 -->
     <msg-content ref="msgContentRef"></msg-content>
+    <!-- 数据校验 -->
+    <valid-result ref="validResultRef"></valid-result>
   </div>
 </template>
 
@@ -203,10 +206,12 @@ import MyTable from '@/components/MyTable/index'
 import {getResultPage, repeatSync, signSuccess} from "@/api/sync";
 import SyncContent from "@/views/sync/result/SyncContent.vue";
 import MsgContent from "@/views/sync/result/MsgContent.vue";
+import ValidResult from "@/views/sync/result/ValidResult.vue";
 
 export default {
   name: 'SyncResult',
   components: {
+    ValidResult,
     SyncContent,
     MsgContent,
     PlanAdd,
@@ -330,6 +335,13 @@ export default {
           this.repeatSyncLoading = false;
         })
       });
+    },
+    handleValidResultData(){
+      if(this.multipleSelection.length !==1){
+        return this.$message.warning("请勾选一条记录进行操作！");
+      }
+      let rowData = this.multipleSelection[0];
+      this.$refs.validResultRef.handleOpen(rowData.msgContent)
     },
     handleSignSuccess(){
       if(this.multipleSelection.length !==1){

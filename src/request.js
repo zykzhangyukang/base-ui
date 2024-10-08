@@ -36,7 +36,7 @@ service.interceptors.request.use(
                     isRefreshing = false;
                     store.commit('user/REMOVE_TOKEN')
                     await router.push('/login');
-                    Message.error('会话已过期，请重新登录');
+                    Message.error('会话已过期，请重新登录！');
                 }
             } else if (isRefreshing) {
                 // 如果正在刷新token，将当前请求挂起，等刷新完成后继续执行
@@ -78,7 +78,7 @@ service.interceptors.response.use(
         const code = error.response?.data?.code;
         if (!code) {
             Message({
-                type: 'error', message: '网络异常，请检查网络连接！'
+                type: 'error', message: '当前网络异常，请检查网络连接！'
             });
         } else if (code === 500) {
             Message({

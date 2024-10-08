@@ -46,10 +46,10 @@ export default {
 .sync-content {
   width: 100%;
   overflow: hidden;
-  overflow-x: auto;
+  overflow-x: scroll;
   overflow-y: auto;
   font-family: Candara, serif;
-  background: #F2F6FC;
+  background: #f8f8f9;
   padding: 5px;
   border-radius: 5px;
   max-height: 650px;
