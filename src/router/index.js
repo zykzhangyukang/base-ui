@@ -1,26 +1,8 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 import Layout from '../layout'
 
-Vue.use(Router)
-
-//解决编程式路由往同一地址跳转时会报错的情况
-const originalPush = Router.prototype.push;
-const originalReplace = Router.prototype.replace;
-//push
-Router.prototype.push = function push(location, onResolve, onReject) {
-    if (onResolve || onReject) {
-        return originalPush.call(this, location, onResolve, onReject);
-    }
-    return originalPush.call(this, location).catch(err => err);
-};
-//replace
-Router.prototype.replace = function push(location, onResolve, onReject) {
-    if (onResolve || onReject) {
-        return originalReplace.call(this, location, onResolve, onReject);
-    }
-    return originalReplace.call(this, location).catch(err => err);
-};
+Vue.use(VueRouter)
 
 /**
  * hidden: true                  如果设置为 true，该项菜单将不会显示在菜单栏中(默认为 false)
@@ -81,12 +63,11 @@ export const DynamicRoutes = [
             }
         ]
     },
-    // 接口获取动态路由。
 ]
 
-const routes = [...constantRoutes]
-const router = new Router({
-    routes
+const router = new VueRouter({
+    // 不适用 history 模式
+    routes: constantRoutes
 });
 router.$addRoutes = (params) => {
     params.forEach((route) => {
@@ -99,4 +80,10 @@ router.$addRoutes = (params) => {
         redirect: '/error/404'
     });
 };
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
+
 export default router
