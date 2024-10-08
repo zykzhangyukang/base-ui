@@ -1,4 +1,4 @@
-import {getUserInfo, login, switchUserLogin} from "@/api/auth.js";
+import {getUserInfo, login, switchUserLogin} from "../../api/auth.js";
 import {
     getRefreshToken,
     removeAccessToken,
@@ -7,11 +7,10 @@ import {
     setAccessToken,
     setExpiresIn,
     setRefreshToken,
-} from "@/utils/cookie";
+} from "../../utils/cookie";
 import axios from 'axios';
 
 const state = {
-    // 用户信息
     userInfo: null,
 }
 
