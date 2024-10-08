@@ -162,7 +162,6 @@
           </el-table-column>
           <el-table-column
               label="操作"
-              align="center"
           >
             <template slot-scope="scope">
               <el-button size="mini" type="text" @click="handleUpdate(scope.row.funcId)">编辑</el-button>

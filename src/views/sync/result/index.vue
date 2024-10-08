@@ -2,17 +2,6 @@
   <div class="table-result-wrapper">
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
-      <el-form-item label="创建时间" prop="msgCreateTimeRange">
-        <el-date-picker
-            v-model="searchForm.msgCreateTimeRange"
-            type="datetimerange"
-            :picker-options="pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item label="计划编号" prop="planCode">
         <el-input v-model="searchForm.planCode" placeholder="计划编号" :style="{width : '220px'}"></el-input>
       </el-form-item>
@@ -30,6 +19,17 @@
         <el-select v-model="searchForm.syncStatus" placeholder="同步状态" clearable :style="{width : '180px'}">
           <el-option :label="resultStatusGName[item.code]" v-for="item in resultStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="创建时间" prop="msgCreateTimeRange">
+        <el-date-picker
+            v-model="searchForm.msgCreateTimeRange"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="消息来源" prop="msgSrc">
         <el-select v-model="searchForm.msgSrc" placeholder="消息来源" clearable :style="{width : '180px'}">
@@ -396,7 +396,7 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .pagination-wrapper{
   margin-top: 25px;
   .el-pagination{

@@ -78,8 +78,7 @@
           sortable
       >
         <template slot-scope="scope">
-          <span style="color: #19be6b" v-if="scope.row.userStatus ===1 ">启用</span>
-          <span style="color: #ed4014" v-else>禁用</span>
+          <el-tag :type="scope.row.userStatus ===1 ? 'success' : 'danger'" size="mini">{{userStatusGName[scope.row.userStatus]}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -119,7 +118,6 @@
       </el-table-column>
       <el-table-column
           label="操作"
-          align="center"
       >
         <template slot-scope="scope">
           <el-button  size="mini"  type="text"   @click="handeUpdate(scope.row.userId)">编辑</el-button>

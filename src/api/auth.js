@@ -130,6 +130,13 @@ export function getConstantAll(data) {
     })
 }
 
+export function refreshResc() {
+    return request({
+        url: '/auth/resc/refresh',
+        method: 'put'
+    })
+}
+
 export function getRescPage(data) {
     return request({
         url: '/auth/resc/page',

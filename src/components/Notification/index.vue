@@ -1,6 +1,6 @@
 <template>
   <div class="notification-wrapper">
-    <el-badge :value="2" class="item">
+    <el-badge is-dot class="item">
       <el-icon class="el-icon-bell"></el-icon>
     </el-badge>
   </div>

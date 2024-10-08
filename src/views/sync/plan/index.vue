@@ -30,7 +30,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-        <el-button type="warning" @click="handleRefresh" :loading="refreshLoading">刷新缓存</el-button>
+        <el-button plain  @click="handleRefresh" :loading="refreshLoading">刷新缓存</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -53,10 +53,13 @@
           label="计划编号"
           sortable
           width="180px"
-          show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <a  style="color: #2d8cf0" @click="$refs.planContentRef.handleOpen(scope.row.uuid)">{{scope.row.planCode}}</a>
+          <div class="ellipsis">
+               <span  class="ellipsis-button link" @click="$refs.planContentRef.handleOpen(scope.row.uuid)">
+                 {{scope.row.planCode}}
+              </span>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -66,7 +69,7 @@
       >
         <template slot-scope="scope">
           <el-switch
-              width="30"
+              width="35"
               v-model="scope.row.status ==='normal' "
               active-color="#19be6b"
               @change="((val)=>{changeStatus(val,scope.row.uuid)})"
@@ -120,7 +123,6 @@
       </el-table-column>
       <el-table-column
           label="操作"
-          align="center"
       >
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="handleUpdate(scope.row.uuid)">编辑</el-button>
@@ -300,11 +302,32 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .pagination-wrapper{
   margin-top: 25px;
   .el-pagination{
     float: right;
   }
+}
+/* 容器和按钮均需要设置省略号效果 */
+.ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipsis-button {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  font-family: Arial,serif;
+}
+.link{
+  color: #2d8cf0;
+  cursor: pointer;
 }
 </style>

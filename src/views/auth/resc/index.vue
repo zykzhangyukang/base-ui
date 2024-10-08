@@ -22,6 +22,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+        <el-button plain @click="handleRefresh" :loading="refreshLoading">刷新资源</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -82,7 +83,6 @@
       </el-table-column>
       <el-table-column
           label="操作"
-          align="center"
       >
         <template slot-scope="scope">
           <el-button size="mini" type="text"  @click="handleUpdate(scope.row.rescId)">编辑</el-button>
@@ -114,7 +114,7 @@ import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import RescAdd from "@/views/auth/resc/RescAdd.vue";
 import RescUpdate from "@/views/auth/resc/RescUpdate.vue";
 import MyTable from '@/components/MyTable/index'
-import {deleteResc, getRescPage} from "@/api/auth";
+import {deleteResc, getRescPage, refreshResc} from "@/api/auth";
 
 
 export default {
@@ -126,6 +126,7 @@ export default {
   },
   data() {
     return {
+      refreshLoading: false,
       addModalVisible: false,
       // 数据总条数
       total: 0,
@@ -158,6 +159,17 @@ export default {
     },
   },
   methods: {
+    handleRefresh(){
+      this.$confirm('刷新系统资源, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        refreshResc().then(res=>{
+          this.$message.success("刷新资源成功！");
+        })
+      });
+    },
     handleAdd(){
       this.$refs.addRef.handleOpen();
     },

@@ -1,5 +1,13 @@
 import request from "@/request";
 
+export function getMessagePage(data) {
+    return request({
+        url: '/sync/message/page',
+        method: 'post',
+        data
+    })
+}
+
 /**
  * 数据校验
  */

@@ -18,11 +18,6 @@ export default {
     key() {
       return this.$route.fullPath
     }
-  },
-  watch:{
-    cachedViews(o){
-      console.log(o);
-    }
   }
 }
 </script>

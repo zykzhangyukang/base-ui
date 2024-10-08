@@ -31,7 +31,7 @@ export default {
   padding: 16px 20px;
   .header-right {
     float: right;
-    width: 110px;
+    width: 120px;
   }
 }
 </style>

@@ -32,7 +32,7 @@
       </table>
 
       <div class="isCenter" v-if="validTables.length === 0">
-        <a-empty />
+        <el-empty description="暂无数据" :image-size="50"></el-empty>
       </div>
     </div>
   </el-dialog>
