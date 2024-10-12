@@ -3,8 +3,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import './directive/install'
 import './router/permission'
-
 import './assets/icon-fonts/iconfont.css'
 import './assets/icon-fonts/iconfont'
 import 'element-ui/lib/theme-chalk/index.css'
