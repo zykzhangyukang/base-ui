@@ -38,7 +38,9 @@
         type: 'warning'
       }).then(() => {
         this.$store.commit('user/REMOVE_TOKEN');
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload()
+        }, 100)
       })
     }
   }

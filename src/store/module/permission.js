@@ -5,7 +5,9 @@ import {getConstantAll, getPermission} from "@/api/auth";
 const state = {
     // 菜单数据
     menusList: [],
-    // 权限数据
+    // 权限(按钮)数据
+    buttonList: [],
+    // 权限(路由)数据
     permission: null,
     // 常量数据
     const:[]
@@ -13,8 +15,8 @@ const state = {
 
 const getters = {
     btnPermissions: state => {
-        if (state.permission != null && state.permission.buttons != null && state.permission.buttons.length > 0) {
-            return state.permission.buttons
+        if (state.buttonList!=null && state.buttonList.length > 0) {
+            return state.buttonList;
         }
         return [];
     }
@@ -24,18 +26,15 @@ const mutations = {
     SET_MENU(state, menusList) {
         state.menusList = menusList;
     },
-    CLEAR_MENU(state) {
-        state.menusList = [];
+    SET_BUTTON(state, buttonList) {
+        state.buttonList = buttonList;
     },
     SET_PERMISSION(state, permission) {
         state.permission = permission;
     },
-    CLEAR_PERMISSION() {
-        state.permission = null;
-    },
     SET_CONSTANTS(state, constants){
         state.const = constants;
-    }
+    },
 }
 
 const actions = {
@@ -46,6 +45,8 @@ const actions = {
         DynamicRoutes.push(...userRouterList);
         // 设置菜单
         commit('SET_MENU', DynamicRoutes);
+        // 设置按钮权限
+        commit('SET_BUTTON', permission.buttons)
         // 初始化路由
         let initialRoutes = router.options.routes;
         // 添加动态路由

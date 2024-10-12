@@ -3,10 +3,7 @@ import store from '@/store'
 function checkPermission(el, binding) {
   const { value } = binding
   try {
-    return
-
     let btnName = value
-
     if (typeof value === 'object') {
       btnName = value[0]
     }

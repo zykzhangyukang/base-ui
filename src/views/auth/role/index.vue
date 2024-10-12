@@ -6,9 +6,9 @@
         <el-input v-model="searchForm.roleName" placeholder="角色名称"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_role_page'">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-        <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_role_add'">新增</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -62,9 +62,9 @@
           label="操作"
       >
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="handeUpdate(scope.row.roleId)">编辑</el-button>
-          <el-button size="mini" type="text" @click="handeDel(scope.row.roleId)">删除</el-button>
-          <el-button size="mini" type="text" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)" >功能</el-button>
+          <el-button size="mini" type="text" @click="handleUpdate(scope.row.roleId)" v-permission="'auth_role_update'">编辑</el-button>
+          <el-button size="mini" type="text" @click="handleDel(scope.row.roleId)" v-permission="'auth_role_delete'">删除</el-button>
+          <el-button size="mini" type="text" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)">查看功能</el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -128,13 +128,13 @@ export default {
     handleAdd(){
       this.$refs.addRef.handleOpen();
     },
-    handeUpdate(id){
+    handleUpdate(id){
       this.$refs.updateRef.handleOpen(id);
     },
     handleUpdateUser(id){
       this.$refs.updateUserRef.handleOpen(id);
     },
-    handeDel(id){
+    handleDel(id){
       this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -198,7 +198,5 @@ export default {
   .el-pagination{
     float: right;
   }
-}
-.userVOList{
 }
 </style>

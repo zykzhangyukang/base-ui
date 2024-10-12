@@ -221,7 +221,9 @@ export default {
         })
         store.dispatch('user/SWITCH_USER_LOGIN', this.multipleSelection[0].username).then(res => {
           if(res.code === 200){
-            window.location.reload();
+            setTimeout(() => {
+              window.location.reload()
+            }, 100)
           }
         }).finally(()=>{
           loading.close();
