@@ -9,12 +9,12 @@
         <el-input v-model="searchForm.rescUrl" placeholder="资源URL"></el-input>
       </el-form-item>
       <el-form-item label="所属系统" prop="rescDomain">
-        <el-select v-model="searchForm.rescDomain" placeholder="所属系统" clearable>
+        <el-select v-model="searchForm.rescDomain" placeholder="所属系统" clearable :style="{width:'180px'}">
           <el-option :label="projectDomainGName[item.code]" v-for="item in projectDomainG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="请求方式" prop="methodType">
-        <el-select v-model="searchForm.methodType" placeholder="请求方式" clearable>
+        <el-select v-model="searchForm.methodType" placeholder="请求方式" clearable :style="{width:'180px'}">
           <el-option :label="methodTypeGName[item.code]" v-for="item in methodTypeG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>

@@ -141,6 +141,7 @@
           prop="hlsMsgContent"
           label="消息内容"
           align="center"
+          width="150px"
       >
         <template  slot-scope="scope">
           <div class="ellipsis">

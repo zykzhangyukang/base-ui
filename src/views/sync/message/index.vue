@@ -123,7 +123,7 @@
       <el-table-column
           prop="msgContent"
           label="消息内容"
-          width="180"
+          width="150px"
       >
         <template  slot-scope="scope">
           <div class="ellipsis">
