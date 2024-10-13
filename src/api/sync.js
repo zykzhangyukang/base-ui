@@ -1,5 +1,13 @@
 import request from "@/request";
 
+export function repeatCallBack(data) {
+    return request({
+        url: '/sync/callback/repeat',
+        method: 'post',
+        data
+    })
+}
+
 
 export function getCallbackPage(data) {
     return request({

@@ -49,6 +49,7 @@
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
+        <el-button plain @click="handleCallback" :loading="callbackLoading">重新回调</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -103,10 +104,9 @@
           prop="status"
           label="回调状态"
           align="center"
-          sortable
       >
         <template slot-scope="scope">
-          <a >{{callbackStatusGName[scope.row.status]}}</a>
+          <a :title="scope.row.errorMsg" >{{callbackStatusGName[scope.row.status]}}</a>
         </template>
       </el-table-column>
       <el-table-column
@@ -158,7 +158,7 @@
 <script>
 import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import MyTable from '@/components/MyTable/index'
-import {getCallbackPage} from "@/api/sync";
+import {getCallbackPage, repeatCallBack, repeatSync} from "@/api/sync";
 import MsgContent from "@/views/sync/result/MsgContent.vue";
 
 export default {
@@ -169,6 +169,7 @@ export default {
   },
   data() {
     return {
+      callbackLoading: false,
       // 数据总条数
       total: 0,
       // 表格数据数组
@@ -216,6 +217,24 @@ export default {
     },
   },
   methods: {
+    handleCallback(){
+      if(this.multipleSelection.length ===0){
+        return this.$message.warning("请勾选一条记录进行操作！");
+      }
+      this.$confirm(`是否要重新回调这些记录?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.repeatSyncLoading = true;
+        let uuidList = this.multipleSelection.map(e=>e.uuid);
+        repeatCallBack({uuidList: uuidList, destProject: this.searchForm.destProject}).then(res=>{
+          this.$message.success("操作成功！已进入回调队列。")
+        }).finally(()=>{
+          this.repeatSyncLoading = false;
+        })
+      });
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },

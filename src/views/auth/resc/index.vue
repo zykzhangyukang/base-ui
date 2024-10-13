@@ -165,8 +165,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.refreshLoading = true;
         refreshResc().then(res=>{
           this.$message.success("刷新资源成功！");
+        }).finally(()=>{
+          this.refreshLoading = false;
         })
       });
     },
