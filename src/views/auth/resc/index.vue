@@ -3,10 +3,10 @@
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="资源名称" prop="rescName">
-        <el-input v-model="searchForm.rescName" placeholder="资源名称"></el-input>
+        <el-input v-model="searchForm.rescName" placeholder="资源名称" clearable></el-input>
       </el-form-item>
       <el-form-item label="资源URL" prop="rescUrl">
-        <el-input v-model="searchForm.rescUrl" placeholder="资源URL"></el-input>
+        <el-input v-model="searchForm.rescUrl" placeholder="资源URL" clearable></el-input>
       </el-form-item>
       <el-form-item label="所属系统" prop="rescDomain">
         <el-select v-model="searchForm.rescDomain" placeholder="所属系统" clearable :style="{width:'180px'}">
@@ -19,10 +19,10 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_resc_page'">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-        <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-        <el-button plain @click="handleRefresh" :loading="refreshLoading">刷新资源</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_resc_add'">新增</el-button>
+        <el-button plain @click="handleRefresh" :loading="refreshLoading" v-permission="'auth_resc_refresh'">刷新资源</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -85,8 +85,8 @@
           label="操作"
       >
         <template slot-scope="scope">
-          <el-button size="mini" type="text"  @click="handleUpdate(scope.row.rescId)">编辑</el-button>
-          <el-button size="mini" type="text"  @click="handleDel(scope.row.rescId)">删除</el-button>
+          <el-button size="mini" type="text"  @click="handleUpdate(scope.row.rescId)" v-permission="'auth_resc_update'">编辑</el-button>
+          <el-button size="mini" type="text"  @click="handleDel(scope.row.rescId)" v-permission="'auth_resc_delete'">删除</el-button>
         </template>
       </el-table-column>
     </my-table>

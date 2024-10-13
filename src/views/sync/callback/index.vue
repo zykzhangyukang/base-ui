@@ -3,7 +3,7 @@
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="源系统" prop="srcProject">
-        <el-select v-model="searchForm.srcProject" placeholder="源系统"  :style="{width:'180px'}">
+        <el-select v-model="searchForm.srcProject" placeholder="源系统"  :style="{width:'180px'}" clearable>
           <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
@@ -14,6 +14,7 @@
       </el-form-item>
       <el-form-item label="开始时间" prop="startTime">
         <el-date-picker
+            :clearable="false"
             v-model="searchForm.startTime"
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -27,6 +28,7 @@
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
+            default-time="23:59:59"
             placeholder="选择结束时间">
         </el-date-picker>
       </el-form-item>
@@ -41,15 +43,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="消息ID" prop="msgId">
-        <el-input v-model="searchForm.msgId" placeholder="消息ID"  :style="{width:'250px'}" ></el-input>
+        <el-input v-model="searchForm.msgId" placeholder="消息ID"  :style="{width:'250px'}" clearable></el-input>
       </el-form-item>
       <el-form-item label="消息内容" prop="msgContent">
-        <el-input v-model="searchForm.msgContent" placeholder="消息内容"  :style="{width:'250px'}" ></el-input>
+        <el-input v-model="searchForm.msgContent" placeholder="消息内容"  :style="{width:'250px'}" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_callback_page'">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-        <el-button plain @click="handleCallback" :loading="callbackLoading">重新回调</el-button>
+        <el-button plain @click="handleCallback" :loading="callbackLoading" v-permission="'sync_callback_repeat'">重新回调</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -156,7 +158,7 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, toLine} from "@/utils";
+import {adminDomain, formatConst, getConst, getNDaysAgo, toLine} from "@/utils";
 import MyTable from '@/components/MyTable/index'
 import {getCallbackPage, repeatCallBack, repeatSync} from "@/api/sync";
 import MsgContent from "@/views/sync/result/MsgContent.vue";
@@ -185,7 +187,7 @@ export default {
         status: '',
         msgId: '',
         msgContent: '',
-        startTime: '',
+        startTime: getNDaysAgo(7),
         endTime: ''
       },
     }

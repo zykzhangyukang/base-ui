@@ -3,7 +3,7 @@
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="计划编号" prop="planCode">
-        <el-input v-model="searchForm.planCode" placeholder="计划编号"></el-input>
+        <el-input v-model="searchForm.planCode" placeholder="计划编号" clearable></el-input>
       </el-form-item>
       <el-form-item label="计划状态" prop="status">
         <el-select v-model="searchForm.status" placeholder="计划状态" clearable >
@@ -11,10 +11,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="源数据库" prop="srcDb">
-        <el-input v-model="searchForm.srcDb" placeholder="源数据库"></el-input>
+        <el-input v-model="searchForm.srcDb" placeholder="源数据库" clearable></el-input>
       </el-form-item>
       <el-form-item label="目标数据库" prop="destDb">
-        <el-input v-model="searchForm.destDb" placeholder="目标数据库"></el-input>
+        <el-input v-model="searchForm.destDb" placeholder="目标数据库" clearable></el-input>
       </el-form-item>
       <el-form-item label="源系统" prop="srcProject">
         <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable >
@@ -27,10 +27,10 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_plan_page'">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-        <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-        <el-button plain  @click="handleRefresh" :loading="refreshLoading">刷新缓存</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'sync_plan_add'">新增</el-button>
+        <el-button plain  @click="handleRefresh" :loading="refreshLoading" v-permission="'sync_plan_refresh'">刷新缓存</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -126,8 +126,8 @@
           label="操作"
       >
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="handleUpdate(scope.row.uuid)">编辑</el-button>
-          <el-button size="mini" type="text" @click="handleDel(scope.row.uuid)">删除</el-button>
+          <el-button size="mini" type="text" @click="handleUpdate(scope.row.uuid)" v-permission="'sync_plan_update'">编辑</el-button>
+          <el-button size="mini" type="text" @click="handleDel(scope.row.uuid)" v-permission="'sync_plan_delete'">删除</el-button>
         </template>
       </el-table-column>
     </my-table>

@@ -8,12 +8,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="目标系统" prop="destProject">
-        <el-select v-model="searchForm.destProject" placeholder="目标系统"  :style="{width:'180px'}">
+        <el-select v-model="searchForm.destProject" placeholder="目标系统"  :style="{width:'180px'}" clearable>
           <el-option :label="destProjectGName[item.code]" v-for="item in destProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="开始时间" prop="startTime">
         <el-date-picker
+            :clearable="false"
             v-model="searchForm.startTime"
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -27,30 +28,31 @@
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
+            default-time="23:59:59"
             placeholder="选择结束时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="发送状态" prop="sendStatus">
-        <el-select v-model="searchForm.sendStatus" placeholder="发送状态"  :style="{width:'180px'}">
+        <el-select v-model="searchForm.sendStatus" placeholder="发送状态"  :style="{width:'180px'}" clearable>
           <el-option :label="sendStatusGName[item.code]" v-for="item in sendStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="处理状态" prop="dealStatus">
-        <el-select v-model="searchForm.dealStatus" placeholder="处理状态" :style="{width:'180px'}" >
+        <el-select v-model="searchForm.dealStatus" placeholder="处理状态" :style="{width:'180px'}" clearable>
           <el-option :label="dealStatusGName[item.code]" v-for="item in dealStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="消息ID" prop="msgId">
-        <el-input v-model="searchForm.msgId" placeholder="消息ID"  :style="{width:'250px'}" ></el-input>
+        <el-input v-model="searchForm.msgId" placeholder="消息ID"  :style="{width:'250px'}" clearable></el-input>
       </el-form-item>
       <el-form-item label="MQ消息" prop="mid">
-        <el-input v-model="searchForm.mid" placeholder="MQ消息"  :style="{width:'250px'}" ></el-input>
+        <el-input v-model="searchForm.mid" placeholder="MQ消息"  :style="{width:'250px'}" clearable></el-input>
       </el-form-item>
       <el-form-item label="消息内容" prop="msgContent">
-        <el-input v-model="searchForm.msgContent" placeholder="消息内容"  :style="{width:'250px'}" ></el-input>
+        <el-input v-model="searchForm.msgContent" placeholder="消息内容"  :style="{width:'250px'}" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_message_page'">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -179,7 +181,7 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, toLine} from "@/utils";
+import {adminDomain, formatConst, getConst, getNDaysAgo, toLine} from "@/utils";
 import MyTable from '@/components/MyTable/index'
 import {getMessagePage} from "@/api/sync";
 import MsgContent from "@/views/sync/result/MsgContent.vue";
@@ -208,7 +210,7 @@ export default {
         msgId: '',
         msgContent: '',
         mid: '',
-        startTime: '',
+        startTime: getNDaysAgo(7),
         endTime: ''
       },
     }

@@ -4,6 +4,7 @@
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="开始时间" prop="startTime">
         <el-date-picker
+            :clearable="false"
             v-model="searchForm.startTime"
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -17,11 +18,12 @@
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
             format="yyyy-MM-dd HH:mm:ss"
+            default-time="23:59:59"
             placeholder="选择结束时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="计划编号" prop="planCode">
-        <el-input v-model="searchForm.planCode" placeholder="计划编号" :style="{width : '180px'}"></el-input>
+        <el-input v-model="searchForm.planCode" placeholder="计划编号" :style="{width : '180px'}" clearable></el-input>
       </el-form-item>
       <el-form-item label="源系统" prop="srcProject">
         <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable :style="{width : '180px'}">
@@ -49,7 +51,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="搜索关键词" prop="keywords" >
-        <el-input v-model="searchForm.keywords" placeholder="计划名称，消息内容，同步内容" :style="{width : '250px'}"></el-input>
+        <el-input v-model="searchForm.keywords" placeholder="计划名称，消息内容，同步内容" :style="{width : '250px'}" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="searchLoading">查询</el-button>
@@ -205,7 +207,7 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, toLine} from "@/utils";
+import {adminDomain, formatConst, getConst, getNDaysAgo, toLine} from "@/utils";
 import PlanAdd from "@/views/sync/plan/PlanAdd.vue";
 import PlanContent from "@/views/sync/plan/PlanContent.vue";
 import PlanUpdate from "@/views/sync/plan/PlanUpdate.vue";
@@ -250,7 +252,7 @@ export default {
         msgSrc: '',
         keywords: '',
         repeatCount: null,
-        startTime: '',
+        startTime: getNDaysAgo(7),
         endTime: ''
       },
     }

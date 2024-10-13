@@ -3,10 +3,10 @@
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="用户账号" prop="username">
-        <el-input v-model="searchForm.username" placeholder="用户账号"></el-input>
+        <el-input v-model="searchForm.username" placeholder="用户账号" clearable></el-input>
       </el-form-item>
       <el-form-item label="真实名称" prop="realName">
-        <el-input v-model="searchForm.realName" placeholder="真实名称"></el-input>
+        <el-input v-model="searchForm.realName" placeholder="真实名称" clearable></el-input>
       </el-form-item>
       <el-form-item label="用户状态" prop="userStatus">
         <el-select v-model="searchForm.userStatus" placeholder="用户状态" clearable>
@@ -14,9 +14,9 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_user_page'">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-        <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_user_add'">新增</el-button>
       </el-form-item>
       <el-form-item>
         <el-dropdown @command="handleCommand" trigger="click">
@@ -24,19 +24,16 @@
             更多操作<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
+            <el-dropdown-item v-permission="'auth_user_pwd_update'">
               <el-icon class="el-icon-setting"></el-icon>重置密码
             </el-dropdown-item>
-            <el-dropdown-item command="updateUserRole">
+            <el-dropdown-item command="updateUserRole" v-permission="'auth_user_role_update'">
               <el-icon class="el-icon-set-up"></el-icon>分配角色
             </el-dropdown-item>
-            <el-dropdown-item command="switchUserLogin">
+            <el-dropdown-item command="switchUserLogin" v-permission="'auth_user_switch_login'">
               <el-icon class="el-icon-turn-off"></el-icon>切换登录
             </el-dropdown-item>
-            <el-dropdown-item>
-              <el-icon class="el-icon-delete"></el-icon>批量删除
-            </el-dropdown-item>
-            <el-dropdown-item command="updateUserStatus">
+            <el-dropdown-item command="updateUserStatus" v-permission="'auth_user_update_status'">
               <el-icon class="el-icon-warning-outline"></el-icon>启用/禁用
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -120,9 +117,9 @@
           label="操作"
       >
         <template slot-scope="scope">
-          <el-button  size="mini"  type="text"   @click="handeUpdate(scope.row.userId)">编辑</el-button>
-          <el-button size="mini"   type="text"   @click="handeDel(scope.row.userId)">删除</el-button>
-          <el-button size="mini"   type="text"    @click="handleUpdateRole(scope.row.userId)">角色</el-button>
+          <el-button  size="mini"  type="text"   @click="handeUpdate(scope.row.userId)" v-permission="'auth_user_update'">编辑</el-button>
+          <el-button size="mini"   type="text"   @click="handeDel(scope.row.userId)" v-permission="'auth_user_delete'">删除</el-button>
+          <el-button size="mini"   type="text"    @click="handleUpdateRole(scope.row.userId)" v-permission="'auth_user_role_update'">分配角色</el-button>
         </template>
       </el-table-column>
     </my-table>

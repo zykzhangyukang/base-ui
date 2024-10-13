@@ -13,7 +13,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="IP地址" prop="ipAddress">
-        <el-input v-model="searchForm.ipAddress" placeholder="IP地址"></el-input>
+        <el-input v-model="searchForm.ipAddress" placeholder="IP地址" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>

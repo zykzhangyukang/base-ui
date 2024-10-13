@@ -3,7 +3,7 @@
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="角色名称" prop="roleName">
-        <el-input v-model="searchForm.roleName" placeholder="角色名称"></el-input>
+        <el-input v-model="searchForm.roleName" placeholder="角色名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_role_page'">查询</el-button>
@@ -63,7 +63,7 @@
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="handleUpdate(scope.row.roleId)" v-permission="'auth_role_update'">编辑</el-button>
           <el-button size="mini" type="text" @click="handleDel(scope.row.roleId)" v-permission="'auth_role_delete'">删除</el-button>
-          <el-button size="mini" type="text" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)">分配功能</el-button>
+          <el-button size="mini" type="text" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)">设置功能</el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -129,9 +129,6 @@ export default {
     },
     handleUpdate(id){
       this.$refs.updateRef.handleOpen(id);
-    },
-    handleUpdateUser(id){
-      this.$refs.updateUserRef.handleOpen(id);
     },
     handleDel(id){
       this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
