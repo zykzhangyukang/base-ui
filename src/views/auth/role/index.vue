@@ -38,7 +38,6 @@
           prop="userVOList"
           label="用户列表"
           align="center"
-          show-overflow-tooltip
       >
         <template slot-scope="scope">
           <span class="userVOList">{{scope.row.userVOList.map(e=>e.realName).join(',') || '暂未分配'}}</span>
@@ -64,7 +63,7 @@
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="handleUpdate(scope.row.roleId)" v-permission="'auth_role_update'">编辑</el-button>
           <el-button size="mini" type="text" @click="handleDel(scope.row.roleId)" v-permission="'auth_role_delete'">删除</el-button>
-          <el-button size="mini" type="text" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)">查看功能</el-button>
+          <el-button size="mini" type="text" @click="$router.push(`/auth/role/func/${scope.row.roleId}`)">分配功能</el-button>
         </template>
       </el-table-column>
     </my-table>

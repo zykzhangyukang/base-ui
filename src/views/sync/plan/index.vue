@@ -36,6 +36,7 @@
     <!-- 表格栏 -->
     <my-table
         border
+        stripe
         ref="tableList"
         v-loading="tableLoading"
         :data="tableData"
@@ -324,7 +325,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
-  font-family: Arial,serif;
 }
 .link{
   color: #2d8cf0;

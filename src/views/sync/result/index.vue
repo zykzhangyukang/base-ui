@@ -2,16 +2,34 @@
   <div class="table-result-wrapper">
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
+      <el-form-item label="开始时间" prop="startTime">
+        <el-date-picker
+            v-model="searchForm.startTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间" prop="endTime">
+        <el-date-picker
+            v-model="searchForm.endTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择结束时间">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item label="计划编号" prop="planCode">
-        <el-input v-model="searchForm.planCode" placeholder="计划编号" :style="{width : '220px'}"></el-input>
+        <el-input v-model="searchForm.planCode" placeholder="计划编号" :style="{width : '180px'}"></el-input>
       </el-form-item>
       <el-form-item label="源系统" prop="srcProject">
-        <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable :style="{width : '200px'}">
+        <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable :style="{width : '180px'}">
           <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code" ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="目标系统" prop="destProject">
-        <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable :style="{width : '200px'}">
+        <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable :style="{width : '180px'}">
           <el-option :label="destProjectGName[item.code]" v-for="item in destProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
@@ -19,17 +37,6 @@
         <el-select v-model="searchForm.syncStatus" placeholder="同步状态" clearable :style="{width : '180px'}">
           <el-option :label="resultStatusGName[item.code]" v-for="item in resultStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="创建时间" prop="msgCreateTimeRange">
-        <el-date-picker
-            v-model="searchForm.msgCreateTimeRange"
-            type="datetimerange"
-            :picker-options="pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
-        </el-date-picker>
       </el-form-item>
       <el-form-item label="消息来源" prop="msgSrc">
         <el-select v-model="searchForm.msgSrc" placeholder="消息来源" clearable :style="{width : '180px'}">
@@ -64,7 +71,7 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" label="选择"></el-table-column>
+      <el-table-column type="selection"  label="选择" align="center"></el-table-column>
       <el-table-column
           prop="planCode"
           label="计划编号"
@@ -225,35 +232,6 @@ export default {
       searchLoading: false,
       repeatSyncLoading: false,
       signSuccessLoading: false,
-
-      pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
-      },
-      value2: '',
       addModalVisible: false,
       // 数据总条数
       total: 0,
@@ -270,8 +248,9 @@ export default {
         syncStatus: '',
         msgSrc: '',
         keywords: '',
-        msgCreateTimeRange: '',
         repeatCount: null,
+        startTime: '',
+        endTime: ''
       },
     }
   },
@@ -428,7 +407,6 @@ export default {
   text-align: center; /* 如果需要文字对齐左边 */
   color: #2d8cf0;
   cursor: pointer;
-  font-family: Arial,serif;
 }
 
 </style>

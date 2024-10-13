@@ -1,5 +1,14 @@
 import request from "@/request";
 
+
+export function getCallbackPage(data) {
+    return request({
+        url: '/sync/callback/page',
+        method: 'post',
+        data
+    })
+}
+
 export function getMessagePage(data) {
     return request({
         url: '/sync/message/page',

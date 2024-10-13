@@ -3,44 +3,51 @@
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="源系统" prop="srcProject">
-        <el-select v-model="searchForm.srcProject" placeholder="源系统"  >
+        <el-select v-model="searchForm.srcProject" placeholder="源系统" :style="{width:'180px'}" >
           <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="目标系统" prop="destProject">
-        <el-select v-model="searchForm.destProject" placeholder="目标系统"  >
+        <el-select v-model="searchForm.destProject" placeholder="目标系统"  :style="{width:'180px'}">
           <el-option :label="destProjectGName[item.code]" v-for="item in destProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="开始时间" prop="startTime">
+        <el-date-picker
+            v-model="searchForm.startTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间" prop="endTime">
+        <el-date-picker
+            v-model="searchForm.endTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择结束时间">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item label="发送状态" prop="sendStatus">
-        <el-select v-model="searchForm.sendStatus" placeholder="发送状态"  >
+        <el-select v-model="searchForm.sendStatus" placeholder="发送状态"  :style="{width:'180px'}">
           <el-option :label="sendStatusGName[item.code]" v-for="item in sendStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="处理状态" prop="dealStatus">
-        <el-select v-model="searchForm.dealStatus" placeholder="处理状态"  >
+        <el-select v-model="searchForm.dealStatus" placeholder="处理状态" :style="{width:'180px'}" >
           <el-option :label="dealStatusGName[item.code]" v-for="item in dealStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item label="创建时间" prop="msgCreateTimeRange">
-        <el-date-picker
-            v-model="searchForm.createTimeRange"
-            type="datetimerange"
-            :picker-options="pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
-        </el-date-picker>
       </el-form-item>
       <el-form-item label="消息ID" prop="msgId">
         <el-input v-model="searchForm.msgId" placeholder="消息ID"  :style="{width:'250px'}" ></el-input>
       </el-form-item>
+      <el-form-item label="MQ消息" prop="mid">
+        <el-input v-model="searchForm.mid" placeholder="MQ消息"  :style="{width:'250px'}" ></el-input>
+      </el-form-item>
       <el-form-item label="消息内容" prop="msgContent">
         <el-input v-model="searchForm.msgContent" placeholder="消息内容"  :style="{width:'250px'}" ></el-input>
-      </el-form-item>
-      <el-form-item label="MQ消息ID" prop="mid">
-        <el-input v-model="searchForm.mid" placeholder="MQ消息ID"  :style="{width:'250px'}" ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
@@ -50,6 +57,7 @@
     <!-- 表格栏 -->
     <my-table
         border
+        stripe
         ref="tableList"
         v-loading="tableLoading"
         :data="tableData"
@@ -59,7 +67,6 @@
       <el-table-column
           prop="uuid"
           label="消息ID"
-          align="center"
           width="250"
       >
       </el-table-column>
@@ -85,7 +92,7 @@
           prop="mid"
           label="MQ消息"
           align="center"
-          width="220px"
+          width="260px"
       >
         <template slot-scope="scope">
         <div class="ellipsis">
@@ -134,13 +141,19 @@
       <el-table-column
           prop="sendTime"
           label="发送时间"
-          width="180"
+          width="150"
+      >
+      </el-table-column>
+      <el-table-column
+          prop="createTime"
+          label="创建时间"
+          width="150"
       >
       </el-table-column>
       <el-table-column
           prop="ackTime"
           label="ACK时间"
-          width="180"
+          width="150"
       >
       </el-table-column>
     </my-table>
@@ -175,33 +188,6 @@ export default {
   },
   data() {
     return {
-      pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
-      },
       // 数据总条数
       total: 0,
       // 表格数据数组
@@ -218,7 +204,8 @@ export default {
         msgId: '',
         msgContent: '',
         mid: '',
-        createTimeRange: ''
+        startTime: '',
+        endTime: ''
       },
     }
   },
@@ -311,7 +298,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center; /* 如果需要文字对齐左边 */
-  font-family: Arial,serif;
 }
 .link{
   color: #2d8cf0;
