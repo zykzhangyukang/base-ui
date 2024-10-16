@@ -1,8 +1,10 @@
 <template>
   <div class="notification-wrapper" @click="handleNotificationClick">
-    <el-badge :value="count"  class="item" >
+    <el-badge :value="count"  class="item" :hidden="count === 0" >
       <el-icon class="el-icon-chat-dot-square" aria-label="Notification"></el-icon>
     </el-badge>
+    <!-- 消息中心 -->
+    <notify-center ref="notifyCenterRef"></notify-center>
   </div>
 </template>
 
@@ -11,9 +13,13 @@
   import Stomp from 'stompjs';
   import { getAccessToken } from "../../utils/cookie";
   import {getNotificationCount} from "../../api/auth";
+  import NotifyCenter from "./NotifyCenter";
 
   export default {
     name: 'Notification',
+    components:{
+      NotifyCenter
+    },
     data() {
       return {
         count: 0,
@@ -34,7 +40,7 @@
     methods: {
       getUnReadCount(){
          getNotificationCount().then(res => {
-          this.count = res.result.count;
+          this.count = res.result;
         });
       },
       connectWebSocket() {
@@ -135,7 +141,7 @@
       },
 
       handleNotificationClick() {
-        console.log('Notification clicked');
+        this.$refs.notifyCenterRef.handleOpen();
       },
     },
   };
