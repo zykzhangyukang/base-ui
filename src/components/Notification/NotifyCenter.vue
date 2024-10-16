@@ -3,7 +3,6 @@
             title="消息中心"
             :visible.sync="visible"
             width="40%"
-            :show-close="true"
             class="dialog-form"
             :before-close="handleClose"
     >
@@ -19,7 +18,7 @@
         name: 'NotifyCenter',
         data() {
             return {
-                visible:false,
+                visible: false,
                 module: 'all'
             }
         },
@@ -34,13 +33,9 @@
         methods:{
             handleClose() {
                 this.visible = false;
-                this.resetForm('form');
             },
             handleOpen(){
                 this.visible = true;
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
             },
             onSubmit(){
                 this.handleClose();
