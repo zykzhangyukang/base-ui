@@ -1,5 +1,12 @@
 import request from '../request'
 
+export function getNotificationCount() {
+    return request({
+        url: '/auth/notification/count',
+        method: 'get',
+    })
+}
+
 export function getUserDeptList() {
     return request({
         url: '/auth/dept/list',

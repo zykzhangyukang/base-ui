@@ -1,6 +1,6 @@
 <template>
   <div class="notification-wrapper" @click="handleNotificationClick">
-    <el-badge is-dot class="item">
+    <el-badge :value="count"  class="item" >
       <el-icon class="el-icon-chat-dot-square" aria-label="Notification"></el-icon>
     </el-badge>
   </div>
@@ -10,12 +10,13 @@
   import SockJS from 'sockjs-client';
   import Stomp from 'stompjs';
   import { getAccessToken } from "../../utils/cookie";
+  import {getNotificationCount} from "../../api/auth";
 
   export default {
     name: 'Notification',
     data() {
       return {
-        msgCount: 0,
+        count: 0,
         stompClient: null,
         reconnectAttempts: 0,
         maxReconnectAttempts: 10,
@@ -24,12 +25,18 @@
       };
     },
     created() {
+      this.getUnReadCount();
       this.connectWebSocket();
     },
     beforeUnmount() {
       this.disconnectWebSocket();
     },
     methods: {
+      getUnReadCount(){
+         getNotificationCount().then(res => {
+          this.count = res.result.count;
+        });
+      },
       connectWebSocket() {
         console.log('正在尝试连接 WebSocket...');
         const socket = new SockJS(process.env.VUE_APP_BASE_API + '/sys_websocket');
@@ -73,7 +80,7 @@
 
       subUserMsg(msg) {
         const body = JSON.parse(msg.body);
-        this.msgCount +=1;
+        this.count +=1;
       },
 
       startHeartbeat() {
