@@ -114,7 +114,10 @@ class MyWebSock {
 
     subSysMsg(msg) {
         const body = JSON.parse(msg.body);
-        console.log(body)
+        // 基金信息更新
+        if(body?.type === 'fund_tips'){
+            store.commit('notification/SET_FUND_TIPS', body.message)
+        }
     }
 
     subUserMsg(msg) {
