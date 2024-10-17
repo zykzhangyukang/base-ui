@@ -12,8 +12,7 @@
     </el-dialog>
 </template>
 <script>
-    import {adminDomain, formatConst, getConst} from "../../utils";
-
+    import {adminDomain, formatConst, getConst} from "@/utils";
     export default {
         name: 'NotifyCenter',
         data() {

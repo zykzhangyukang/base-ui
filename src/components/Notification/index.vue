@@ -1,8 +1,10 @@
 <template>
-  <div class="notification-wrapper" @click="handleNotificationClick">
-    <el-badge :value="count"  class="item" :hidden="count === 0" >
-      <el-icon class="el-icon-chat-dot-square" aria-label="Notification"></el-icon>
-    </el-badge>
+  <div>
+    <div class="notification-wrapper" @click="handleNotificationClick">
+      <el-badge :value="count"  class="item" :hidden="count === 0" >
+        <el-icon class="el-icon-chat-dot-square" aria-label="Notification"></el-icon>
+      </el-badge>
+    </div>
     <!-- 消息中心 -->
     <notify-center ref="notifyCenterRef"></notify-center>
   </div>
