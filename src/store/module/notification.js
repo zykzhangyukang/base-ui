@@ -1,14 +1,15 @@
 
 const state = {
-    fundTips: '暂无基金数据',
+    fundData:  []
 }
 
 const getters = {
 }
 
 const mutations = {
-    SET_FUND_TIPS(state, message){
-        state.fundTips = message;
+    SET_FUND_DATA(state, message){
+        console.log(message)
+        state.fundData = message;
     }
 }
 

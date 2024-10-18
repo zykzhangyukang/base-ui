@@ -116,7 +116,7 @@ class MyWebSock {
         const body = JSON.parse(msg.body);
         // 基金信息更新
         if(body?.type === 'fund_tips'){
-            store.commit('notification/SET_FUND_TIPS', body.message)
+            store.commit('notification/SET_FUND_DATA', JSON.parse(body.message))
         }
     }
 
