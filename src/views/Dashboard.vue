@@ -28,6 +28,7 @@
             <el-table-column
                     label="净值日期"
                     prop="jzrq"
+                    width="150"
             >
             </el-table-column>
             <el-table-column
@@ -43,6 +44,7 @@
             <el-table-column
                     label="估值时间"
                     prop="gztime"
+                    width="150"
             >
             </el-table-column>
             <el-table-column
@@ -76,7 +78,35 @@
                     {{ scope.row.todayIncome > 0 ? '+' + scope.row.todayIncome : scope.row.todayIncome < 0 ? scope.row.todayIncome : '+0.00' }}
                 </template>
             </el-table-column>
+            <el-table-column
+                    label="操作"
+                    fixed="right"
+            >
+                <template slot-scope="scope">
+                    <el-button size="mini" type="text" @click="showImage(scope.row.fundcode)" icon="el-icon-picture-outline">
+                        查看图片
+                    </el-button>
+                </template>
+            </el-table-column>
         </el-table>
+
+        <el-dialog
+                :title="null"
+                width="500px"
+                :visible.sync="dialogVisible"
+                :before-close="handleClose">
+            <el-image
+                    style="width: 451px; height: 281px"
+                    :src="url"
+                    :fit="fit">
+                <div slot="placeholder" class="image-slot">
+                    <div class="image-loading">
+                        加载中<span class="el-icon-loading"></span>
+                    </div>
+                </div>
+            </el-image>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -84,9 +114,16 @@
     export default {
         name: 'Dashboard',
         data() {
-            return {}
+            return {
+                dialogVisible: false,
+                url: '',
+            }
         },
         methods: {
+            showImage(code) {
+                this.url  = 'https://j4.dfcfw.com/charts/pic7/'+code+'.png?'+new Date().getTime();
+                this.dialogVisible = true;
+            },
             getSummaries(param) {
                 const {columns, data} = param;
                 const sums = [];
@@ -96,7 +133,7 @@
                         return;
                     }
                     const values = data.map(item => Number(item[column.property]));
-                    if (index < 10) {
+                    if (index < 10 || index > 11) {
                         sums[index] = '';
                     } else {
                         const sum = values.reduce((prev, curr) => {
