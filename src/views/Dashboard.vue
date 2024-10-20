@@ -1,5 +1,6 @@
 <template xmlns="http://www.w3.org/1999/html">
     <div class="home-wrapper">
+      <h2 style="text-align: center;margin-top: 20px;margin-bottom:20px;color: #303030;font-weight: 500">{{userInfo.username}}你好，欢迎您使用系统！</h2>
       <el-alert
           :title="'理财有风险，投资需谨慎 ,   Websocket实时监控中：'+refreshTime"
           type="success"

@@ -7,7 +7,7 @@
       </div>
       <div class="button-wrapper" style="display: flex; align-items: center; margin-left: auto;">
         <el-button type='primary' @click="handleSave">保存</el-button>
-        <el-button type="info" @click="$router.push('/auth/role')">返回</el-button>
+        <el-button type="info" @click="backToList">返回</el-button>
       </div>
     </div>
 
@@ -97,8 +97,7 @@ import {mapGetters, mapMutations} from "vuex";
           this.loading = true;
           try {
             await roleFuncUpdate({ roleId: this.roleId, funcIdList }).then(async () => {
-              this.delVisitedView(this.$route);
-              await this.$router.push('/auth/role')
+              this.backToList();
             });
           } finally {
             this.loading = false;
@@ -114,8 +113,7 @@ import {mapGetters, mapMutations} from "vuex";
                 type: 'warning',
               }
           ).then(()=>{
-            this.delVisitedView(this.$route);
-            this.$router.push('/auth/role');
+            this.backToList();
           });
         }
       },
@@ -189,6 +187,10 @@ import {mapGetters, mapMutations} from "vuex";
           element.parentNode.style.styleFloat = 'left';
         });
       },
+      backToList(){
+        this.delVisitedView(this.$route);
+        this.$router.push('/auth/role')
+      }
     },
   };
 </script>

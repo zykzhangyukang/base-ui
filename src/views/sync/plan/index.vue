@@ -245,7 +245,6 @@ export default {
         this.refreshLoading = true;
         refreshPlan().then(res => {
           this.$message.success("刷新缓存成功！");
-          this.onSubmit();
         }).finally(()=>{
           this.refreshLoading = false;
         })

@@ -1,5 +1,5 @@
 <template>
-    <el-table ref="tableList" :data="data" :height="tableH" v-bind="$attrs" v-on="$listeners" size="mini" >
+    <el-table ref="tableList" :data="data" :height="tableH" v-bind="$attrs" v-on="$listeners" stripe size="mini" >
         <slot></slot>
     </el-table>
 </template>
