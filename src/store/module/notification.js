@@ -8,7 +8,6 @@ const getters = {
 
 const mutations = {
     SET_FUND_DATA(state, message){
-        console.log(message)
         state.fundData = message;
     }
 }

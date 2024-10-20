@@ -23,7 +23,7 @@ router.beforeEach(async (to, from, next) => {
                     // 用户权限设置
                     await store.dispatch('permission/FETCH_PERMISSION').then(() => {
                         next({
-                            path: to.path
+                            path: to.fullPath
                         })
                     })
                 } catch (error) {

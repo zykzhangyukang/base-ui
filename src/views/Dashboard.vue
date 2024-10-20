@@ -1,8 +1,14 @@
 <template xmlns="http://www.w3.org/1999/html">
     <div class="home-wrapper">
-        <h2 style="margin: 10px 0">基金信息</h2>
+      <el-alert
+          :title="'理财有风险，投资需谨慎 ,   Websocket实时监控中：'+refreshTime"
+          type="success"
+          show-icon
+          style="margin-bottom: 10px"
+          :closable="true"
+      >
+      </el-alert>
         <el-table
-                stripe
                 border
                 fixed="left"
                 show-summary
@@ -12,59 +18,88 @@
             <el-table-column
                     prop="fundcode"
                     label="基金编号"
+                    align="center"
+                    sortable
             >
+              <template slot-scope="scope">
+                <el-button size="mini" type="text" @click="showImage(scope.row.fundcode)" >
+                  {{ scope.row.fundcode }}
+                </el-button>
+              </template>
             </el-table-column>
             <el-table-column
                     width="200"
                     prop="name"
                     label="基金名称"
+                    align="center"
+                    sortable
+                    show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
                     label="估算净值"
                     prop="gsz"
+                    align="center"
+                    sortable
             >
             </el-table-column>
             <el-table-column
                     label="净值日期"
                     prop="jzrq"
-                    width="150"
+                    align="center"
+                    sortable
             >
             </el-table-column>
             <el-table-column
                     label="估算涨跌百分比"
                     prop="gszzl"
+                    align="center"
+                    sortable
             >
             </el-table-column>
             <el-table-column
                     label="当日估值"
                     prop="dwjz"
+                    align="center"
+                    sortable
             >
             </el-table-column>
             <el-table-column
                     label="估值时间"
                     prop="gztime"
-                    width="150"
+                    align="center"
+                    sortable
             >
             </el-table-column>
             <el-table-column
                     label="持有份额"
                     prop="bonds"
+                    align="center"
+                    sortable
             >
             </el-table-column>
             <el-table-column
                     label="持仓成本价"
                     prop="costPrise"
+                    align="center"
+                    sortable
             >
             </el-table-column>
             <el-table-column
                     label="收益率"
                     prop="incomePercent"
+                    align="center"
+                    sortable
             >
+              <template slot-scope="scope">
+                {{scope.row.incomePercent + '%' }}
+              </template>
             </el-table-column>
             <el-table-column
                     label="累计收益"
                     prop="income"
+                    align="center"
+                    sortable
             >
                 <template slot-scope="scope">
                     {{ scope.row.income > 0 ? '+' + scope.row.income : scope.row.income < 0 ? scope.row.income : '+0.00' }}
@@ -73,19 +108,11 @@
             <el-table-column
                     label="今日收益"
                     prop="todayIncome"
+                    align="center"
+                    sortable
             >
                 <template slot-scope="scope">
                     {{ scope.row.todayIncome > 0 ? '+' + scope.row.todayIncome : scope.row.todayIncome < 0 ? scope.row.todayIncome : '+0.00' }}
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="操作"
-                    fixed="right"
-            >
-                <template slot-scope="scope">
-                    <el-button size="mini" type="text" @click="showImage(scope.row.fundcode)" icon="el-icon-picture-outline">
-                        查看图片
-                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -111,10 +138,13 @@
 </template>
 
 <script>
+    import {getFormattedDate} from "@/utils";
+
     export default {
         name: 'Dashboard',
         data() {
             return {
+                refreshTime: '',
                 dialogVisible: false,
                 url: '',
             }
@@ -129,7 +159,7 @@
                 const sums = [];
                 columns.forEach((column, index) => {
                     if (index === 0) {
-                        sums[index] = '汇总';
+                        sums[index] = '合计';
                         return;
                     }
                     const values = data.map(item => Number(item[column.property]));
@@ -143,7 +173,11 @@
                             }
                             return prev;
                         }, 0);
-                        sums[index] = sum.toFixed(2) + ' 元'; // 保留两位小数
+                        if(sum > 0){
+                          sums[index] ='+' + sum.toFixed(2);
+                        }else {
+                          sums[index] = sum.toFixed(2) + '';
+                        }
                     }
                 });
                 return sums;
@@ -156,9 +190,10 @@
             userInfo() {
                 return this.$store.state.user.userInfo;
             },
-            fundData() {
-                return this.$store.state.notification.fundData;
-            },
+          fundData() {
+            this.refreshTime = getFormattedDate();
+            return this.$store.state.notification.fundData;
+          },
         }
     }
 </script>

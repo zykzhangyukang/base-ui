@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import {mapMutations} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
   import {getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck} from "@/api/auth";
 
   export default {
@@ -84,21 +84,22 @@
               ${delStr ? `<strong style="color: #ed4014">删除功能:</strong> ${delStr}` : ''}
             `;
 
-          await this.$alert(
-              message,
-              '操作结果',
-              {
-                dangerouslyUseHTMLString: true,
-                confirmButtonText: '确定',
-                type: 'warning',
-              }
-          );
+           await this.$alert(
+               message,
+               '操作结果',
+               {
+                 dangerouslyUseHTMLString: true,
+                 confirmButtonText: '确定',
+                 type: 'warning',
+               }
+           );
 
           this.loading = true;
           try {
-            await roleFuncUpdate({ roleId: this.roleId, funcIdList });
-            this.$message.success('分配功能成功！');
-            await this.fetchData();
+            await roleFuncUpdate({ roleId: this.roleId, funcIdList }).then(async () => {
+              this.delVisitedView(this.$route);
+              await this.$router.push('/auth/role')
+            });
           } finally {
             this.loading = false;
           }
@@ -112,12 +113,15 @@
                 confirmButtonText: '确定',
                 type: 'warning',
               }
-          );
+          ).then(()=>{
+            this.delVisitedView(this.$route);
+            this.$router.push('/auth/role');
+          });
         }
       },
 
       async fetchData() {
-        const roleId = this.$route.params.id;
+        const roleId = this.$route.query.roleId;
         this.loading = true;
 
         try {
