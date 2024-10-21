@@ -7,6 +7,14 @@ export function getNotificationCount() {
     })
 }
 
+export function getNotificationPage(data) {
+    return request({
+        url: '/auth/notification/page',
+        method: 'post',
+        data
+    })
+}
+
 export function getUserDeptList() {
     return request({
         url: '/auth/dept/list',
