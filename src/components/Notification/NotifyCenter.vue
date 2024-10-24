@@ -44,7 +44,7 @@
 </template>
 <script>
     import {adminDomain, formatConst, getConst} from "@/utils";
-    import {getNotificationPage} from "../../api/auth";
+    import {getNotificationPage} from "../../api/common";
 
     export default {
         name: 'NotifyCenter',

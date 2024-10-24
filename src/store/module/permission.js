@@ -1,6 +1,7 @@
 import router, {DynamicRoutes} from '../../router/index'
 import ruleRoutes from '../../router/ruleRoutes'
-import {getConstantAll, getPermission} from "@/api/auth";
+import {getPermission} from "@/api/auth";
+import {getConstantAll} from "@/api/common";
 
 const state = {
     // 菜单数据

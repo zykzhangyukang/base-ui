@@ -22,8 +22,7 @@
 <script>
 import SparkMD5 from 'spark-md5';
 import {cutFile} from "./cutFile";
-import {uploadFileChunk} from "@/api/file";
-import {uploadFileChunkStart} from "../../api/file";
+import {uploadFileChunkStart, uploadFileChunk} from "../../api/common";
 
 export default {
   data() {
