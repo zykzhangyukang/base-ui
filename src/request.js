@@ -35,8 +35,9 @@ service.interceptors.request.use(
                     console.error('刷新Token失败', error);
                     isRefreshing = false;
                     store.commit('user/REMOVE_TOKEN')
-                    await router.push('/login');
-                    Message.error('会话已过期，请重新登录！');
+                    router.push('/login').then(r => {
+                        Message.error('会话已过期，请重新登录！');
+                    });
                 }
             } else if (isRefreshing) {
                 // 如果正在刷新token，将当前请求挂起，等刷新完成后继续执行
@@ -80,10 +81,16 @@ service.interceptors.response.use(
             Message({
                 type: 'error', message: '当前网络异常，请检查网络连接！'
             });
-        } else if (code === 500) {
-            Message({
-                type: 'error', message: '服务器未知异常，请联系管理员处理！'
+        }
+        if (code === 401) {
+            store.commit('user/REMOVE_TOKEN')
+            router.push('/login').then(r => {
+                Message({type: 'error', message: '会话已过期，请重新登录！'});
             });
+        }  else if (code === 403) {
+            Message({type: 'error', message: '无权限操作！'});
+        }else if (code === 500) {
+            Message({type: 'error', message: '服务器未知异常，请联系管理员处理！'});
         }
         return Promise.reject(error);
     });
