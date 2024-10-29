@@ -136,6 +136,41 @@ const ruleRoutes = [
                 }
             }
         ]
+    },
+    {
+        path: '/trade',
+        name: 'Trade',
+        component: Layout,
+        redirect: '/trade/fund',
+        meta: {
+            title: '交易系统',
+            icon: 'vue-icon-zichankapian',
+            permission: 'trade_view'
+        },
+        children: [
+            {
+                path: '/trade/fund',
+                name: 'TradeFund',
+                component: () => import('@/views/trade/fund/index.vue'),
+                meta: {
+                    icon: 'el-icon-present',
+                    title: '基金管理',
+                    permission: 'trade_fund_view',
+                    keepAlive: true
+                }
+            },
+            {
+                path: '/trade/stock',
+                name: 'TradeStock',
+                component: () => import('@/views/trade/stock/index.vue'),
+                meta: {
+                    icon: 'el-icon-coin',
+                    title: '股票管理',
+                    permission: 'trade_stock_view',
+                    keepAlive: true
+                }
+            }
+        ]
     }
 ]
 

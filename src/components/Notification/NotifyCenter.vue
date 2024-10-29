@@ -33,9 +33,7 @@
             </el-table-column>
         </el-table>
         <el-pagination
-                small
                 @current-change="handleCurrentChange"
-                background
                 style="margin-top: 10px;position: relative;"
                 layout="prev, pager, next"
                 :total="total">
