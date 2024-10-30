@@ -9,7 +9,7 @@ import './assets/icon-fonts/iconfont.css'
 import './assets/icon-fonts/iconfont'
 import 'element-ui/lib/theme-chalk/index.css'
 import ElementUI from 'element-ui'
-Vue.use(ElementUI, { size: 'small' })
+Vue.use(ElementUI, { size: 'mini' })
 
 Vue.config.productionTip = false
 Vue.config.silent = true

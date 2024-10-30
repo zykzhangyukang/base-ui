@@ -2,20 +2,31 @@
     <el-dialog
             title="消息中心"
             :visible.sync="visible"
-            width="40%"
-            class="dialog-form"
+            width="50%"
+            :close-on-click-modal="false"
             :before-close="handleClose"
     >
+      <div class="tool-bar">
         <el-radio-group v-model="searchForm.module" size="mini" @input="handleInput">
-            <el-radio-button :label="item.code" :name="item.code" v-for="item in notificationModuleG" :key="item.code">
-                {{notificationModuleGName[item.code]}}
-            </el-radio-button>
+          <el-radio-button :label="item.code" :name="item.code" v-for="item in notificationModuleG" :key="item.code">
+            {{notificationModuleGName[item.code]}}
+          </el-radio-button>
         </el-radio-group>
+        <el-button style="float: right;margin-left: 10px" plain icon="el-icon-finished">全部已读</el-button>
+        <el-select v-model="searchForm.isRead" clearable placeholder="请选择" style="float: right" @change="handleInput">
+          <el-option
+              v-for="item in isReadG"
+              :key="item.code"
+              :label="isReadGName[item.code]"
+              :value="item.code">
+          </el-option>
+        </el-select>
+      </div>
         <el-table
                 v-loading="tableLoading"
                 :data="tableData"
                 stripe
-                style="width: 100%;margin-top: 10px">
+                style="width: 100%;margin-top: 10px;">
             <el-table-column
                     prop="notificationType"
                     width="100"
@@ -26,9 +37,17 @@
             </el-table-column>
             <el-table-column
                     prop="data"
-                    label="内容">
+                    label="消息内容">
                 <template slot-scope="scope">
                     {{scope.row.data}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                    width="100px"
+                    align="center"
+                    label="是否已读">
+                <template slot-scope="scope">
+                   <el-icon class="read-icon" :class="[scope.row.isRead === 1 ?'el-icon-finished':'el-icon-message']"></el-icon>
                 </template>
             </el-table-column>
         </el-table>
@@ -41,38 +60,45 @@
     </el-dialog>
 </template>
 <script>
-    import {adminDomain, formatConst, getConst} from "@/utils";
-    import {getNotificationPage} from "../../api/common";
+import {adminDomain, formatConst, getConst} from "@/utils";
+import {getNotificationPage} from "@/api/common";
 
-    export default {
+export default {
         name: 'NotifyCenter',
-        data() {
-            return {
-                visible: false,
-                tableLoading: false,
-                tableData: [],
-                total: 0,
-                searchForm: {
-                    currentPage: 1,
-                    pageSize: 5,
-                    module: 'all'
-                },
-            }
+      data() {
+        return {
+          visible: false,
+          tableLoading: false,
+          tableData: [],
+          total: 0,
+          searchForm: {
+            currentPage: 1,
+            pageSize: 10,
+            isRead: null,
+            module: 'all'
+          },
+        }
+      },
+      computed: {
+        notificationModuleG() {
+          return getConst("notification_module", adminDomain)
         },
-        computed: {
-            notificationModuleG() {
-                return getConst("notification_module", adminDomain)
-            },
-            notificationModuleGName() {
-                return formatConst(this.notificationModuleG);
-            },
-            notificationTypeG() {
-                return getConst("notification_type", adminDomain)
-            },
-            notificationTypeGName() {
-                return formatConst(this.notificationTypeG);
-            },
+        notificationModuleGName() {
+          return formatConst(this.notificationModuleG);
         },
+        notificationTypeG() {
+          return getConst("notification_type", adminDomain)
+        },
+        notificationTypeGName() {
+          return formatConst(this.notificationTypeG);
+        },
+        isReadG() {
+          return getConst("is_read", adminDomain)
+        },
+        isReadGName() {
+          return formatConst(this.isReadG);
+        },
+      },
         methods: {
             handleInput(val){
                 this.searchForm.currentPage = 1;
@@ -109,5 +135,19 @@
 <style scoped lang="less">
     .item {
         margin-top: 5px;
+    }
+    .read-icon{
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .el-icon-message{
+      color: #999;
+    }
+    .el-icon-finished{
+      color: #19be6b;
+    }
+    .tool-bar{
+      background: #f0f0f0;
+      padding: 10px;
     }
 </style>

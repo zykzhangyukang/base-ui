@@ -115,11 +115,13 @@
       </el-table-column>
       <el-table-column
           label="操作"
+          width="220px"
       >
         <template slot-scope="scope">
           <el-button  size="mini"  type="text"   @click="handeUpdate(scope.row.userId)" v-permission="'auth_user_update'">编辑</el-button>
           <el-button size="mini"   type="text"   @click="handeDel(scope.row.userId)" v-permission="'auth_user_delete'">删除</el-button>
           <el-button size="mini"   type="text"    @click="handleUpdateRole(scope.row.userId)" v-permission="'auth_user_role_update'">分配角色</el-button>
+          <el-button size="mini"   type="text"    @click="handleSwitchUserLogin(scope.row)" v-permission="'auth_user_switch_login'">切换登录</el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -201,29 +203,29 @@ export default {
         this.handleSwitchUserLogin();
       }
     },
-    handleSwitchUserLogin() {
-      if (this.multipleSelection.length !== 1) {
-        return this.$message.warning("请勾选一条记录进行操作！");
+    handleSwitchUserLogin(rowData) {
+      if(!rowData){
+        if (this.multipleSelection.length !== 1) {
+          return this.$message.warning("请勾选一条记录进行操作！");
+        }
+        rowData = this.multipleSelection[0];
       }
-      let rowData = this.multipleSelection[0];
       this.$confirm(`您确定要切换用户【${rowData.realName}】的账号登录吗？`, '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(async () => {
-        const loading = this.$message.info({
-          message: '切换登录中',
+      }).then(() => {
+        this.$message.info({
+          message: ' 切换登录中',
           iconClass: 'el-icon-loading',
-          duration: 0
-        })
-        store.dispatch('user/SWITCH_USER_LOGIN', this.multipleSelection[0].username).then(res => {
-          if(res.code === 200){
-            setTimeout(() => {
-              window.location.reload()
-            }, 100)
+          duration: 1000,
+          onClose: function () {
+            store.dispatch('user/SWITCH_USER_LOGIN', rowData.username).then(res => {
+              if (res.code === 200) {
+                window.location.reload();
+              }
+            })
           }
-        }).finally(()=>{
-          loading.close();
         })
       });
     },
