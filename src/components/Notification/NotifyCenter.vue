@@ -7,13 +7,13 @@
             :before-close="handleClose"
     >
       <div class="tool-bar">
-        <el-radio-group v-model="searchForm.module" size="mini" @input="handleInput">
-          <el-radio-button :label="item.code" :name="item.code" v-for="item in notificationModuleG" :key="item.code">
-            {{notificationModuleGName[item.code]}}
-          </el-radio-button>
-        </el-radio-group>
+          <el-radio-group v-model="searchForm.module" size="mini" @input="handleInput">
+              <el-radio-button :label="item.code" :name="item.code" v-for="item in notificationModuleG" :key="item.code">
+                  {{ notificationModuleGName[item.code] }} ({{getUnReadCount(item.code)}})
+              </el-radio-button>
+          </el-radio-group>
         <el-button style="float: right;margin-left: 10px" plain icon="el-icon-finished">全部已读</el-button>
-        <el-select v-model="searchForm.isRead" clearable placeholder="请选择" style="float: right" @change="handleInput">
+        <el-select v-model="searchForm.isRead" :style="{width: '100px'}" clearable placeholder="请选择" style="float: right" @change="handleInput">
           <el-option
               v-for="item in isReadG"
               :key="item.code"
@@ -47,7 +47,12 @@
                     align="center"
                     label="是否已读">
                 <template slot-scope="scope">
-                   <el-icon class="read-icon" :class="[scope.row.isRead === 1 ?'el-icon-finished':'el-icon-message']"></el-icon>
+                    <span v-if="scope.row.isRead === 1">
+                         <el-icon class="read-icon el-icon-finished"></el-icon> <span class="read_flag">已读</span>
+                    </span>
+                    <span v-else>
+                         <el-icon class="read-icon el-icon-message"></el-icon> <span class="un_read_flag">未读</span>
+                    </span>
                 </template>
             </el-table-column>
         </el-table>
@@ -71,6 +76,7 @@ export default {
           visible: false,
           tableLoading: false,
           tableData: [],
+          result:{},
           total: 0,
           searchForm: {
             currentPage: 1,
@@ -101,6 +107,9 @@ export default {
         },
       },
         methods: {
+            getUnReadCount(code){
+                return  this.result[code] || 0;
+            },
             handleInput(val){
                 this.searchForm.currentPage = 1;
                 this.fetchData();
@@ -108,8 +117,10 @@ export default {
             fetchData() {
                 this.tableLoading = true;
                 getNotificationPage(this.searchForm).then(res=>{
-                    this.tableData = res.result.dataList;
-                    this.total = res.result.totalRow;
+                    this.tableData = res.result.pageInfo.dataList;
+                    this.total = res.result.pageInfo.totalRow;
+                    // 消息未读数
+                    this.result = res.result;
                 }).finally(()=>{
                     this.tableLoading = false;
                 })
@@ -135,14 +146,16 @@ export default {
 </script>
 <style scoped lang="less">
     .item {
-        margin-top: 5px;
     }
     .read-icon{
       font-size: 16px;
       cursor: pointer;
     }
     .el-icon-message{
-      color: #999;
+      color: #666;
+    }
+    .un_read_flag{
+        color: #ff4400;
     }
     .el-icon-finished{
       color: #19be6b;

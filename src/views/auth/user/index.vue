@@ -215,7 +215,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.info({
+        this.$message.success({
           message: ' 切换登录中',
           iconClass: 'el-icon-loading',
           duration: 1000,
