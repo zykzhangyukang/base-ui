@@ -2,7 +2,7 @@
     <el-dialog
             title="消息中心"
             :visible.sync="visible"
-            width="50%"
+            width="40%"
             :close-on-click-modal="false"
             :before-close="handleClose"
     >
@@ -36,10 +36,10 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    prop="data"
+                    prop="message"
                     label="消息内容">
                 <template slot-scope="scope">
-                    {{scope.row.data}}
+                    {{scope.row.message}}
                 </template>
             </el-table-column>
             <el-table-column
@@ -52,6 +52,7 @@
             </el-table-column>
         </el-table>
         <el-pagination
+                background
                 @current-change="handleCurrentChange"
                 style="margin-top: 10px;position: relative;"
                 layout="prev, pager, next"
