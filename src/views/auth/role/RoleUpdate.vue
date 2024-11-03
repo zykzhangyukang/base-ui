@@ -9,10 +9,10 @@
     <span  v-loading="loading">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="用户账号" prop="roleName" >
-          <el-input v-model="form.roleName"  clearable></el-input>
+          <el-input v-model="form.roleName"  ></el-input>
         </el-form-item>
         <el-form-item label="角色描述" prop="roleDesc">
-          <el-input v-model="form.roleDesc"  clearable  type="textarea" :rows="2"></el-input>
+          <el-input v-model="form.roleDesc"    type="textarea" :rows="2"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary"  @click="onSubmit" :loading="btnLoading">更新</el-button>

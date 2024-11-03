@@ -3,7 +3,7 @@
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="角色名称" prop="roleName">
-        <el-input v-model="searchForm.roleName" placeholder="角色名称" clearable></el-input>
+        <el-input v-model="searchForm.roleName" placeholder="角色名称"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_role_page'">查询</el-button>

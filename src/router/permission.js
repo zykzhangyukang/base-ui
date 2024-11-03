@@ -1,13 +1,17 @@
 import router from './index'
 import {getAccessToken} from '@/utils/cookie'
 import store from "../store";
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
+NProgress.configure({ showSpinner: true });
+
 
 // 白名单列表
 const whiteList = ['/login']
 
 router.beforeEach(async (to, from, next) => {
-
-    // 改变页面标题
+    NProgress.start();
     document.title = getPageTitle(to.meta.title || to.name)
 
     if (getAccessToken()) {
@@ -15,7 +19,6 @@ router.beforeEach(async (to, from, next) => {
         if (to.path === '/login') {
             next({path: '/'})
         } else {
-            // 用户已经登录 路由的访问权限
             if (!store.state.permission.permission) {
                 try {
                     // 获取用户信息
@@ -31,7 +34,6 @@ router.beforeEach(async (to, from, next) => {
                     next(`/login?redirect=${to.fullPath}`)
                 }
             } else {
-                // store中存在权限
                 if (to.path !== '/login') {
                     next();
                 } else {
@@ -41,14 +43,16 @@ router.beforeEach(async (to, from, next) => {
             next()
         }
     } else {
-        // 在免登录白名单，直接进入
         if (whiteList.includes(to.path)) {
             next()
         } else {
-            // 否则重定向到登录页
             next(`/login?redirect=${to.fullPath}`)
         }
     }
+})
+
+router.afterEach(async(to, from) => {
+    NProgress.done();
 })
 
 

@@ -13,8 +13,18 @@
         </el-select>
       </el-form-item>
       <el-form-item label="IP地址" prop="ipAddress">
-        <el-input v-model="searchForm.ipAddress" placeholder="IP地址" clearable></el-input>
+        <el-input v-model="searchForm.ipAddress" placeholder="IP地址" ></el-input>
       </el-form-item>
+      <el-form-item label="设备信息" prop="deviceInfo">
+        <el-input v-model="searchForm.deviceInfo" placeholder="设备信息" ></el-input>
+      </el-form-item>
+      <el-form-item label="操作人" prop="realName">
+        <el-input v-model="searchForm.realName" placeholder="操作人" ></el-input>
+      </el-form-item>
+      <el-form-item label="用户账号" prop="username">
+        <el-input v-model="searchForm.username" placeholder="用户账号" ></el-input>
+      </el-form-item>
+      <br/>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
@@ -129,7 +139,9 @@ export default {
         pageSize: 20,
         logModule: '',
         logLevel: '',
-        ipAddress: ''
+        ipAddress: '',
+        deviceInfo: '',
+        realName: ''
       }
     }
   },

@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown class="user-avatar-wrapper" @command="handleCommand" size="middle">
+  <el-dropdown class="user-avatar-wrapper" @command="handleCommand" size="small">
     <div class="avatar-box">
       <el-avatar size="small" :src="avatarSrc" />
       <i class="el-icon-caret-bottom" />

@@ -26,6 +26,7 @@
                 v-loading="tableLoading"
                 :data="tableData"
                 stripe
+                height="350"
                 style="width: 100%;margin-top: 10px;">
             <el-table-column
                     prop="notificationType"
@@ -48,10 +49,10 @@
                     label="是否已读">
                 <template slot-scope="scope">
                     <span v-if="scope.row.isRead === 1">
-                         <el-icon class="read-icon el-icon-finished"></el-icon> <span class="read_flag">已读</span>
+                          <span class="read_flag">已读</span>
                     </span>
                     <span v-else>
-                         <el-icon class="read-icon el-icon-message"></el-icon> <span class="un_read_flag">未读</span>
+                         <span class="un_read_flag">未读</span>
                     </span>
                 </template>
             </el-table-column>
@@ -146,10 +147,6 @@ export default {
 </script>
 <style scoped lang="less">
     .item {
-    }
-    .read-icon{
-      font-size: 16px;
-      cursor: pointer;
     }
     .el-icon-message{
       color: #666;

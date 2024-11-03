@@ -1,12 +1,12 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="table-resc-wrapper">
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="资源名称" prop="rescName">
-        <el-input v-model="searchForm.rescName" placeholder="资源名称" clearable></el-input>
+        <el-input v-model="searchForm.rescName" placeholder="资源名称" ></el-input>
       </el-form-item>
       <el-form-item label="资源URL" prop="rescUrl">
-        <el-input v-model="searchForm.rescUrl" placeholder="资源URL" clearable></el-input>
+        <el-input v-model="searchForm.rescUrl" placeholder="资源URL" ></el-input>
       </el-form-item>
       <el-form-item label="所属系统" prop="rescDomain">
         <el-select v-model="searchForm.rescDomain" placeholder="所属系统" clearable :style="{width:'180px'}">
@@ -18,6 +18,10 @@
           <el-option :label="methodTypeGName[item.code]" v-for="item in methodTypeG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="功能标识" prop="funcKey">
+        <el-input v-model="searchForm.funcKey" placeholder="功能标识" ></el-input>
+      </el-form-item>
+      <br/>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_resc_page'">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
@@ -32,7 +36,6 @@
         v-loading="tableLoading"
         :data="tableData"
         @sort-change="sortChange"
-        style="width: 100%"
     >
       <el-table-column
           prop="rescName"
@@ -44,6 +47,7 @@
       <el-table-column
           prop="rescUrl"
           label="资源URL"
+          align="left"
           sortable
       >
       </el-table-column>
@@ -83,6 +87,7 @@
       </el-table-column>
       <el-table-column
           label="操作"
+          width="180"
       >
         <template slot-scope="scope">
           <el-button size="mini" type="text"  @click="handleUpdate(scope.row.rescId)" v-permission="'auth_resc_update'">编辑</el-button>
@@ -140,7 +145,8 @@ export default {
         rescName: '',
         rescUrl: '',
         rescDomain: '',
-        methodType: ''
+        methodType: '',
+        funcKey: ''
       }
     }
   },

@@ -11,10 +11,10 @@
         <el-input v-model="parentNode.funcName"  disabled readonly placeholder="上级功能"></el-input>
       </el-form-item>
       <el-form-item label="功能名称" prop="funcName">
-        <el-input v-model="form.funcName"  clearable placeholder="功能名称"></el-input>
+        <el-input v-model="form.funcName"   placeholder="功能名称"></el-input>
       </el-form-item>
       <el-form-item label="功能标识" prop="funcKey">
-        <el-input v-model="form.funcKey"  clearable placeholder="功能标识"></el-input>
+        <el-input v-model="form.funcKey"   placeholder="功能标识"></el-input>
       </el-form-item>
       <el-form-item label="功能类型" prop="funcType">
         <el-select v-model="form.funcType" placeholder="功能类型" clearable>

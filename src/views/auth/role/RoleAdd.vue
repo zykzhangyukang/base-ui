@@ -8,7 +8,7 @@
   >
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="角色名称" prop="roleName">
-        <el-input v-model="form.roleName"  clearable></el-input>
+        <el-input v-model="form.roleName"  ></el-input>
       </el-form-item>
       <el-form-item label="角色描述" prop="roleDesc">
         <el-input v-model="form.roleDesc"  clearable type="textarea" :rows="2"></el-input>

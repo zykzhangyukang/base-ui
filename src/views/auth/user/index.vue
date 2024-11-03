@@ -3,10 +3,10 @@
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
       <el-form-item label="用户账号" prop="username">
-        <el-input v-model="searchForm.username" placeholder="用户账号" clearable></el-input>
+        <el-input v-model="searchForm.username" placeholder="用户账号" ></el-input>
       </el-form-item>
       <el-form-item label="真实名称" prop="realName">
-        <el-input v-model="searchForm.realName" placeholder="真实名称" clearable></el-input>
+        <el-input v-model="searchForm.realName" placeholder="真实名称" ></el-input>
       </el-form-item>
       <el-form-item label="用户状态" prop="userStatus">
         <el-select v-model="searchForm.userStatus" placeholder="用户状态" clearable>

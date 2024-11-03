@@ -46,13 +46,13 @@
         <!-- 查询栏 -->
         <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
           <el-form-item label="功能名称" prop="funcName">
-            <el-input v-model="searchForm.funcName" placeholder="功能名称" clearable></el-input>
+            <el-input v-model="searchForm.funcName" placeholder="功能名称"></el-input>
           </el-form-item>
           <el-form-item label="功能标识" prop="funcKey">
-            <el-input v-model="searchForm.funcKey" placeholder="功能标识" clearable></el-input>
+            <el-input v-model="searchForm.funcKey" placeholder="功能标识" ></el-input>
           </el-form-item>
           <el-form-item label="资源url" prop="rescUrl">
-            <el-input v-model="searchForm.rescUrl" placeholder="资源url" clearable></el-input>
+            <el-input v-model="searchForm.rescUrl" placeholder="资源url" ></el-input>
           </el-form-item>
           <el-form-item label="功能类型" prop="funcType">
             <el-select v-model="searchForm.funcType" placeholder="功能类型" clearable :style="{width : '180px'}">
@@ -89,7 +89,6 @@
             v-loading="tableLoading"
             :data="tableData"
             @sort-change="sortChange"
-            style="width: 100%"
             @selection-change="handleSelectionChange"
         >
           <el-table-column
