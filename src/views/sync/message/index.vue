@@ -43,13 +43,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="消息ID" prop="msgId">
-        <el-input v-model="searchForm.msgId" placeholder="消息ID"  :style="{width:'250px'}" clearable></el-input>
+        <el-input v-model="searchForm.msgId" placeholder="消息ID"  :style="{width:'250px'}" ></el-input>
       </el-form-item>
       <el-form-item label="MQ消息" prop="mid">
-        <el-input v-model="searchForm.mid" placeholder="MQ消息"  :style="{width:'250px'}" clearable></el-input>
+        <el-input v-model="searchForm.mid" placeholder="MQ消息"  :style="{width:'250px'}" ></el-input>
       </el-form-item>
       <el-form-item label="消息内容" prop="msgContent">
-        <el-input v-model="searchForm.msgContent" placeholder="消息内容"  :style="{width:'250px'}" clearable></el-input>
+        <el-input v-model="searchForm.msgContent" placeholder="消息内容"  :style="{width:'250px'}" ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_message_page'">查询</el-button>
