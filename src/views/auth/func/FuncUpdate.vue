@@ -7,7 +7,7 @@
       :before-close="handleClose"
       :close-on-click-modal="false"
   >
-    <span v-loading="loading">
+    <div v-loading="loading">
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="功能名称" prop="funcName">
         <el-input v-model="form.funcName"  placeholder="功能名称"></el-input>
@@ -31,7 +31,6 @@
         <el-button type="info" @click="resetForm('form')">重置</el-button>
       </el-form-item>
     </el-form>
-    </span>
     <el-divider>资源列表</el-divider>
     <el-select
         v-model="searchList"
@@ -85,6 +84,7 @@
         </template>
       </el-table-column>
     </el-table>
+    </div>
   </el-dialog>
 </template>
 <script>

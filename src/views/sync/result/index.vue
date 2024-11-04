@@ -51,7 +51,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="搜索关键词" prop="keywords" >
-        <el-input v-model="searchForm.keywords" placeholder="计划名称，消息内容，同步内容" :style="{width : '250px'}" clearable></el-input>
+        <el-input v-model="searchForm.keywords" placeholder="计划名称，消息内容，同步内容" :style="{width : '250px'}" ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="searchLoading">查询</el-button>
