@@ -87,7 +87,9 @@ service.interceptors.response.use(
             router.push('/login').then(r => {
                 Message({type: 'error', message: '会话已过期，请重新登录！'});
             });
-        }  else if (code === 403) {
+        } else if (code === 400) {
+            Message({type: 'error', message: '请求参数错误！'});
+        } else if (code === 403) {
             Message({type: 'error', message: '无权限操作！'});
         }else if (code === 500) {
             Message({type: 'error', message: '服务器未知异常，请联系管理员处理！'});
