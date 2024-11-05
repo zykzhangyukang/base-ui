@@ -15,7 +15,6 @@
         size="mini"
         v-loading="loading"
         border
-        fixed="left"
         show-summary
         :summary-method="getSummaries"
         :data="tableData"
@@ -24,7 +23,6 @@
           prop="fundCode"
           label="基金编号"
           align="center"
-          sortable
       >
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="showImage(scope.row.fundCode)">
@@ -37,74 +35,82 @@
           prop="fundName"
           label="基金名称"
           align="center"
-          sortable
           show-overflow-tooltip
       >
       </el-table-column>
+      <el-table-column label="净值数据"  align="center">
+        <el-table-column
+                label="30天均值"
+                prop="jz30"
+        >
+        </el-table-column>
+        <el-table-column
+                label="20天均值"
+                prop="jz20"
+        >
+        </el-table-column>
+        <el-table-column
+                label="10天均值"
+                prop="jz10"
+        >
+        </el-table-column>
+        <el-table-column
+                label="5天均值"
+                prop="jz5"
+        >
+        </el-table-column>
+        <el-table-column
+                label="昨天净值"
+                prop="gsz"
+        >
+          <template slot-scope="scope">
+            {{ scope.row.gsz }}
+          </template>
+        </el-table-column>
+        <el-table-column
+                label="今日估值"
+                prop="dwjz"
+        >
+        </el-table-column>
+      </el-table-column>
       <el-table-column
-          label="估算净值"
-          prop="gsz"
-          align="center"
-          sortable
+              label="估值时间"
+              prop="gztime"
+              align="center"
+              width="150"
       >
       </el-table-column>
       <el-table-column
-          label="净值日期"
-          prop="jzrq"
-          align="center"
-          sortable
-      >
-      </el-table-column>
-      <el-table-column
-          label="估算涨跌百分比"
+          label="估算涨跌%"
           prop="gszzl"
           align="center"
-          sortable
-      >
-      </el-table-column>
-      <el-table-column
-          label="当日估值"
-          prop="dwjz"
-          align="center"
-          sortable
-      >
-      </el-table-column>
-      <el-table-column
-          label="估值时间"
-          prop="gztime"
-          align="center"
-          sortable
       >
       </el-table-column>
       <el-table-column
           label="持有份额"
           prop="bonds"
           align="center"
-          sortable
       >
       </el-table-column>
       <el-table-column
           label="持仓成本价"
           prop="costPrise"
           align="center"
-          sortable
       >
       </el-table-column>
       <el-table-column
           label="收益率"
           prop="incomePercent"
           align="center"
-          sortable
       >
         <template slot-scope="scope">
-          {{ scope.row.incomePercent + '%' }}
+          {{ scope.row.incomePercent ? scope.row.incomePercent + '%' : '-' }}
         </template>
       </el-table-column>
       <el-table-column
           label="累计收益"
           prop="income"
           align="center"
-          sortable
       >
         <template slot-scope="scope">
           {{ scope.row.income > 0 ? '+' + scope.row.income : scope.row.income < 0 ? scope.row.income : '+0.00' }}
@@ -114,7 +120,7 @@
           label="今日收益"
           prop="todayIncome"
           align="center"
-          sortable
+          fixed="right"
       >
         <template slot-scope="scope">
           {{
@@ -177,7 +183,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[column.property]));
-        if (index < 10 || index > 11) {
+        if (index < 13) {
           sums[index] = '';
         } else {
           const sum = values.reduce((prev, curr) => {
