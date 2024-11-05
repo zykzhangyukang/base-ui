@@ -6,22 +6,19 @@
       class="dialog-form"
       :before-close="handleClose"
   >
-    <div class="sync-content">
-      <pre v-text="content">
-    </pre>
-    </div>
+    <pre><code class="json">{{ codeSnippet }}</code></pre>
   </el-dialog>
 </template>
 <script>
-
-
+  import hljs from 'highlight.js';
+  import 'highlight.js/styles/googlecode.min.css';
 export default {
   name: 'SyncContent',
   components: {},
   data() {
     return {
       visible: false,
-      content: ''
+      codeSnippet: ''
     }
   },
   computed: {},
@@ -31,11 +28,21 @@ export default {
     },
     handleOpen(content) {
       const parsedData = JSON.parse(content);
-      this.content = JSON.stringify(parsedData, null, 5);
+      this.codeSnippet = JSON.stringify(parsedData, null, 5);
       this.visible = true;
+      this.highlightCode();
     },
     onSubmit() {
       this.handleClose();
+    },
+    highlightCode() {
+      this.$nextTick(() => {
+        this.$el.querySelectorAll('pre code').forEach(block => {
+          if (!block.getAttribute('data-highlighted')) {
+            hljs.highlightElement(block);
+          }
+        });
+      });
     }
   },
   created() {
@@ -43,15 +50,7 @@ export default {
 }
 </script>
 <style scoped lang="less">
-.sync-content {
-  width: 100%;
-  overflow: hidden;
-  overflow-x: scroll;
-  overflow-y: auto;
-  font-family: Candara, serif;
-  background: #f8f8f9;
-  padding: 5px;
-  border-radius: 5px;
-  max-height: 650px;
-}
+  code {
+    font-family: Consolas,serif;
+  }
 </style>

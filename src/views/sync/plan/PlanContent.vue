@@ -1,59 +1,62 @@
 <template>
   <el-dialog
-      :title="plan.description"
-      :visible.sync="visible"
-      width="35%"
-      class="dialog-form"
-      :before-close="handleClose"
+          :title="description"
+          :visible.sync="visible"
+          width="35%"
+          class="dialog-form"
+          :before-close="handleClose"
   >
-    <xmp v-loading="loading" class="plan_content">
-      {{ plan.planContent }}
-    </xmp>
+    <pre><code class="xml">{{ codeSnippet }}</code></pre>
   </el-dialog>
 </template>
+
 <script>
+  import { getPlanContent } from "@/api/sync";
+  import hljs from 'highlight.js';
+  import 'highlight.js/styles/googlecode.min.css';
 
-import {getPlanContent} from "@/api/sync";
-
-export default {
-  name: 'PlanContent',
-  components: {},
-  data() {
-    return {
-      visible: false,
-      loading: false,
-      plan: {},
-    }
-  },
-  computed: {},
-  methods: {
-    handleClose() {
-      this.visible = false;
+  export default {
+    name: 'PlanContent',
+    data() {
+      return {
+        visible: false,
+        loading: false,
+        description: '',
+        codeSnippet: ''
+      };
     },
-    handleOpen(uuid) {
-      this.visible = true;
-      this.loading = true;
-      getPlanContent(uuid).then(res => {
-        this.plan = res.result;
-      }).finally(() => {
-        this.loading = false;
-      })
+    methods: {
+      handleClose() {
+        this.visible = false;
+      },
+      handleOpen(uuid) {
+        this.visible = true;
+        this.loading = true;
+        getPlanContent(uuid)
+                .then(res => {
+                  this.codeSnippet = res.result.planContent || '';
+                  this.description = res.result.description;
+                })
+                .finally(() => {
+                  this.loading = false;
+                  this.highlightCode();
+                });
+      },
+      highlightCode() {
+        this.$nextTick(() => {
+          this.$el.querySelectorAll('pre code').forEach(block => {
+            if (!block.getAttribute('data-highlighted')) {
+              hljs.highlightElement(block);
+            }
+          });
+        });
+      }
     },
-  },
-  created() {
-  }
-}
+  };
 </script>
+
 <style scoped lang="less">
-.plan_content {
-  width: 100%;
-  overflow: hidden;
-  overflow-x: auto;
-  overflow-y: auto;
-  font-family: Candara, serif;
-  background: #f8f8f9;
-  padding: 5px;
-  border-radius: 5px;
-  max-height: 600px;
-}
+  code {
+    font-family: Consolas,serif;
+  }
 </style>

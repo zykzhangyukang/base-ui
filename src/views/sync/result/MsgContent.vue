@@ -1,57 +1,55 @@
 <template>
-  <el-dialog
-      title="消息内容"
-      :visible.sync="visible"
-      width="40%"
-      class="dialog-form"
-      :before-close="handleClose"
-  >
-    <div class="msg-content">
-      <pre v-text="content">
-    </pre>
-    </div>
-  </el-dialog>
+    <el-dialog
+            title="消息内容"
+            :visible.sync="visible"
+            width="40%"
+            class="dialog-form"
+            :before-close="handleClose">
+        <pre><code class="json">{{ codeSnippet }}</code></pre>
+    </el-dialog>
 </template>
 <script>
-
-
-export default {
-  name: 'MsgContent',
-  components: {},
-  data() {
-    return {
-      visible: false,
-      content: ''
+    import hljs from 'highlight.js';
+    import 'highlight.js/styles/googlecode.min.css';
+    export default {
+        name: 'MsgContent',
+        components: {},
+        data() {
+            return {
+                visible: false,
+                codeSnippet: ''
+            }
+        },
+        computed: {},
+        methods: {
+            handleClose() {
+                this.visible = false;
+            },
+            handleOpen(content) {
+                const parsedData = JSON.parse(content);
+                this.codeSnippet = JSON.stringify(parsedData, null, 5);
+                this.visible = true;
+                this.highlightCode();
+            },
+            onSubmit() {
+                this.handleClose();
+            },
+            highlightCode() {
+                this.$nextTick(() => {
+                    this.$el.querySelectorAll('pre code').forEach(block => {
+                        if (!block.getAttribute('data-highlighted')) {
+                            hljs.highlightElement(block);
+                        }
+                    });
+                });
+            }
+        },
+        created() {
+        }
     }
-  },
-  computed: {},
-  methods: {
-    handleClose() {
-      this.visible = false;
-    },
-    handleOpen(content) {
-      const parsedData = JSON.parse(content);
-      this.content = JSON.stringify(parsedData, null, 5);
-      this.visible = true;
-    },
-    onSubmit() {
-      this.handleClose();
-    }
-  },
-  created() {
-  }
-}
 </script>
 <style scoped lang="less">
-.msg-content {
-  width: 100%;
-  overflow: hidden;
-  overflow-x: auto;
-  overflow-y: auto;
-  font-family: Candara, serif;
-  background: #f8f8f9;
-  padding: 5px;
-  border-radius: 5px;
-  max-height: 650px;
-}
+    code {
+        font-family: Consolas,serif;
+    }
 </style>
