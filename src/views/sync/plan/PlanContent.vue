@@ -6,7 +6,15 @@
           class="dialog-form"
           :before-close="handleClose"
   >
-    <pre><code class="xml">{{ codeSnippet }}</code></pre>
+    <div style="float: right">
+      <el-icon class="el-icon-document-copy"
+               v-clipboard:cut="codeSnippet"
+               v-clipboard:success="onCutSuccess"
+      ></el-icon>
+    </div>
+    <pre>
+      <code class="xml">{{ codeSnippet }}</code>
+    </pre>
   </el-dialog>
 </template>
 
@@ -26,6 +34,9 @@
       };
     },
     methods: {
+      onCutSuccess(){
+        this.$message.success("复制成功!");
+      },
       handleClose() {
         this.visible = false;
       },
@@ -58,5 +69,8 @@
 <style scoped lang="less">
   code {
     font-family: Consolas,serif;
+  }
+  .el-icon-document-copy{
+    cursor: pointer;
   }
 </style>

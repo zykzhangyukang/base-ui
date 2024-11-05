@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.21.2",
+    "clipboard": "^2.0.11",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.14",
     "highlight.js": "^11.10.0",
