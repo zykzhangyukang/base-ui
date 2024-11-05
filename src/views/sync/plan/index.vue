@@ -47,6 +47,7 @@
           prop="description"
           label="描述信息"
           align="center"
+          width="200px"
       >
       </el-table-column>
       <el-table-column

@@ -80,9 +80,6 @@
           width="180px"
           show-overflow-tooltip
       >
-        <template slot-scope="scope">
-          <a  style="color: #2d8cf0" @click="$refs.planContentRef.handleOpen(scope.row.planUuid)">{{scope.row.planCode}}</a>
-        </template>
       </el-table-column>
       <el-table-column
           prop="planName"

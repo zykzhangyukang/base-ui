@@ -50,6 +50,9 @@
           align="left"
           sortable
       >
+        <template slot-scope="scope">
+           {{scope.row.rescUrl}}
+        </template>
       </el-table-column>
       <el-table-column
           prop="rescDomain"

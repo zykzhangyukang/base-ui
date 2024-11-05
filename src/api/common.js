@@ -23,6 +23,13 @@ export function getNotificationPage(data) {
     })
 }
 
+export function maskNotificationRead(id) {
+    return request({
+        url: '/common/notification/read?notificationId='+id,
+        method: 'put',
+    })
+}
+
 
 export function uploadFileChunkStart(data) {
     return request({

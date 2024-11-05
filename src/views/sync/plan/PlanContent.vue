@@ -21,7 +21,7 @@
 <script>
   import { getPlanContent } from "@/api/sync";
   import hljs from 'highlight.js';
-  import 'highlight.js/styles/googlecode.min.css';
+  import 'highlight.js/styles/idea.css'
 
   export default {
     name: 'PlanContent',
@@ -69,6 +69,7 @@
 <style scoped lang="less">
   code {
     font-family: Consolas,serif;
+    font-size: 12px;
   }
   .el-icon-document-copy{
     cursor: pointer;

@@ -23,6 +23,7 @@
         </el-select>
       </div>
         <el-table
+                @row-click="rowClick"
                 v-loading="tableLoading"
                 :data="tableData"
                 stripe
@@ -68,7 +69,7 @@
 </template>
 <script>
 import {adminDomain, formatConst, getConst} from "@/utils";
-import {getNotificationPage} from "@/api/common";
+import {getNotificationPage, maskNotificationRead} from "@/api/common";
 
 export default {
         name: 'NotifyCenter',
@@ -108,6 +109,16 @@ export default {
         },
       },
         methods: {
+            rowClick(row){
+              if(row.isRead === 0){
+                maskNotificationRead(row.notificationId).then(res=>{
+                  if(res.code===200){
+                    this.$message.success("消息已读");
+                    row.isRead = 1;
+                  }
+                });
+              }
+            },
             getUnReadCount(code){
                 return  this.result[code] || 0;
             },
@@ -152,10 +163,10 @@ export default {
       color: #666;
     }
     .un_read_flag{
-        color: #ff4400;
+        color: red;
     }
-    .el-icon-finished{
-      color: #19be6b;
+    .read_flag{
+      color: darkgreen;
     }
     .tool-bar{
       background: #f0f0f0;
