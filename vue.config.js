@@ -6,7 +6,13 @@ const cdn = {
   js: [
     'https://lib.baomitu.com/vue/2.6.11/vue.min.js',
     'https://lib.baomitu.com/vuex/3.5.1/vuex.min.js',
-    'https://lib.baomitu.com/axios/0.20.0/axios.min.js'
+    'https://lib.baomitu.com/axios/0.20.0/axios.min.js',
+    'https://lib.baomitu.com/highlight.js/11.10.0/highlight.min.js',
+    'https://lib.baomitu.com/js-cookie/2.2.1/js.cookie.min.js',
+    'https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js',
+    'https://lib.baomitu.com/sockjs-client/1.6.1/sockjs.min.js',
+    'https://lib.baomitu.com/spark-md5/3.0.2/spark-md5.min.js',
+    'https://lib.baomitu.com/stomp.js/2.3.3/stomp.min.js'
   ]
 }
 
@@ -47,7 +53,13 @@ module.exports = {
         externals: {
           vue: 'Vue',
           vuex: 'Vuex',
-          axios: 'axios'
+          axios: 'axios',
+          'highlight.js': 'hljs',
+          'js-cookie': 'Cookies',
+          'nprogress': 'NProgress',
+          'sockjs-client': 'SockJS',
+          'spark-md5': 'SparkMD5',
+          'stompjs': 'Stomp'
         }
       })
     }

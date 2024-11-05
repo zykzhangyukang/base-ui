@@ -1,236 +1,183 @@
 <template>
   <div class="trade-fund-wrapper">
+    <!-- 提示框 -->
     <el-alert
-        :title="'理财有风险，投资需谨慎 ,   Websocket实时监控中...'"
-        type="success"
-        show-icon
-        style="margin-bottom: 10px"
-        :closable="true"
-    >
-    </el-alert>
+            title="理财有风险，投资需谨慎 , Websocket实时监控中..."
+            type="success"
+            show-icon
+            closable
+            class="alert-box"
+    />
+
+    <!-- 工具栏 -->
     <div class="tool-bar">
-      <el-button icon="el-icon-refresh"  plain @click="fetchData" :loading="loading">刷新</el-button>
+      <el-button icon="el-icon-refresh" plain @click="fetchData" :loading="loading">
+        刷新
+      </el-button>
     </div>
+
+    <!-- 表格内容 -->
     <el-table
-        size="mini"
-        v-loading="loading"
-        border
-        show-summary
-        :summary-method="getSummaries"
-        :data="tableData"
-        style="width: 100%">
-      <el-table-column
-          prop="fundCode"
-          label="基金编号"
-          align="center"
-      >
+            size="mini"
+            v-loading="loading"
+            border
+            show-summary
+            :summary-method="getSummaries"
+            :data="tableData"
+            class="table-content"
+    >
+      <el-table-column prop="fundCode" label="基金编号" align="center">
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="showImage(scope.row.fundCode)">
             {{ scope.row.fundCode }}
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column
-          width="200"
-          prop="fundName"
-          label="基金名称"
-          align="center"
-          show-overflow-tooltip
-      >
-      </el-table-column>
-      <el-table-column label="净值数据"  align="center">
-        <el-table-column
-                label="30天均值"
-                prop="jz30"
-        >
+      <el-table-column prop="fundName" label="基金名称" align="center" show-overflow-tooltip  />
+      <el-table-column label="净值数据" align="center">
+        <el-table-column label="30天均值" prop="jz30" />
+        <el-table-column label="20天均值" prop="jz20" />
+        <el-table-column label="10天均值" prop="jz10" />
+        <el-table-column label="5天均值" prop="jz5" />
+        <el-table-column label="昨天净值" prop="gsz">
+          <template slot-scope="scope">{{ scope.row.gsz }}</template>
         </el-table-column>
-        <el-table-column
-                label="20天均值"
-                prop="jz20"
-        >
-        </el-table-column>
-        <el-table-column
-                label="10天均值"
-                prop="jz10"
-        >
-        </el-table-column>
-        <el-table-column
-                label="5天均值"
-                prop="jz5"
-        >
-        </el-table-column>
-        <el-table-column
-                label="昨天净值"
-                prop="gsz"
-        >
-          <template slot-scope="scope">
-            {{ scope.row.gsz }}
-          </template>
-        </el-table-column>
-        <el-table-column
-                label="今日估值"
-                prop="dwjz"
-        >
-        </el-table-column>
+        <el-table-column label="今日估值" prop="dwjz" />
       </el-table-column>
-      <el-table-column
-              label="估值时间"
-              prop="gztime"
-              align="center"
-              width="150"
-      >
+      <el-table-column label="估值时间" prop="gztime" align="center" width="150" />
+      <el-table-column label="估算涨跌%" prop="gszzl" align="center">
+        <template slot-scope="scope">
+            <span :style="{ color: scope.row.gszzl > 0 ? 'red' : scope.row.gszzl < 0 ? 'green' : '' }">
+              {{ scope.row.gszzl > 0 ? '+' : '' }}{{ scope.row.gszzl ? scope.row.gszzl + '%' : '-' }}
+            </span>
+        </template>
       </el-table-column>
-      <el-table-column
-          label="估算涨跌%"
-          prop="gszzl"
-          align="center"
-      >
-      </el-table-column>
-      <el-table-column
-          label="持有份额"
-          prop="bonds"
-          align="center"
-      >
-      </el-table-column>
-      <el-table-column
-          label="持仓成本价"
-          prop="costPrise"
-          align="center"
-      >
-      </el-table-column>
-      <el-table-column
-          label="收益率"
-          prop="incomePercent"
-          align="center"
-      >
+      <el-table-column label="持有份额" prop="bonds" align="center" />
+      <el-table-column label="持仓成本价" prop="costPrise" align="center" />
+
+      <el-table-column label="收益率" prop="incomePercent" align="center">
         <template slot-scope="scope">
           {{ scope.row.incomePercent ? scope.row.incomePercent + '%' : '-' }}
         </template>
       </el-table-column>
-      <el-table-column
-          label="累计收益"
-          prop="income"
-          align="center"
-      >
+      <el-table-column label="累计收益" prop="income" align="center">
         <template slot-scope="scope">
-          {{ scope.row.income > 0 ? '+' + scope.row.income : scope.row.income < 0 ? scope.row.income : '+0.00' }}
+          {{ formatIncome(scope.row.income) }}
         </template>
       </el-table-column>
-      <el-table-column
-          label="今日收益"
-          prop="todayIncome"
-          align="center"
-          fixed="right"
-      >
+      <el-table-column label="今日收益" prop="todayIncome" align="center" fixed="right">
         <template slot-scope="scope">
-          {{
-            scope.row.todayIncome > 0 ? '+' + scope.row.todayIncome : scope.row.todayIncome < 0 ? scope.row.todayIncome : '+0.00'
-          }}
+          {{ formatIncome(scope.row.todayIncome) }}
         </template>
       </el-table-column>
     </el-table>
 
+    <!-- 图片展示弹窗 -->
     <el-dialog
-        :title="null"
-        width="500px"
-        :visible.sync="dialogVisible"
-        :before-close="handleClose">
-      <el-image
-          style="width: 451px; height: 281px"
-          :src="url"
-          :fit="fit">
-        <div slot="placeholder" class="image-slot">
+            width="500px"
+            :visible.sync="dialogVisible"
+            :before-close="handleClose"
+    >
+      <el-image :src="url" :fit="fit" class="image-display">
+        <template #placeholder>
           <div class="image-loading">
             加载中<span class="el-icon-loading"></span>
           </div>
-        </div>
+        </template>
       </el-image>
     </el-dialog>
   </div>
 </template>
-<script>
-import {getFundListData} from "@/api/trade";
 
-export default {
-  name: "TradeFund",
-  data() {
-    return {
-      loading: false,
-      dialogVisible: false,
-      url: '',
-      tableData: [],
-    }
-  },
-  methods: {
-    fetchData() {
-      this.loading = true;
-      getFundListData().then(res => {
-        this.tableData = res.result;
-      }).finally(() => {
-        this.loading = false;
-      })
+<script>
+  import { getFundListData } from "@/api/trade";
+
+  export default {
+    name: "TradeFund",
+    data() {
+      return {
+        loading: false,
+        dialogVisible: false,
+        url: "",
+        tableData: [],
+      };
     },
-    showImage(code) {
-      this.url = 'https://j4.dfcfw.com/charts/pic7/' + code + '.png?' + new Date().getTime();
-      this.dialogVisible = true;
-    },
-    getSummaries(param) {
-      const {columns, data} = param;
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = '合计';
-          return;
+    methods: {
+      async fetchData() {
+        this.loading = true;
+        try {
+          const res = await getFundListData();
+          this.tableData = res.result;
+        } finally {
+          this.loading = false;
         }
-        const values = data.map(item => Number(item[column.property]));
-        if (index < 13) {
-          sums[index] = '';
-        } else {
-          const sum = values.reduce((prev, curr) => {
-            const value = Number(curr);
-            if (!isNaN(value)) {
-              return prev + value;
-            }
-            return prev;
-          }, 0);
-          if (sum > 0) {
-            sums[index] = '+' + sum.toFixed(2);
-          } else {
-            sums[index] = sum.toFixed(2) + '';
+      },
+      showImage(code) {
+        this.url = `https://j4.dfcfw.com/charts/pic7/${code}.png?${new Date().getTime()}`;
+        this.dialogVisible = true;
+      },
+      getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        // 指定需要计算合计的列名
+        const sumColumns = ['todayIncome','income'];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '合计';
+            return;
           }
-        }
-      });
-      return sums;
+          const property = column.property;
+          if (sumColumns.includes(property)) {
+            const values = data.map(item => Number(item[property]));
+            const sum = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              return !isNaN(value) ? prev + value : prev;
+            }, 0);
+            sums[index] = sum > 0 ? '+' + sum.toFixed(2) : sum.toFixed(2);
+          } else {
+            sums[index] = '';  // 不需要合计的列为空
+          }
+        });
+        return sums;
+      },
+      formatIncome(value) {
+        return value > 0 ? `+${value}` : value < 0 ? value : "+0.00";
+      },
+      handleClose(done) {
+        done();
+      },
     },
-    handleClose(done) {
-      done();
+    created() {
+      this.fetchData();
     },
-  },
-  computed: {
-    userInfo() {
-      return this.$store.state.user.userInfo;
-    },
-  },
-  created() {
-    this.fetchData();
-  },
-}
+  };
 </script>
 
 <style scoped lang="less">
-.image-slot {
-  width: 451px;
-  height: 281px;
-  background: #f5f7fa;
-}
-
-.image-loading {
-  text-align: center;
-  background: #f5f7fa;
-  padding-top: 120px;
-}
-.tool-bar {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
+  .trade-fund-wrapper {
+    .alert-box {
+      margin-bottom: 10px;
+    }
+    .tool-bar {
+      margin: 5px 0;
+    }
+    .table-content {
+      width: 100%;
+    }
+    .image-display {
+      width: 451px;
+      height: 281px;
+    }
+    .image-loading {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f7fa;
+      .el-icon-loading {
+        margin-left: 5px;
+      }
+    }
+  }
 </style>
