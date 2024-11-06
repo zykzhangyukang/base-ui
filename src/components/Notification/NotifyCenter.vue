@@ -7,23 +7,27 @@
             :before-close="handleClose"
     >
       <div class="tool-bar">
-          <el-radio-group v-model="searchForm.module" size="mini" @input="handleInput">
+        <el-row>
+          <el-col :span="16">
+            <el-radio-group v-model="searchForm.module" size="mini" @input="handleInput">
               <el-radio-button :label="item.code" :name="item.code" v-for="item in notificationModuleG" :key="item.code">
-                  {{ notificationModuleGName[item.code] }} ({{getUnReadCount(item.code)}})
+                {{ notificationModuleGName[item.code] }} ({{getUnReadCount(item.code)}})
               </el-radio-button>
-          </el-radio-group>
-        <el-button style="float: right;margin-left: 10px" plain icon="el-icon-finished">全部已读</el-button>
-        <el-select v-model="searchForm.isRead" :style="{width: '100px'}" clearable placeholder="请选择" style="float: right" @change="handleInput">
-          <el-option
-              v-for="item in isReadG"
-              :key="item.code"
-              :label="isReadGName[item.code]"
-              :value="item.code">
-          </el-option>
-        </el-select>
+            </el-radio-group>
+          </el-col>
+          <el-col :span="8">
+            <el-select v-model="searchForm.isRead" :style="{width: '100px'}" placeholder="请选择" style="float: right" @change="handleInput">
+              <el-option
+                  v-for="item in isReadG"
+                  :key="item.code"
+                  :label="isReadGName[item.code]"
+                  :value="item.code">
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
       </div>
         <el-table
-                @row-click="rowClick"
                 v-loading="tableLoading"
                 :data="tableData"
                 stripe
@@ -49,17 +53,17 @@
                     align="center"
                     label="是否已读">
                 <template slot-scope="scope">
-                    <span v-if="scope.row.isRead === 1">
+                    <el-button v-if="scope.row.isRead === 1" @click="rowClick(scope.row)" size="mini">
                           <span class="read_flag">已读</span>
-                    </span>
-                    <span v-else>
+                    </el-button>
+                    <el-button @click="rowClick(scope.row)" v-else size="mini">
                          <span class="un_read_flag">未读</span>
-                    </span>
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
         <el-pagination
-                background
+                v-if="this.total > this.searchForm.pageSize"
                 @current-change="handleCurrentChange"
                 style="margin-top: 10px;position: relative;"
                 layout="prev, pager, next"
@@ -83,7 +87,7 @@ export default {
           searchForm: {
             currentPage: 1,
             pageSize: 10,
-            isRead: null,
+            isRead: 0,
             module: 'all'
           },
         }
@@ -115,6 +119,8 @@ export default {
                   if(res.code===200){
                     this.$message.success("消息已读");
                     row.isRead = 1;
+                    const  index = this.tableData.findIndex(e=>e.notificationId === row.notificationId);
+                    this.tableData.splice(index, 1);
                   }
                 });
               }
