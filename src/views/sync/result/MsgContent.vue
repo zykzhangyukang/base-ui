@@ -1,6 +1,7 @@
 <template>
     <el-dialog
             title="消息内容"
+            v-if="visible"
             :visible.sync="visible"
             width="40%"
             class="dialog-form"
@@ -16,7 +17,7 @@
 </template>
 <script>
     import hljs from 'highlight.js';
-    import 'highlight.js/styles/idea.css';
+    import 'highlight.js/styles/monokai-sublime.min.css'
     export default {
         name: 'MsgContent',
         components: {},
@@ -59,8 +60,8 @@
 </script>
 <style scoped lang="less">
     code {
-        font-family: Consolas,serif;
-        font-size: 12px;
+      font-family: "Consolas",serif;
+      font-size: 13px;
     }
     .el-icon-document-copy{
         cursor: pointer;

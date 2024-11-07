@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+          v-if="visible"
           :title="description"
           :visible.sync="visible"
           width="35%"
@@ -21,7 +22,7 @@
 <script>
   import { getPlanContent } from "@/api/sync";
   import hljs from 'highlight.js';
-  import 'highlight.js/styles/idea.css'
+  import 'highlight.js/styles/monokai-sublime.min.css'
 
   export default {
     name: 'PlanContent',
@@ -68,8 +69,8 @@
 
 <style scoped lang="less">
   code {
-    font-family: Consolas,serif;
-    font-size: 12px;
+    font-family: "Consolas",serif;
+    font-size: 13px;
   }
   .el-icon-document-copy{
     cursor: pointer;
