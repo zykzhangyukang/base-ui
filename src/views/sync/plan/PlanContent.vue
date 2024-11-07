@@ -13,7 +13,7 @@
                v-clipboard:success="onCutSuccess"
       ></el-icon>
     </div>
-    <pre>
+    <pre v-if="loading">
       <code class="xml">{{ codeSnippet }}</code>
     </pre>
   </el-dialog>
@@ -50,8 +50,8 @@
                   this.description = res.result.description;
                 })
                 .finally(() => {
-                  this.loading = false;
                   this.highlightCode();
+                  this.loading = false;
                 });
       },
       highlightCode() {
