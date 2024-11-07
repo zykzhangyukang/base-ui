@@ -13,7 +13,7 @@
                v-clipboard:success="onCutSuccess"
       ></el-icon>
     </div>
-    <pre v-if="loading">
+    <pre v-loading="loading">
       <code class="xml">{{ codeSnippet }}</code>
     </pre>
   </el-dialog>
