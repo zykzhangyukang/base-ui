@@ -170,6 +170,7 @@ export default {
       this.visible = false;
       this.options = [];
       this.searchList = [];
+      this.rescVOList = [];
       this.resetForm('form');
       this.$emit('success')
     },

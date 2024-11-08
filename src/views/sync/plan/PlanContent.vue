@@ -13,7 +13,7 @@
                v-clipboard:success="onCutSuccess"
       ></el-icon>
     </div>
-    <pre v-loading="loading">
+    <pre>
       <code class="xml">{{ codeSnippet }}</code>
     </pre>
   </el-dialog>
@@ -29,7 +29,6 @@
     data() {
       return {
         visible: false,
-        loading: false,
         description: '',
         codeSnippet: ''
       };
@@ -41,18 +40,10 @@
       handleClose() {
         this.visible = false;
       },
-      handleOpen(uuid) {
+      handleOpen(planContent) {
         this.visible = true;
-        this.loading = true;
-        getPlanContent(uuid)
-                .then(res => {
-                  this.codeSnippet = res.result.planContent || '';
-                  this.description = res.result.description;
-                })
-                .finally(() => {
-                  this.highlightCode();
-                  this.loading = false;
-                });
+        this.codeSnippet = planContent;
+        this.highlightCode();
       },
       highlightCode() {
         this.$nextTick(() => {

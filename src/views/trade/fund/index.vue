@@ -35,14 +35,14 @@
       </el-table-column>
       <el-table-column prop="fundName" label="基金名称" align="center" show-overflow-tooltip  />
       <el-table-column label="净值数据" align="center">
-        <el-table-column label="30天均值" prop="jz30" />
-        <el-table-column label="20天均值" prop="jz20" />
-        <el-table-column label="10天均值" prop="jz10" />
-        <el-table-column label="5天均值" prop="jz5" />
-        <el-table-column label="昨天净值" prop="gsz">
+        <el-table-column label="30天均值" prop="jz30"  align="center" />
+        <el-table-column label="20天均值" prop="jz20"  align="center" />
+        <el-table-column label="10天均值" prop="jz10"  align="center" />
+        <el-table-column label="5天均值" prop="jz5"  align="center" />
+        <el-table-column label="昨天净值" prop="gsz"  align="center">
           <template slot-scope="scope">{{ scope.row.gsz }}</template>
         </el-table-column>
-        <el-table-column label="今日估值" prop="dwjz" />
+        <el-table-column label="今日估值" prop="dwjz"  align="center" />
       </el-table-column>
       <el-table-column label="估值时间" prop="gztime" align="center" width="150" />
       <el-table-column label="估算涨跌%" prop="gszzl" align="center">

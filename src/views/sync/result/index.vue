@@ -2,6 +2,19 @@
   <div class="table-result-wrapper">
     <!-- 查询栏 -->
     <el-form :inline="true" :model="searchForm" class="searchForm" ref="searchForm">
+      <el-form-item label="计划编号" prop="planCode">
+        <el-input v-model="searchForm.planCode" placeholder="计划编号" :style="{width : '180px'}" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="源系统" prop="srcProject">
+        <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable :style="{width : '180px'}">
+          <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code" ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="目标系统" prop="destProject">
+        <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable :style="{width : '180px'}">
+          <el-option :label="destProjectGName[item.code]" v-for="item in destProjectG" :value="item.code" :key="item.code"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="开始时间" prop="startTime">
         <el-date-picker
             :clearable="false"
@@ -21,19 +34,6 @@
             default-time="23:59:59"
             placeholder="选择结束时间">
         </el-date-picker>
-      </el-form-item>
-      <el-form-item label="计划编号" prop="planCode">
-        <el-input v-model="searchForm.planCode" placeholder="计划编号" :style="{width : '180px'}" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="源系统" prop="srcProject">
-        <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable :style="{width : '180px'}">
-          <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code" ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="目标系统" prop="destProject">
-        <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable :style="{width : '180px'}">
-          <el-option :label="destProjectGName[item.code]" v-for="item in destProjectG" :value="item.code" :key="item.code"></el-option>
-        </el-select>
       </el-form-item>
       <el-form-item label="同步状态" prop="syncStatus">
         <el-select v-model="searchForm.syncStatus" placeholder="同步状态" clearable :style="{width : '180px'}">

@@ -8,7 +8,13 @@
   >
     <div v-for="item in list" :key="item.rescId" class="item">
       {{item.rescUrl}}
-      <div class="desc">{{item.rescName}}</div>
+      <div class="desc">
+        {{item.rescName}}
+        <el-icon class="el-icon-document-copy"
+                 v-clipboard:cut="item.rescUrl"
+                 v-clipboard:success="onCutSuccess"
+        ></el-icon>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -27,6 +33,9 @@ export default {
   computed:{
   },
   methods:{
+    onCutSuccess(){
+      this.$message.success("复制成功!");
+    },
     handleClose() {
       this.visible = false;
     },
@@ -50,5 +59,8 @@ export default {
   border-radius: 5px;
   font-size: 12px;
   margin-bottom: 10px;
+}
+.el-icon-document-copy{
+  cursor: pointer;
 }
 </style>

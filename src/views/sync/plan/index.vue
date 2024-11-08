@@ -58,7 +58,7 @@
       >
         <template slot-scope="scope">
           <div class="ellipsis">
-               <span  class="ellipsis-button link" @click="$refs.planContentRef.handleOpen(scope.row.uuid)">
+               <span  class="ellipsis-button link" @click="$refs.planContentRef.handleOpen(scope.row.planContent)">
                  {{scope.row.planCode}}
               </span>
           </div>

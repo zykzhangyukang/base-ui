@@ -1,7 +1,7 @@
 <template>
   <div class="container" v-loading="loading">
     <div class="header">
-      <div class="role-info">
+      <div class="role-info" @click="showRoleList">
         {{ roleName }}：
         <span class="user-info">{{ userList.map(e => e.realName).join(', ') }}</span>
       </div>
@@ -55,6 +55,17 @@ import {mapGetters, mapMutations} from "vuex";
     },
     methods: {
       ...mapMutations(['delVisitedView']),
+      showRoleList(){
+        this.$alert(
+            this.userList.map(e => e.realName).join(', '),
+            '用户列表',
+            {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: '确定',
+              type: 'info',
+            }
+        );
+      },
       async handleSave() {
         const allCheckedNodes = [];
         const allHalfCheckedNodes = [];

@@ -7,7 +7,7 @@
       :close-on-click-modal="false"
       :before-close="handleClose"
   >
-    <el-form ref="form" :model="form" label-width="" label-position="top">
+    <el-form ref="form" :model="form" label-width="" label-position="top" v-loading="loading">
       <el-form-item label="" prop="planContent">
         <el-input v-model="form.planContent"  clearable type="textarea" :rows="12"></el-input>
       </el-form-item>
@@ -29,6 +29,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       visible:false,
       btnLoading: false,
       form:{
@@ -45,8 +46,11 @@ export default {
     handleOpen(uuid){
       this.visible = true;
       this.form.uuid = uuid;
+      this.loading = true;
       getPlanContent(uuid).then(res=>{
         this.form = res.result;
+      }).finally(()=>{
+        this.loading = false;
       })
     },
     resetForm(formName) {
