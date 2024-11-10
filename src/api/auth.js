@@ -297,6 +297,13 @@ export function getUserRoleInit(id) {
     })
 }
 
+export function getUserPhone(id) {
+    return request({
+        url: '/auth/user/phone?userId='+id,
+        method: 'get',
+    })
+}
+
 export function updateUserRole(data) {
     return request({
         url: '/auth/user/role/update',

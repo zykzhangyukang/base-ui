@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {Message} from 'element-ui'
 import store from "./store";
 import router from "./router";
+import MessageOnce from '@/utils/messageonce'
 import {getAccessToken, getExpiresIn} from './utils/cookie'
 
 // 创建axios实例
@@ -10,6 +10,7 @@ const service = axios.create({
     timeout: 120000
 })
 
+const messageOnce = new MessageOnce()
 let isRefreshing = false;
 let requests = [];
 
@@ -36,7 +37,7 @@ service.interceptors.request.use(
                     isRefreshing = false;
                     store.commit('user/REMOVE_TOKEN')
                     router.push('/login').then(r => {
-                        Message.error('会话已过期，请重新登录！');
+                        messageOnce.error('登录已过期，请重新登录');
                     });
                 }
             } else if (isRefreshing) {
@@ -68,31 +69,26 @@ service.interceptors.response.use(
         if (code === 200) {
             return data;
         } else if (code === 405) {
-            Message({
-                type: 'warning',
-                message
-            });
+            messageOnce.warning({type: 'warning', message});
             return Promise.reject('error');
         }
     },
     error => {
         const code = error.response?.data?.code;
         if (!code) {
-            Message({
-                type: 'error', message: '当前网络异常，请检查网络连接！'
-            });
+            messageOnce.error({type: 'error', message: '当前网络异常，请检查网络连接'});
         }
         if (code === 401) {
             store.commit('user/REMOVE_TOKEN')
             router.push('/login').then(r => {
-                Message({type: 'error', message: '会话已过期，请重新登录！'});
+                messageOnce.error({type: 'error', message: '会话已过期，请重新登录'});
             });
         } else if (code === 400) {
-            Message({type: 'error', message: '请求参数错误！'});
+            messageOnce.error({type: 'error', message: '请求参数错误'});
         } else if (code === 403) {
-            Message({type: 'error', message: '无权限操作！'});
+            messageOnce.error({type: 'error', message: '很抱歉，您暂无该操作权限'})
         }else if (code === 500) {
-            Message({type: 'error', message: '服务器未知异常，请联系管理员处理！'});
+            messageOnce.error({type: 'error', message: '服务器未知异常，请联系管理员处理'});
         }
         return Promise.reject(error);
     });

@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_user_page'">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_user_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_user_add'">新增</el-button>
       </el-form-item>
@@ -88,7 +88,7 @@
         >
         <template slot-scope="scope">
           <span>
-              {{scope.row.phone}}
+              {{scope.row.phone}} <el-button type="text" size="mini" @click="lookPhone(scope.row)" :loading="scope.row.phoneLoading">查看</el-button>
           </span>
         </template>
       </el-table-column>
@@ -153,7 +153,7 @@ import UserUpdate from "@/views/auth/user/UserUpdate.vue";
 import MyTable from '@/components/MyTable/index'
 import UserUpdateRole from "@/views/auth/user/UserUpdateRole.vue";
 import store from "@/store";
-import {deleteUser, disableUser, enableUser, getUserPage} from "@/api/auth";
+import {deleteUser, disableUser, enableUser, getUserPage, getUserPhone} from "@/api/auth";
 
 export default {
   name: 'UserList',
@@ -165,6 +165,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       addModalVisible: false,
       // 数据总条数
       total: 0,
@@ -192,6 +193,23 @@ export default {
     }
   },
   methods: {
+    lookPhone(row){
+      this.$set(row, 'phoneLoading', true);
+      getUserPhone(row.userId).then(async res => {
+         await this.$alert(
+            res.result,
+            '查看手机号',
+            {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: '确定',
+              type: 'warning',
+            }
+        ).catch(e=>{
+        });
+      }).finally(()=>{
+        this.$set(row, 'phoneLoading', false);
+      })
+    },
     handleCommand(command){
       if(command === 'updateUserStatus'){
         return  this.handleUpdateUserStatus();
@@ -210,7 +228,7 @@ export default {
         }
         rowData = this.multipleSelection[0];
       }
-      this.$confirm(`您确定要切换用户【${rowData.realName}】的账号登录吗？`, '警告', {
+      this.$confirm(`您确定要切换用户“${rowData.realName}”的账号登录吗？`, '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -227,7 +245,7 @@ export default {
             })
           }
         })
-      });
+      }).catch(e=>{});
     },
     handleUpdateUserStatus(){
       if(this.multipleSelection.length !==1){
@@ -313,12 +331,14 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      this.loading = true;
       this.tableLoading = true;
       getUserPage(this.searchForm).then(res => {
         this.tableData = res.result.dataList;
         this.total = res.result.totalRow;
       }).finally(() => {
         this.tableLoading = false;
+        this.loading = false;
       })
     },
     handleSizeChange(val) {

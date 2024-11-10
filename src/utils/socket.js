@@ -18,9 +18,6 @@ class MyWebSock {
     }
 
     connect() {
-        console.log(store.state.user)
-
-        console.log('正在尝试连接 WebSocket...');
         const socket = new SockJS(this.url);
         this.stompClient = Stomp.over(socket);
         this.stompClient.debug = null;
@@ -31,13 +28,10 @@ class MyWebSock {
 
         this.stompClient.connect(headers, () => {
                 this.reconnectAttempts = 0;
-                console.log('WebSocket 连接成功');
                 this.subscribeToTopics();
-                // 重置心跳定时器
                 this.startHeartbeat();
             },
             err => {
-                console.log('WebSocket 连接失败', err);
                 this.handleReconnect();
             }
         );
@@ -54,7 +48,6 @@ class MyWebSock {
         try {
             this.stompClient.send('heartbeat');
         } catch (err) {
-            console.log('WebSocket 连接丢失: ' + err);
             this.handleReconnect();
         }
     }
@@ -65,7 +58,6 @@ class MyWebSock {
 
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
             const backoffTime = this.getFibonacciBackoffTime(this.reconnectAttempts) * 1000; // 斐波那契退避
-            console.log(`将在 ${backoffTime / 1000} 秒后重连...`);
             this.reconnectTimer = setTimeout(() => {
                 this.connect();
             }, backoffTime);
