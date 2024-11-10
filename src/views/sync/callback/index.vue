@@ -49,7 +49,7 @@
         <el-input v-model="searchForm.msgContent" placeholder="消息内容"  :style="{width:'250px'}" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_callback_page'">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_callback_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button plain @click="handleCallback" :loading="callbackLoading" v-permission="'sync_callback_repeat'">重新回调</el-button>
       </el-form-item>
@@ -171,6 +171,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       callbackLoading: false,
       // 数据总条数
       total: 0,
@@ -258,11 +259,13 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      this.loading = true;
       this.tableLoading = true;
       getCallbackPage(this.searchForm).then(res => {
         this.tableData = res.result.dataList;
         this.total = res.result.totalRow;
       }).finally(() => {
+        this.loading = false;
         this.tableLoading = false;
       })
     },

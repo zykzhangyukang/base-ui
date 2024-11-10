@@ -53,10 +53,10 @@
                     align="center"
                     label="是否已读">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.isRead === 1" @click="rowClick(scope.row)" size="mini">
+                    <el-button v-if="scope.row.isRead === 1" @click="rowClick(scope.row)" size="mini" type="text" :loading="scope.row.readLoading">
                           <span class="read_flag">已读</span>
                     </el-button>
-                    <el-button @click="rowClick(scope.row)" v-else size="mini">
+                    <el-button @click="rowClick(scope.row)" v-else size="mini" type="text"  :loading="scope.row.readLoading">
                          <span class="un_read_flag">未读</span>
                     </el-button>
                 </template>
@@ -115,6 +115,7 @@ export default {
         methods: {
             rowClick(row){
               if(row.isRead === 0){
+                this.$set(row, 'readLoading', true);
                 maskNotificationRead(row.notificationId).then(res=>{
                   if(res.code===200){
                     this.$message.success("消息已读");
@@ -122,6 +123,8 @@ export default {
                     const  index = this.tableData.findIndex(e=>e.notificationId === row.notificationId);
                     this.tableData.splice(index, 1);
                   }
+                }).finally(()=>{
+                  this.$set(row, 'readLoading', false);
                 });
               }
             },

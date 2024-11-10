@@ -263,6 +263,17 @@ export function updateUser(data) {
     })
 }
 
+export function uploadUserAvatar(formData) {
+    return request({
+        url: '/auth/user/upload/avatar',
+        method: 'post',
+        headers: {
+            'content-type': 'multipart/form-data'
+        },
+        data: formData
+    })
+}
+
 export function deleteUser(id) {
     return request({
         url: '/auth/user/delete?userId='+id,

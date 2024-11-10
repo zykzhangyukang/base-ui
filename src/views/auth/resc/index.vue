@@ -23,7 +23,7 @@
       </el-form-item>
       <br/>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_resc_page'">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_resc_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_resc_add'">新增</el-button>
         <el-button plain @click="handleRefresh" :loading="refreshLoading" v-permission="'auth_resc_refresh'">刷新资源</el-button>
@@ -134,6 +134,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       refreshLoading: false,
       addModalVisible: false,
       // 数据总条数
@@ -225,11 +226,13 @@ export default {
     },
     fetchData() {
       this.tableLoading = true;
+      this.loading = true;
       getRescPage(this.searchForm).then(res => {
         this.tableData = res.result.dataList;
         this.total = res.result.totalRow;
       }).finally(() => {
         this.tableLoading = false;
+        this.loading = false;
       })
     },
     handleSizeChange(val) {

@@ -17,7 +17,7 @@
               :props="defaultProps"
               @node-click="handleNodeClick"
               :filter-node-method="filterNode"
-              v-loading="loading"
+              v-loading="treeLoading"
               :default-expanded-keys="defaultExpandedKeys"
               :expand-on-click-node="false"
               node-key="funcId"
@@ -65,7 +65,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading">查询</el-button>
             <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
             <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
           </el-form-item>
@@ -213,7 +213,8 @@ export default {
       filterText: '',
       treeData: [],
       defaultExpandedKeys: [],
-      loading: true,
+      treeLoading: false,
+      loading: false,
       defaultProps: {
         children: 'children',
         label: 'funcName',
@@ -328,7 +329,7 @@ export default {
       this.onSubmit();
     },
     fetchTreeData() {
-      this.loading = true;
+      this.treeLoading = true;
       getFuncTree()
           .then((res) => {
             this.treeData = res.result;
@@ -337,7 +338,7 @@ export default {
             console.error("Failed to fetch tree data:", error);
           })
           .finally(() => {
-            this.loading = false;
+            this.treeLoading = false;
           });
     },
     filterNode(value, data) {
@@ -364,11 +365,13 @@ export default {
         this.searchForm.parentId = null;
       }
       this.tableLoading = true;
+      this.loading = true;
       getFuncPage(this.searchForm).then(res => {
         this.tableData = res.result.dataList;
         this.total = res.result.totalRow;
       }).finally(() => {
         this.tableLoading = false;
+        this.loading = false;
       })
     },
   },

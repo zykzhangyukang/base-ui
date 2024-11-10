@@ -27,7 +27,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_plan_page'">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_plan_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'sync_plan_add'">新增</el-button>
         <el-button plain  @click="handleRefresh" :loading="refreshLoading" v-permission="'sync_plan_refresh'">刷新缓存</el-button>
@@ -171,6 +171,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       addModalVisible: false,
       // 数据总条数
       total: 0,
@@ -281,12 +282,14 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      this.loading = true;
       this.tableLoading = true;
       getPlanPage(this.searchForm).then(res => {
         this.tableData = res.result.dataList;
         this.total = res.result.totalRow;
       }).finally(() => {
         this.tableLoading = false;
+        this.loading = false;
       })
     },
     handleSizeChange(val) {

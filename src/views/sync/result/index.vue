@@ -54,7 +54,7 @@
         <el-input v-model="searchForm.keywords" placeholder="计划名称，消息内容，同步内容" :style="{width : '250px'}" ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="searchLoading">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button plain @click="handleRepeatSync" :loading="repeatSyncLoading">重新同步</el-button>
         <el-button plain @click="handleSignSuccess" :loading="signSuccessLoading">标记成功</el-button>
@@ -229,7 +229,7 @@ export default {
   data() {
     return {
       // loading安装
-      searchLoading: false,
+      loading: false,
       repeatSyncLoading: false,
       signSuccessLoading: false,
       addModalVisible: false,
@@ -352,13 +352,13 @@ export default {
     },
     fetchData() {
       this.tableLoading = true;
-      this.searchLoading = true;
+      this.loading = true;
       getResultPage(this.searchForm).then(res => {
         this.tableData = res.result.dataList;
         this.total = res.result.totalRow;
       }).finally(() => {
         this.tableLoading = false;
-        this.searchLoading = false;
+        this.loading = false;
       })
     },
     handleSizeChange(val) {

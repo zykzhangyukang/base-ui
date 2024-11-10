@@ -45,7 +45,7 @@
         <el-input v-model="searchForm.username" placeholder="用户账号" ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -148,6 +148,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       // 数据总条数
       total: 0,
       // 表格数据数组
@@ -199,12 +200,14 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      this.loading = true;
       this.tableLoading = true;
       getLogPage(this.searchForm).then(res => {
         this.tableData = res.result.dataList;
         this.total = res.result.totalRow;
       }).finally(() => {
         this.tableLoading = false;
+        this.loading = false;
       })
     },
     handleSizeChange(val) {
