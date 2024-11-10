@@ -22,8 +22,11 @@
               :http-request="httpRequest"
               :before-upload="beforeAvatarUpload"
           >
-          <img v-if="form.avatar" :src="form.avatar" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <el-image :src="form.avatar" class="avatar">
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline"></i>
+              </div>
+          </el-image>
         </el-upload>
         </el-form-item>
         <el-form-item label="联系方式" prop="phone">
@@ -79,11 +82,6 @@ export default {
       let file = option.file;
       const formData = new FormData();
       formData.append('file', file);
-     /* const loading = this.$message.warning({
-        message: '上传头像中',
-        iconClass: 'el-icon-loading',
-        duration: 0
-      })*/
       uploadUserAvatar(formData).then(res=>{
         if(res.code === 200){
           this.$message.success("上传成功！");
@@ -92,7 +90,6 @@ export default {
           this.$message.error("上传失败！")
         }
       }).finally(()=>{
-     /*   loading.close();*/
       })
     },
     beforeAvatarUpload(file) {

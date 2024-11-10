@@ -91,8 +91,8 @@ import {mapGetters, mapMutations} from "vuex";
         // 如果新增和删除都为空，则不弹窗或显示提示
         if (insertStr || delStr) {
           const message = `
-              ${insertStr ? `<strong style="color: #19be6b">新增功能:</strong> ${insertStr}<br>` : ''}
-              ${delStr ? `<strong style="color: #ed4014">删除功能:</strong> ${delStr}` : ''}
+              ${insertStr ? `<strong style="color: green">${insertStr}</strong> <br>` : ''}
+              ${delStr ? `<strong style="color: red">${delStr}</strong> ` : ''}
             `;
 
            await this.$alert(
