@@ -196,9 +196,6 @@ export default {
     lookPhone(row){
       this.$set(row, 'phoneLoading', true);
       getUserPhone(row.userId).then(async res => {
-        const  index = this.tableData.findIndex(e=>e.userId === row.userId);
-        let hidePhone =  this.tableData[index].phone;
-        this.tableData[index].phone = res.result;
         await this.$alert(
             res.result,
             '用户手机号',
@@ -209,7 +206,6 @@ export default {
             }
         ).catch(e=>{
         });
-        this.tableData[index].phone = hidePhone;
       }).finally(()=>{
         this.$set(row, 'phoneLoading', false);
       })
