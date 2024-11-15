@@ -52,3 +52,26 @@ export function uploadFileChunk(formData) {
         data: formData
     })
 }
+
+export function getFundListData() {
+    return request({
+        url: '/trade/fund/list',
+        method: 'get'
+    })
+}
+
+export function saveFundSetting(data) {
+    return request({
+        url: '/trade/fund/save/setting',
+        method: 'post',
+        data
+    })
+}
+
+export function getFundSetting() {
+    return request({
+        url: '/trade/fund/get/setting',
+        method: 'get',
+    })
+}
+

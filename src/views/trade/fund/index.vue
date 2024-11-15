@@ -14,6 +14,9 @@
       <el-button icon="el-icon-refresh" plain @click="fetchData" :loading="loading">
         刷新
       </el-button>
+      <el-button icon="el-icon-setting" plain @click="openSetting" :loading="loading" v-permission="'trade_fund_setting'">
+        设置
+      </el-button>
     </div>
 
     <!-- 表格内容 -->
@@ -28,9 +31,15 @@
     >
       <el-table-column prop="fundCode" label="基金编号" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="showImage(scope.row.fundCode)">
+          <span>
+          <el-button size="mini" type="text" @click="showImage(scope.row.fundCode)" class="fund_code">
             {{ scope.row.fundCode }}
           </el-button>
+              <el-icon class="el-icon-document-copy"
+                       v-clipboard:cut="scope.row.fundCode"
+                       v-clipboard:success="onCutSuccess"
+              ></el-icon>
+          </span>
         </template>
       </el-table-column>
       <el-table-column prop="fundName" label="基金名称" align="center" show-overflow-tooltip  />
@@ -86,23 +95,80 @@
         </template>
       </el-image>
     </el-dialog>
+    <!-- 设置弹框 -->
+    <el-dialog title="基金设置" :visible.sync="settingVisible" width="670px" center>
+      <el-table :data="settingData" border  height="350" v-loading="tableLoading">
+        <el-table-column property="date" label="基金编号" align="center">
+          <template slot-scope="scope">
+            <el-input  v-model="scope.row.fundCode" placeholder="" style="width: 100%"  ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column property="costPrise" label="持仓成本价" align="center" >
+          <template slot-scope="scope">
+            <el-input-number  v-model="scope.row.costPrise" placeholder=""  style="width: 100%" :precision="4" ></el-input-number>
+          </template>
+        </el-table-column>
+        <el-table-column property="bonds" label="持有份额" align="center">
+          <template slot-scope="scope">
+            <el-input-number  v-model="scope.row.bonds" placeholder=""  style="width: 100%" :precision="2" ></el-input-number>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="100"  align="center">
+          <template slot-scope="scope">
+            <el-button @click="delSetting(scope.$index)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addSetting">新增一行</el-button>
+        <el-button type="primary" @click="saveSetting">保存设置</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import { getFundListData } from "@/api/trade";
+import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
 
   export default {
     name: "TradeFund",
     data() {
       return {
         loading: false,
+        tableLoading: false,
         dialogVisible: false,
+        settingVisible: false,
         url: "",
         tableData: [],
+        settingData: []
       };
     },
     methods: {
+      onCutSuccess(){
+        this.$message.success("复制成功!");
+      },
+      openSetting(){
+        this.settingVisible = true;
+        this.tableLoading = true;
+        getFundSetting().then(res=>{
+          this.settingData = res.result || [];
+        }).finally(()=>{
+          this.tableLoading = false;
+        })
+      },
+      delSetting(index){
+         this.settingData.splice(index, 1);
+      },
+      addSetting(){
+        this.settingData.push({})
+      },
+      saveSetting(){
+        saveFundSetting(this.settingData).then(res=>{
+          this.$message.success("设置成功");
+          this.settingVisible = false;
+          this.fetchData();
+        })
+      },
       async fetchData() {
         this.loading = true;
         try {
@@ -155,6 +221,14 @@
 
 <style scoped lang="less">
   .trade-fund-wrapper {
+    .fund_code{
+      color: dodgerblue;
+      margin-right: 5px;
+      font-weight: 500;
+    }
+    .el-icon-document-copy{
+      cursor: pointer;
+    }
     .alert-box {
       margin-bottom: 10px;
     }

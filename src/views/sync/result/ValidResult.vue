@@ -54,6 +54,7 @@ export default {
   methods: {
     handleClose() {
       this.visible = false;
+      this.validTables = [];
     },
     handleOpen(msgContent) {
       this.visible = true;
