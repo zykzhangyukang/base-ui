@@ -72,7 +72,6 @@
     </el-dialog>
 </template>
 <script>
-import {adminDomain, formatConst, getConst} from "@/utils";
 import {getNotificationPage, maskNotificationRead} from "@/api/common";
 
 export default {
@@ -94,22 +93,22 @@ export default {
       },
       computed: {
         notificationModuleG() {
-          return getConst("notification_module", adminDomain)
+          return this.$getConst("notification_module")
         },
         notificationModuleGName() {
-          return formatConst(this.notificationModuleG);
+          return this.$formatConst(this.notificationModuleG);
         },
         notificationTypeG() {
-          return getConst("notification_type", adminDomain)
+          return this.$getConst("notification_type")
         },
         notificationTypeGName() {
-          return formatConst(this.notificationTypeG);
+          return this.$formatConst(this.notificationTypeG);
         },
         isReadG() {
-          return getConst("is_read", adminDomain)
+          return this.$getConst("is_read")
         },
         isReadGName() {
-          return formatConst(this.isReadG);
+          return this.$formatConst(this.isReadG);
         },
       },
         methods: {

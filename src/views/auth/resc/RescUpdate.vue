@@ -33,7 +33,6 @@
 </template>
 <script>
 
-import {adminDomain, formatConst, getConst} from "@/utils";
 import {getRescDetail, updateResc} from "@/api/auth";
 
 export default {
@@ -52,16 +51,16 @@ export default {
   },
   computed:{
     methodTypeG(){
-      return getConst("method_type", adminDomain)
+      return this.$getConst("method_type")
     },
     methodTypeGName(){
-      return formatConst(this.methodTypeG);
+      return this.$formatConst(this.methodTypeG);
     },
     projectDomainG(){
-      return getConst("project_domain", adminDomain)
+      return this.$getConst("project_domain")
     },
     projectDomainGName(){
-      return formatConst(this.projectDomainG);
+      return this.$formatConst(this.projectDomainG);
     },
   },
   methods:{

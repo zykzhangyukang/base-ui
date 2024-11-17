@@ -70,7 +70,6 @@
         v-loading="tableLoading"
         :data="tableData"
         @sort-change="sortChange"
-        style="width: 100%"
         @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection"  label="选择" align="center"></el-table-column>
@@ -204,7 +203,6 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, getNDaysAgo, toLine} from "@/utils";
 import PlanAdd from "@/views/sync/plan/PlanAdd.vue";
 import PlanContent from "@/views/sync/plan/PlanContent.vue";
 import PlanUpdate from "@/views/sync/plan/PlanUpdate.vue";
@@ -249,41 +247,41 @@ export default {
         msgSrc: '',
         keywords: '',
         repeatCount: null,
-        startTime: getNDaysAgo(7),
+        startTime: this.$getNDaysAgo(7),
         endTime: ''
       },
     }
   },
   computed:{
     srcProjectG(){
-      return getConst("src_project",adminDomain)
+      return this.$getConst("src_project")
     },
     srcProjectGName(){
-      return formatConst(this.srcProjectG)
+      return this.$formatConst(this.srcProjectG)
     },
     destProjectG(){
-      return getConst("dest_project",adminDomain)
+      return this.$getConst("dest_project")
     },
     destProjectGName(){
-      return formatConst(this.destProjectG)
+      return this.$formatConst(this.destProjectG)
     },
     msgSrcG(){
-      return getConst("msg_src",adminDomain)
+      return this.$getConst("msg_src")
     },
     msgSrcGName(){
-      return formatConst(this.msgSrcG)
+      return this.$formatConst(this.msgSrcG)
     },
     resultStatusG(){
-      return getConst("result_status",adminDomain)
+      return this.$getConst("result_status")
     },
     resultStatusGName(){
-      return formatConst(this.resultStatusG)
+      return this.$formatConst(this.resultStatusG)
     },
     repeatCountG(){
-      return getConst("repeat_times",adminDomain)
+      return this.$getConst("repeat_times")
     },
     repeatCountGName(){
-      return formatConst(this.repeatCountG)
+      return this.$formatConst(this.repeatCountG)
     },
   },
   methods: {
@@ -342,7 +340,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

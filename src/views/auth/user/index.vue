@@ -48,7 +48,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_user_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_user_add'">新增</el-button>
-        <el-button type="warning"  @click="handExcel" v-permission="'auth_user_export'">列表导出</el-button>
+        <el-button type="warning"  @click="handExcel" v-permission="'auth_user_export'" :loading="downloadLoading">列表导出</el-button>
       </el-form-item>
       <el-form-item>
         <el-dropdown @command="handleCommand" trigger="click">
@@ -188,7 +188,6 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import UserAdd from "@/views/auth/user/UserAdd.vue";
 import UserUpdate from "@/views/auth/user/UserUpdate.vue";
 import MyTable from '@/components/MyTable/index'
@@ -215,6 +214,7 @@ export default {
   data() {
     return {
       loading: false,
+      downloadLoading: false,
       addModalVisible: false,
       // 数据总条数
       total: 0,
@@ -240,10 +240,10 @@ export default {
   },
   computed:{
     userStatusG(){
-      return getConst("user_status_group", adminDomain)
+      return this.$getConst("user_status_group")
     },
     userStatusGName(){
-      return formatConst(this.userStatusG);
+      return this.$formatConst(this.userStatusG);
     }
   },
   methods: {
@@ -264,17 +264,17 @@ export default {
         this.$set(row, 'phoneLoading', false);
       })
     },
-    handleCommand(command){
-      if(command === 'updateUserStatus'){
-        return  this.handleUpdateUserStatus();
+    handleCommand(command) {
+      if (command === 'updateUserStatus') {
+        return this.handleUpdateUserStatus();
       }
-      if(command === 'updateUserRole'){
+      if (command === 'updateUserRole') {
         this.handleUpdateRole();
       }
-      if(command === 'switchUserLogin'){
+      if (command === 'switchUserLogin') {
         this.handleSwitchUserLogin();
       }
-      if(command === 'exportUserList'){
+      if (command === 'exportUserList') {
         this.handExcel();
       }
     },
@@ -349,8 +349,13 @@ export default {
     handleAdd(){
       this.$refs.addRef.handleOpen();
     },
-    handExcel(){
-      exportUserList(this.searchForm, "用户列表.xlsx");
+    handExcel() {
+      this.downloadLoading = true;
+      exportUserList(this.searchForm).then(res=>{
+        this.$exportXlsx(res.data, 'xlsx', '用户列表')
+      }).finally(()=>{
+        this.downloadLoading = false;
+      });
     },
     handeUpdate(id){
       this.$refs.updateRef.handleOpen(id);
@@ -382,7 +387,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

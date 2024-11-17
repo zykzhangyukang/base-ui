@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
-  import {getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck} from "@/api/auth";
+import {mapMutations} from "vuex";
+import {getRoleFuncInit, roleFuncUpdate, roleFuncUpdateCheck} from "@/api/auth";
 
-  export default {
+export default {
     name: 'RoleFuncUpdate',
     data() {
       return {

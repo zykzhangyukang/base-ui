@@ -136,7 +136,6 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import RescAdd from "@/views/auth/resc/RescAdd.vue";
 import RescUpdate from "@/views/auth/resc/RescUpdate.vue";
 import MyTable from '@/components/MyTable/index'
@@ -176,16 +175,16 @@ export default {
   },
   computed:{
     methodTypeG(){
-      return getConst("method_type", adminDomain)
+      return this.$getConst("method_type")
     },
     methodTypeGName(){
-      return formatConst(this.methodTypeG);
+      return this.$formatConst(this.methodTypeG);
     },
     projectDomainG(){
-      return getConst("project_domain", adminDomain)
+      return this.$getConst("project_domain")
     },
     projectDomainGName(){
-      return formatConst(this.projectDomainG);
+      return this.$formatConst(this.projectDomainG);
     },
   },
   methods: {
@@ -236,7 +235,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

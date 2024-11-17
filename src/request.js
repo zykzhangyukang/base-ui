@@ -1,10 +1,8 @@
 import axios from 'axios'
 import store from "./store";
 import router from "./router";
-import MessageOnce from '@/utils/messageonce'
-import {getAccessToken, getExpiresIn} from './utils/cookie'
-import NProgress from "nprogress";
-import {Message} from "element-ui";
+import MessageOnce from '@/utils/toast/messageonce'
+import {getAccessToken, getExpiresIn} from './utils/storage/cookie'
 
 // 创建axios实例
 const service = axios.create({
@@ -68,6 +66,31 @@ service.interceptors.response.use(
         const data = response.data;
         const code = data.code;
         const message = data.msg;
+
+        // 判断是否为下载请求
+        if (response.status === 200) {
+            if (response.request.responseType === 'arraybuffer') {
+                let disposition = response.headers['content-disposition']
+                if (disposition) {
+                    disposition = decodeURIComponent(disposition);
+                    const index1 = disposition.indexOf('filename');
+                    const index2 = disposition.indexOf('UTF-8');
+                    let filename = null;
+                    if (index2 > 0) {
+                        filename = disposition.substring(index2 + 7);
+                    }
+                    if (index1 > 0) {
+                        filename = disposition.substring(index1 + 7);
+                    }
+                    return {
+                        data: response.data, filename: filename
+                    }
+                } else {
+                    return response.data;
+                }
+            }
+        }
+
         if (code === 200) {
             return data;
         } else if (code === 405) {
@@ -102,39 +125,6 @@ function isTokenExpiringSoon() {
         return true;
     }
     return expiresIn - new Date().getTime() < 15 * 60 * 1000;
-}
-
-
-export function download({url, data, filename}) {
-    NProgress.start()
-    return service({
-        url: url,
-        method: 'post',
-        data,
-        responseType: 'blob'
-    }).then((r) => {
-        const content = r.data
-        const blob = new Blob([content])
-        console.log(blob)
-        if ('download' in document.createElement('a')) {
-            const elink = document.createElement('a')
-            elink.download = filename
-            elink.style.display = 'none'
-            elink.href = URL.createObjectURL(blob)
-            document.body.appendChild(elink)
-            elink.click()
-            URL.revokeObjectURL(elink.href)
-            document.body.removeChild(elink)
-        } else {
-            navigator.msSaveBlob(blob, filename)
-        }
-        NProgress.done()
-    }).catch((r) => {
-        NProgress.done()
-        Message.error({
-            message: '下载文件失败', type: 'error', duration: 5 * 1000
-        })
-    })
 }
 
 export default service;

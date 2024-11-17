@@ -176,7 +176,6 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, getNDaysAgo, toLine} from "@/utils";
 import MyTable from '@/components/MyTable/index'
 import {getMessagePage} from "@/api/sync";
 import MsgContent from "@/views/sync/result/MsgContent.vue";
@@ -206,35 +205,35 @@ export default {
         msgId: '',
         msgContent: '',
         mid: '',
-        startTime: getNDaysAgo(7),
+        startTime: this.$getNDaysAgo(7),
         endTime: ''
       },
     }
   },
   computed:{
     srcProjectG(){
-      return getConst("src_project",adminDomain)
+      return this.$getConst("src_project")
     },
     srcProjectGName(){
-      return formatConst(this.srcProjectG)
+      return this.$formatConst(this.srcProjectG)
     },
     destProjectG(){
-      return getConst("dest_project",adminDomain)
+      return this.$getConst("dest_project")
     },
     destProjectGName(){
-      return formatConst(this.destProjectG)
+      return this.$formatConst(this.destProjectG)
     },
     sendStatusG(){
-      return getConst("send_status",adminDomain)
+      return this.$getConst("send_status")
     },
     sendStatusGName(){
-      return formatConst(this.sendStatusG)
+      return this.$formatConst(this.sendStatusG)
     },
     dealStatusG(){
-      return getConst("deal_status",adminDomain)
+      return this.$getConst("deal_status")
     },
     dealStatusGName(){
-      return formatConst(this.dealStatusG)
+      return this.$formatConst(this.dealStatusG)
     },
   },
   methods: {
@@ -247,7 +246,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

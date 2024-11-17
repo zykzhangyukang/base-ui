@@ -18,7 +18,6 @@
         v-loading="tableLoading"
         :data="tableData"
         @sort-change="sortChange"
-        style="width: 100%"
     >
 
       <el-table-column
@@ -89,7 +88,6 @@
 </template>
 
 <script>
-import {toLine} from "@/utils";
 import RoleAdd from "@/views/auth/role/RoleAdd.vue";
 import RoleUpdate from "@/views/auth/role/RoleUpdate.vue";
 import RoleUpdateUser from "@/views/auth/role/RoleUpdateUser.vue";
@@ -161,7 +159,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

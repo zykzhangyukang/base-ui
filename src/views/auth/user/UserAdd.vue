@@ -39,8 +39,7 @@
 </template>
 <script>
 
-import {adminDomain, formatConst, getConst} from "@/utils";
-import {saveUser, getUserDeptList} from "../../../api/auth";
+import {saveUser, getUserDeptList} from "@/api/auth";
 
 export default {
   name: 'UserAdd',
@@ -64,10 +63,10 @@ export default {
   },
   computed:{
     userStatusG(){
-      return getConst("user_status_group", adminDomain)
+      return this.$getConst("user_status_group")
     },
     userStatusGName(){
-      return formatConst(this.userStatusG);
+      return this.$formatConst(this.userStatusG);
     }
   },
   methods:{

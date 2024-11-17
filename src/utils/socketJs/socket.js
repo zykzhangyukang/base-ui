@@ -1,7 +1,7 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import store from '@/store/index';
-import {getAccessToken} from "./cookie";
+import store from '@/store';
+import {getAccessToken} from "../storage/cookie";
 
 class MyWebSock {
     url = process.env.VUE_APP_BASE_API + '/sys_websocket';

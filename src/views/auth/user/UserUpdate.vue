@@ -52,7 +52,6 @@
 </template>
 <script>
 
-import {adminDomain, formatConst, getConst} from "@/utils";
 import {getUserDeptList, getUserDetail, updateUser, uploadUserAvatar} from "@/api/auth";
 
 export default {
@@ -71,10 +70,10 @@ export default {
   },
   computed:{
     userStatusG(){
-      return getConst("user_status_group", adminDomain)
+      return this.$getConst("user_status_group")
     },
     userStatusGName(){
-      return formatConst(this.userStatusG);
+      return this.$formatConst(this.userStatusG);
     }
   },
   methods:{

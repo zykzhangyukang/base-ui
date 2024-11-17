@@ -11,8 +11,8 @@
 </template>
 
 <script>
-  import {getNotificationCount} from "../../api/common";
-  import MyWebSock from "../../utils/socket";
+  import {getNotificationCount} from "@/api/common";
+  import MyWebSock from "../../utils/socketJs/socket";
   import NotifyCenter from "./NotifyCenter";
   export default {
     name: 'Notification',

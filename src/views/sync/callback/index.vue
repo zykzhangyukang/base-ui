@@ -162,9 +162,8 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, getNDaysAgo, toLine} from "@/utils";
 import MyTable from '@/components/MyTable/index'
-import {getCallbackPage, repeatCallBack, repeatSync} from "@/api/sync";
+import {getCallbackPage, repeatCallBack} from "@/api/sync";
 import MsgContent from "@/views/sync/result/MsgContent.vue";
 
 export default {
@@ -192,35 +191,35 @@ export default {
         status: '',
         msgId: '',
         msgContent: '',
-        startTime: getNDaysAgo(7),
+        startTime: this.$getNDaysAgo(7),
         endTime: ''
       },
     }
   },
   computed:{
     srcProjectG(){
-      return getConst("src_project",adminDomain)
+      return this.$getConst("src_project")
     },
     srcProjectGName(){
-      return formatConst(this.srcProjectG)
+      return this.$formatConst(this.srcProjectG)
     },
     destProjectG(){
-      return getConst("dest_project",adminDomain)
+      return this.$getConst("dest_project")
     },
     destProjectGName(){
-      return formatConst(this.destProjectG)
+      return this.$formatConst(this.destProjectG)
     },
     callbackStatusG(){
-      return getConst("callback_status",adminDomain)
+      return this.$getConst("callback_status")
     },
     callbackStatusGName(){
-      return formatConst(this.callbackStatusG)
+      return this.$formatConst(this.callbackStatusG)
     },
     repeatCountG(){
-      return getConst("repeat_times",adminDomain)
+      return this.$getConst("repeat_times")
     },
     repeatCountGName(){
-      return formatConst(this.repeatCountG)
+      return this.$formatConst(this.repeatCountG)
     },
   },
   methods: {
@@ -254,7 +253,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

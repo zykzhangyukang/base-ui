@@ -173,7 +173,6 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import PlanAdd from "@/views/sync/plan/PlanAdd.vue";
 import PlanContent from "@/views/sync/plan/PlanContent.vue";
 import PlanUpdate from "@/views/sync/plan/PlanUpdate.vue";
@@ -215,22 +214,22 @@ export default {
   },
   computed:{
     srcProjectG(){
-      return getConst("src_project",adminDomain)
+      return this.$getConst("src_project")
     },
     srcProjectGName(){
-      return formatConst(this.srcProjectG)
+      return this.$formatConst(this.srcProjectG)
     },
     destProjectG(){
-      return getConst("dest_project",adminDomain)
+      return this.$getConst("dest_project")
     },
     destProjectGName(){
-      return formatConst(this.destProjectG)
+      return this.$formatConst(this.destProjectG)
     },
     planStatusG(){
-      return getConst("plan_status",adminDomain)
+      return this.$getConst("plan_status")
     },
     planStatusGName(){
-      return formatConst(this.planStatusG)
+      return this.$formatConst(this.planStatusG)
     },
   },
   methods: {
@@ -294,7 +293,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

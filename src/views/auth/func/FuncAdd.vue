@@ -36,7 +36,6 @@
 </template>
 <script>
 
-  import {adminDomain, formatConst, getConst} from "@/utils";
   import {saveFunc} from "@/api/auth";
   export default {
   name: 'FuncAdd',
@@ -58,16 +57,16 @@
   },
   computed:{
     funcHideG(){
-      return getConst("func_hide_group", adminDomain)
+      return this.$getConst("func_hide_group")
     },
     funcHideGName(){
-      return formatConst(this.funcHideG);
+      return this.$formatConst(this.funcHideG);
     },
     funcTypeG(){
-      return getConst("func_type_group", adminDomain)
+      return this.$getConst("func_type_group")
     },
     funcTypeGName(){
-      return formatConst(this.funcTypeG);
+      return this.$formatConst(this.funcTypeG);
     },
   },
   methods:{

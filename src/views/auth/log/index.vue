@@ -56,7 +56,6 @@
         v-loading="tableLoading"
         :data="tableData"
         @sort-change="sortChange"
-        style="width: 100%"
     >
       <el-table-column
           prop="logInfo"
@@ -137,7 +136,6 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import MyTable from '@/components/MyTable/index'
 import {getLogPage} from "@/api/auth";
 
@@ -169,16 +167,16 @@ export default {
   },
   computed:{
     logModuleG(){
-      return getConst("log_module_group", adminDomain)
+      return this.$getConst("log_module_group")
     },
     logModuleGName(){
-      return formatConst(this.logModuleG);
+      return this.$formatConst(this.logModuleG);
     },
     logLevelG(){
-      return getConst("log_level_group", adminDomain)
+      return this.$getConst("log_level_group")
     },
     logLevelGName(){
-      return formatConst(this.logLevelG);
+      return this.$formatConst(this.logLevelG);
     },
   },
   methods: {
@@ -191,7 +189,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

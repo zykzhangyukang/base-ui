@@ -1,5 +1,5 @@
 import router from './index'
-import {getAccessToken} from '@/utils/cookie'
+import {getAccessToken} from '@/utils/storage/cookie'
 import store from "../store";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'

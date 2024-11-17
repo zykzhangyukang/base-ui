@@ -20,11 +20,10 @@
 </template>
 
 <script>
-  import { getPlanContent } from "@/api/sync";
-  import hljs from 'highlight.js';
-  import 'highlight.js/styles/monokai-sublime.min.css'
+import hljs from 'highlight.js';
+import 'highlight.js/styles/monokai-sublime.min.css'
 
-  export default {
+export default {
     name: 'PlanContent',
     data() {
       return {

@@ -213,7 +213,6 @@
 </template>
 
 <script>
-import {adminDomain, formatConst, getConst, toLine} from "@/utils";
 import FuncAdd from "@/views/auth/func/FuncAdd.vue";
 import FuncUpdate from "@/views/auth/func/FuncUpdate.vue";
 import FuncResc from "@/views/auth/func/FuncResc.vue";
@@ -267,16 +266,16 @@ export default {
   },
   computed:{
     funcHideG(){
-      return getConst("func_hide_group", adminDomain)
+      return this.$getConst("func_hide_group")
     },
     funcHideGName(){
-      return formatConst(this.funcHideG);
+      return this.$formatConst(this.funcHideG);
     },
     funcTypeG(){
-      return getConst("func_type_group", adminDomain)
+      return this.$getConst("func_type_group")
     },
     funcTypeGName(){
-      return formatConst(this.funcTypeG);
+      return this.$formatConst(this.funcTypeG);
     },
   },
   methods: {
@@ -330,7 +329,7 @@ export default {
     },
     sortChange({prop, order }){
       if(order){
-        this.searchForm.sortField = toLine(prop);
+        this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
       }else {
         this.searchForm.sortField = '';

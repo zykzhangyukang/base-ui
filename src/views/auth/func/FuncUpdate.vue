@@ -89,7 +89,6 @@
 </template>
 <script>
 
-import {adminDomain, formatConst, getConst} from "@/utils";
 import {getFuncDetail, searchResc, updateFunc, updateFuncResc} from "@/api/auth";
 
 export default {
@@ -110,22 +109,22 @@ export default {
   },
   computed: {
     funcHideG() {
-      return getConst("func_hide_group", adminDomain)
+      return this.$getConst("func_hide_group")
     },
     funcHideGName() {
-      return formatConst(this.funcHideG);
+      return this.$formatConst(this.funcHideG);
     },
     funcTypeG() {
-      return getConst("func_type_group", adminDomain)
+      return this.$getConst("func_type_group")
     },
     funcTypeGName() {
-      return formatConst(this.funcTypeG);
+      return this.$formatConst(this.funcTypeG);
     },
     projectDomainG(){
-      return getConst("project_domain", adminDomain)
+      return this.$getConst("project_domain")
     },
     projectDomainGName(){
-      return formatConst(this.projectDomainG);
+      return this.$formatConst(this.projectDomainG);
     },
   },
   methods: {

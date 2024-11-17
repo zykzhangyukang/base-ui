@@ -8,8 +8,11 @@ import './router/permission'
 import './assets/icon-fonts/iconfont.css'
 import './assets/icon-fonts/iconfont'
 import 'element-ui/lib/theme-chalk/index.css'
+import Util from './utils'
+
 import ElementUI from 'element-ui'
 Vue.use(ElementUI, { size: 'mini' })
+Vue.use(Util)
 
 Vue.config.productionTip = false
 Vue.config.silent = true

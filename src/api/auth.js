@@ -87,11 +87,12 @@ export function getUserInfo(params) {
     })
 }
 
-export function exportUserList(data,filename) {
-    return download({
+export function exportUserList(data) {
+    return request({
         url: '/auth/user/export',
+        method: 'post',
         data,
-        filename
+        responseType: 'arraybuffer'
     })
 }
 
