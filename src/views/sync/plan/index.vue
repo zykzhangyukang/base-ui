@@ -10,12 +10,6 @@
           <el-option :label="planStatusGName[item.code]" v-for="item in planStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="源数据库" prop="srcDb">
-        <el-input v-model="searchForm.srcDb" placeholder="源数据库" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="目标数据库" prop="destDb">
-        <el-input v-model="searchForm.destDb" placeholder="目标数据库" clearable></el-input>
-      </el-form-item>
       <el-form-item label="源系统" prop="srcProject">
         <el-select v-model="searchForm.srcProject" placeholder="源系统" clearable >
           <el-option :label="srcProjectGName[item.code]" v-for="item in srcProjectG" :value="item.code" :key="item.code"></el-option>
@@ -25,6 +19,32 @@
         <el-select v-model="searchForm.destProject" placeholder="目标系统" clearable >
           <el-option :label="destProjectGName[item.code]" v-for="item in destProjectG" :value="item.code" :key="item.code"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="源数据库" prop="srcDb">
+        <el-input v-model="searchForm.srcDb" placeholder="源数据库" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="目标数据库" prop="destDb">
+        <el-input v-model="searchForm.destDb" placeholder="目标数据库" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="开始时间" prop="startTime">
+        <el-date-picker
+            :clearable="false"
+            v-model="searchForm.startTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间" prop="endTime">
+        <el-date-picker
+            v-model="searchForm.endTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            default-time="23:59:59"
+            placeholder="选择结束时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'sync_plan_page'" :loading="loading">查询</el-button>
@@ -41,7 +61,6 @@
         v-loading="tableLoading"
         :data="tableData"
         @sort-change="sortChange"
-        style="width: 100%"
     >
       <el-table-column
           prop="description"
@@ -187,7 +206,9 @@ export default {
         srcProject: '',
         destProject: '',
         srcDb: '',
-        destDb: ''
+        destDb: '',
+        startTime: null,
+        endTime: null
       },
       refreshLoading: false,
     }

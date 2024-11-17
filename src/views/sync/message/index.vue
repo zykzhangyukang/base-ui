@@ -64,7 +64,6 @@
         v-loading="tableLoading"
         :data="tableData"
         @sort-change="sortChange"
-        style="width: 100%"
     >
       <el-table-column
           prop="uuid"

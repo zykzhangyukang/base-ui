@@ -1,5 +1,4 @@
-import request from '../request'
-
+import request, {download} from '../request'
 
 
 export function getFuncTree() {
@@ -85,6 +84,14 @@ export function getUserInfo(params) {
         url: '/auth/user/info',
         method: 'get',
         params
+    })
+}
+
+export function exportUserList(data,filename) {
+    return download({
+        url: '/auth/user/export',
+        data,
+        filename
     })
 }
 

@@ -5,18 +5,50 @@
       <el-form-item label="用户账号" prop="username">
         <el-input v-model="searchForm.username" placeholder="用户账号" ></el-input>
       </el-form-item>
+      <el-form-item label="所属部门" prop="deptId">
+        <el-select v-model="searchForm.deptId" placeholder="所属部门">
+          <el-option v-for="item in deptList" :label="item.deptName" :value="item.deptId" :key="item.deptId"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="真实名称" prop="realName">
         <el-input v-model="searchForm.realName" placeholder="真实名称" ></el-input>
+      </el-form-item>
+      <el-form-item label="手机号" prop="phone">
+        <el-input v-model="searchForm.phone" placeholder="手机号" ></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱地址" prop="email">
+        <el-input v-model="searchForm.email" placeholder="邮箱地址" ></el-input>
       </el-form-item>
       <el-form-item label="用户状态" prop="userStatus">
         <el-select v-model="searchForm.userStatus" placeholder="用户状态" clearable>
           <el-option :label="userStatusGName[item.code]" v-for="item in userStatusG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="开始时间" prop="startTime">
+        <el-date-picker
+            :clearable="false"
+            v-model="searchForm.startTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间" prop="endTime">
+        <el-date-picker
+            v-model="searchForm.endTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            default-time="23:59:59"
+            placeholder="选择结束时间">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_user_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_user_add'">新增</el-button>
+        <el-button type="warning"  @click="handExcel" v-permission="'auth_user_export'">列表导出</el-button>
       </el-form-item>
       <el-form-item>
         <el-dropdown @command="handleCommand" trigger="click">
@@ -36,6 +68,9 @@
             <el-dropdown-item command="updateUserStatus" v-permission="'auth_user_update_status'">
               <el-icon class="el-icon-warning-outline"></el-icon>启用/禁用
             </el-dropdown-item>
+            <el-dropdown-item command="exportUserList" v-permission="'auth_user_export'">
+              <el-icon  class="el-icon-document"></el-icon>列表导出
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-form-item>
@@ -47,7 +82,6 @@
         v-loading="tableLoading"
         :data="tableData"
         @sort-change="sortChange"
-        style="width: 100%"
         @selection-change="handleSelectionChange"
     >
       <el-table-column
@@ -88,13 +122,20 @@
         >
         <template slot-scope="scope">
           <span>
-              {{scope.row.phone}} <el-button type="text" size="mini" @click="lookPhone(scope.row)" :loading="scope.row.phoneLoading">查看</el-button>
+              {{scope.row.phone}} <el-button type="text" size="mini" @click="lookPhone(scope.row)" :loading="scope.row.phoneLoading" icon="el-icon-view">查看</el-button>
           </span>
         </template>
       </el-table-column>
       <el-table-column
           prop="deptName"
           label="所属部门"
+          align="center"
+          sortable
+      >
+      </el-table-column>
+      <el-table-column
+          prop="email"
+          label="邮箱地址"
           align="center"
           sortable
       >
@@ -153,7 +194,15 @@ import UserUpdate from "@/views/auth/user/UserUpdate.vue";
 import MyTable from '@/components/MyTable/index'
 import UserUpdateRole from "@/views/auth/user/UserUpdateRole.vue";
 import store from "@/store";
-import {deleteUser, disableUser, enableUser, getUserPage, getUserPhone} from "@/api/auth";
+import {
+  deleteUser,
+  disableUser,
+  enableUser,
+  exportUserList,
+  getUserDeptList,
+  getUserPage,
+  getUserPhone
+} from "@/api/auth";
 
 export default {
   name: 'UserList',
@@ -173,6 +222,7 @@ export default {
       tableData: [],
       tableLoading: true,
       multipleSelection: [],
+      deptList: [],
       searchForm: {
         currentPage: 1,
         pageSize: 20,
@@ -180,7 +230,11 @@ export default {
         realName: '',
         userStatus: '',
         sortField: '',
-        sortType: ''
+        sortType: '',
+        phone: '',
+        email: '',
+        startTime: null,
+        endTime: null
       }
     }
   },
@@ -219,6 +273,9 @@ export default {
       }
       if(command === 'switchUserLogin'){
         this.handleSwitchUserLogin();
+      }
+      if(command === 'exportUserList'){
+        this.handExcel();
       }
     },
     handleSwitchUserLogin(rowData) {
@@ -292,6 +349,9 @@ export default {
     handleAdd(){
       this.$refs.addRef.handleOpen();
     },
+    handExcel(){
+      exportUserList(this.searchForm, "用户列表.xlsx");
+    },
     handeUpdate(id){
       this.$refs.updateRef.handleOpen(id);
     },
@@ -352,6 +412,9 @@ export default {
   },
   created() {
     this.fetchData();
+    getUserDeptList().then(res=>{
+      this.deptList = res.result;
+    })
   }
 }
 </script>

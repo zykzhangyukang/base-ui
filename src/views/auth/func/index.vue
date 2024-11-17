@@ -54,6 +54,26 @@
           <el-form-item label="资源url" prop="rescUrl">
             <el-input v-model="searchForm.rescUrl" placeholder="资源url" ></el-input>
           </el-form-item>
+          <el-form-item label="开始时间" prop="startTime">
+            <el-date-picker
+                :clearable="false"
+                v-model="searchForm.startTime"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择开始时间">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="结束时间" prop="endTime">
+            <el-date-picker
+                v-model="searchForm.endTime"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
+                default-time="23:59:59"
+                placeholder="选择结束时间">
+            </el-date-picker>
+          </el-form-item>
           <el-form-item label="功能类型" prop="funcType">
             <el-select v-model="searchForm.funcType" placeholder="功能类型" clearable :style="{width : '180px'}">
               <el-option :label="funcTypeGName[item.code]" v-for="item in funcTypeG" :value="item.code" :key="item.code"></el-option>
@@ -227,6 +247,8 @@ export default {
         funcType: '',
         rescUrl: '',
         hide: null,
+        startTime: null,
+        endTime: null
       },
       // 数据总条数
       total: 0,

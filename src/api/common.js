@@ -74,4 +74,3 @@ export function getFundSetting() {
         method: 'get',
     })
 }
-

@@ -42,7 +42,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="fundName" label="基金名称" align="center" show-overflow-tooltip  />
+      <el-table-column prop="fundName" label="基金名称" align="center" show-overflow-tooltip width="200"  />
       <el-table-column label="净值数据" align="center">
         <el-table-column label="30天均值" prop="jz30"  align="center" />
         <el-table-column label="20天均值" prop="jz20"  align="center" />
@@ -140,7 +140,7 @@ import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
         settingVisible: false,
         url: "",
         tableData: [],
-        settingData: []
+        settingData: [{}]
       };
     },
     methods: {

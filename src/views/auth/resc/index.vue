@@ -13,6 +13,26 @@
           <el-option :label="projectDomainGName[item.code]" v-for="item in projectDomainG" :value="item.code" :key="item.code"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="开始时间" prop="startTime">
+        <el-date-picker
+            :clearable="false"
+            v-model="searchForm.startTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择开始时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间" prop="endTime">
+        <el-date-picker
+            v-model="searchForm.endTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            format="yyyy-MM-dd HH:mm:ss"
+            default-time="23:59:59"
+            placeholder="选择结束时间">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item label="请求方式" prop="methodType">
         <el-select v-model="searchForm.methodType" placeholder="请求方式" clearable :style="{width:'180px'}">
           <el-option :label="methodTypeGName[item.code]" v-for="item in methodTypeG" :value="item.code" :key="item.code"></el-option>
@@ -21,7 +41,6 @@
       <el-form-item label="功能标识" prop="funcKey">
         <el-input v-model="searchForm.funcKey" placeholder="功能标识" ></el-input>
       </el-form-item>
-      <br/>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_resc_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
@@ -41,7 +60,6 @@
           prop="rescName"
           label="资源名称"
           align="center"
-          sortable
       >
       </el-table-column>
       <el-table-column
@@ -150,7 +168,9 @@ export default {
         rescUrl: '',
         rescDomain: '',
         methodType: '',
-        funcKey: ''
+        funcKey: '',
+        startTime: null,
+        endTime: null
       }
     }
   },

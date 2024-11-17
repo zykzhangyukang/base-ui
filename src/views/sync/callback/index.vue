@@ -62,7 +62,6 @@
         v-loading="tableLoading"
         :data="tableData"
         @sort-change="sortChange"
-        style="width: 100%"
         @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection"  label="选择" align="center"></el-table-column>
