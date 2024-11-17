@@ -137,28 +137,24 @@
           prop="dealCount"
           label="处理次数"
           align="center"
-          sortable
       >
       </el-table-column>
       <el-table-column
           prop="sendTime"
           label="发送时间"
           width="150"
-          sortable
       >
       </el-table-column>
       <el-table-column
           prop="createTime"
           label="创建时间"
           width="150"
-          sortable
       >
       </el-table-column>
       <el-table-column
           prop="ackTime"
           label="ACK时间"
           width="150"
-          sortable
       >
       </el-table-column>
     </my-table>

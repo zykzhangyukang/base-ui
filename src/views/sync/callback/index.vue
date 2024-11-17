@@ -107,7 +107,12 @@
           align="center"
       >
         <template slot-scope="scope">
-          <a :title="scope.row.errorMsg" >{{callbackStatusGName[scope.row.status]}}</a>
+          <span>
+            <el-tooltip v-if="scope.row.errorMsg" :content="scope.row.errorMsg" placement="bottom" effect="light">
+            <span>{{callbackStatusGName[scope.row.status]}}</span>
+           </el-tooltip>
+           <span v-else>{{callbackStatusGName[scope.row.status]}}</span>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -145,7 +150,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="searchForm.currentPage"
-          :page-sizes="[10, 15, 20, 50]"
+          :page-sizes="[10, 15, 30, 50]"
           :page-size="searchForm.pageSize"
           layout="total, prev, pager, next, sizes, jumper"
           :total="total">
@@ -180,7 +185,7 @@ export default {
       multipleSelection: [],
       searchForm: {
         currentPage: 1,
-        pageSize: 20,
+        pageSize: 30,
         srcProject: '',
         repeatCount: null,
         destProject: 'sync',

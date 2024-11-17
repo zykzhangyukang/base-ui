@@ -121,7 +121,7 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addSetting">新增一行</el-button>
-        <el-button type="primary" @click="saveSetting">保存设置</el-button>
+        <el-button type="primary" @click="saveSetting" :loading="saveLoading">保存设置</el-button>
       </span>
     </el-dialog>
   </div>
@@ -135,6 +135,7 @@ import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
     data() {
       return {
         loading: false,
+        saveLoading: false,
         tableLoading: false,
         dialogVisible: false,
         settingVisible: false,
@@ -163,10 +164,13 @@ import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
         this.settingData.push({})
       },
       saveSetting(){
+        this.saveLoading = true;
         saveFundSetting(this.settingData).then(res=>{
           this.$message.success("设置成功");
           this.settingVisible = false;
           this.fetchData();
+        }).finally(()=>{
+          this.saveLoading = true;
         })
       },
       async fetchData() {
