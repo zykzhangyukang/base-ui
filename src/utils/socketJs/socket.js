@@ -41,7 +41,7 @@ class MyWebSock {
         if (this.timer) clearInterval(this.timer);
         this.timer = setInterval(() => {
             this.sendHeartbeat();
-        }, 10000);
+        }, 5000);
     }
 
     sendHeartbeat() {
