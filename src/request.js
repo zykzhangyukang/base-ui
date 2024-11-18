@@ -106,7 +106,7 @@ service.interceptors.response.use(
         if (code === 401) {
             store.commit('user/REMOVE_TOKEN')
             router.push('/login').then(r => {
-                messageOnce.error({type: 'error', message: '会话已过期，请重新登录'});
+                messageOnce.error({type: 'error', message: error.response?.data?.msg ?? '会话已过期，请重新登录'});
             });
         } else if (code === 400) {
             messageOnce.error({type: 'error', message: '请求参数错误'});
