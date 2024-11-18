@@ -79,6 +79,13 @@ export function login(data) {
     })
 }
 
+export function logout(data) {
+    return request({
+        url: '/auth/user/logout?accessToken='+data,
+        method: 'get',
+    })
+}
+
 export function getUserInfo(params) {
     return request({
         url: '/auth/user/info',

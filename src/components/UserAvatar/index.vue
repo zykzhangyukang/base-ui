@@ -14,6 +14,8 @@
 
 <script>
 import Avatar from '../../assets/img/avatar.png'
+import {logout} from "@/api/auth";
+import {getAccessToken} from "@/utils/storage/cookie";
 
 export default {
   name: 'UserAvatar',
@@ -42,10 +44,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.commit('user/REMOVE_TOKEN');
-        setTimeout(() => {
-          window.location.reload()
-        }, 100)
+        logout(getAccessToken()).then(res=>{
+          this.$store.commit('user/REMOVE_TOKEN');
+          setTimeout(() => {
+            window.location.reload()
+          }, 100)
+        })
       })
     }
   }

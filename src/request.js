@@ -95,7 +95,7 @@ service.interceptors.response.use(
             return data;
         } else if (code === 405) {
             messageOnce.warning({type: 'warning', message});
-            return Promise.reject('error');
+            return Promise.reject(data);
         }
     },
     error => {
