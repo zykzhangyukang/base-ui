@@ -93,6 +93,11 @@ class MyWebSock {
                 id: 'sub-1',
                 Authorization: this.token,
             });
+
+            this.stompClient.subscribe(`/user/${this.token}/checkMsg`, this.subCheckMsg,  {
+                id: 'sub-2',
+                Authorization: this.token,
+            });
         }
     }
 
@@ -106,7 +111,6 @@ class MyWebSock {
 
     subSysMsg(msg) {
         const body = JSON.parse(msg.body);
-        // 基金信息更新
         if(body?.type === 'fund_tips'){
             store.commit('notification/SET_FUND_DATA', JSON.parse(body.message))
         }
@@ -115,6 +119,13 @@ class MyWebSock {
     subUserMsg(msg) {
         const body = JSON.parse(msg.body);
         console.log(body)
+    }
+
+    subCheckMsg(msg){
+        const body = JSON.parse(msg.body);
+        if(body?.type === 'device_check'){
+            store.commit('notification/SET_DEVICE_CHECK', body.message)
+        }
     }
 }
 
