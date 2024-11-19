@@ -202,6 +202,7 @@ import {
   getUserPage,
   getUserPhone
 } from "@/api/auth";
+import NProgress from "nprogress";
 
 export default {
   name: 'UserList',
@@ -351,10 +352,12 @@ export default {
     },
     handExcel() {
       this.downloadLoading = true;
+      NProgress.start();
       exportUserList(this.searchForm).then(res=>{
         this.$exportXlsx(res.data, 'xlsx', '用户列表')
       }).finally(()=>{
         this.downloadLoading = false;
+        NProgress.done();
       });
     },
     handeUpdate(id){
