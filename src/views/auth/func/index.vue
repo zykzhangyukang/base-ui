@@ -85,9 +85,9 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading" v-permission="'auth_func_page'">查询</el-button>
             <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-            <el-button type="success" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+            <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_func_add'">新增</el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown @command="handleCommand">
@@ -95,7 +95,7 @@
                 更多操作<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="clearResc">
+                <el-dropdown-item command="clearResc" v-permission="'auth_func_resc_remove'">
                   <el-icon class="el-icon-folder-delete"></el-icon>清空资源
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -183,8 +183,8 @@
               label="操作"
           >
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="handleUpdate(scope.row.funcId)">编辑</el-button>
-              <el-button size="mini" type="text" @click="handleDel(scope.row.funcId)">删除</el-button>
+              <el-button size="mini" type="text" @click="handleUpdate(scope.row.funcId)" v-permission="'auth_func_update'">编辑</el-button>
+              <el-button size="mini" type="text" @click="handleDel(scope.row.funcId)" v-permission="'auth_func_delete'">删除</el-button>
             </template>
           </el-table-column>
         </my-table>

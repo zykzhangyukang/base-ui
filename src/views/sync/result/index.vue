@@ -56,9 +56,9 @@
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-        <el-button plain @click="handleRepeatSync" :loading="repeatSyncLoading">重新同步</el-button>
-        <el-button plain @click="handleSignSuccess" :loading="signSuccessLoading">标记成功</el-button>
-        <el-button plain @click="handleValidResultData">数据校验</el-button>
+        <el-button plain @click="handleRepeatSync" :loading="repeatSyncLoading" v-permission="'sync_result_repeat_sync'">重新同步</el-button>
+        <el-button plain @click="handleSignSuccess" :loading="signSuccessLoading" v-permission="'sync_result_sign_success'">标记成功</el-button>
+        <el-button plain @click="handleValidResultData" v-permission="'sync_result_valid_result_data'">数据校验</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
