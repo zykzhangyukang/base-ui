@@ -110,6 +110,8 @@ service.interceptors.response.use(
             });
         } else if (code === 400) {
             messageOnce.error({type: 'error', message: '请求参数错误'});
+        } else if (code === 404) {
+            messageOnce.error({type: 'error', message: '请求接口不存在'});
         } else if (code === 403) {
             messageOnce.error({type: 'error', message: '很抱歉，您暂无该操作权限'})
         }else if (code === 500) {
