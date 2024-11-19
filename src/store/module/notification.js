@@ -1,8 +1,7 @@
-import MessageOnce from "@/utils/toast/messageonce";
-const messageOnce = new MessageOnce()
 
 const state = {
-    fundData:  []
+    fundData:  [],
+    showDeviceMsg: null,
 }
 
 const getters = {
@@ -13,7 +12,7 @@ const mutations = {
         state.fundData = message;
     },
     SET_DEVICE_CHECK(state, message){
-        messageOnce.warning(message);
+        state.showDeviceMsg = message;
     }
 }
 
