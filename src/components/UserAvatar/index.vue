@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import Avatar from '../../assets/img/avatar.png'
-import {logout} from "@/api/auth";
-import {getAccessToken} from "@/utils/storage/cookie";
+  import Avatar from '../../assets/img/avatar.png'
+  import {logout} from "@/api/auth";
+  import {getAccessToken} from "@/utils/storage/cookie";
 
-export default {
+  export default {
   name: 'UserAvatar',
   data() {
     return {

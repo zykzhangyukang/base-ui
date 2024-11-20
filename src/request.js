@@ -99,10 +99,7 @@ service.interceptors.response.use(
         }
     },
     error => {
-        const code = error.response?.data?.code;
-        if (!code) {
-            messageOnce.error({type: 'error', message: '当前网络异常，请检查网络连接'});
-        }
+        const code = error.response?.status;
         if (code === 401) {
             store.commit('user/REMOVE_TOKEN')
             router.push('/login').then(r => {
@@ -116,6 +113,8 @@ service.interceptors.response.use(
             messageOnce.error({type: 'error', message: '很抱歉，您暂无该操作权限'})
         }else if (code === 500) {
             messageOnce.error({type: 'error', message: '服务器未知异常，请联系管理员处理'});
+        }else {
+            messageOnce.error({type: 'error', message: '当前网络异常，请检查网络连接'});
         }
         return Promise.reject(error);
     });

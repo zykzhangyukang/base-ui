@@ -29,7 +29,7 @@
       this.getUnReadCount();
       this.webSocketClient = new MyWebSock();
     },
-    beforeUnmount() {
+    beforeDestroy() {
       if (this.webSocketClient) {
         this.webSocketClient.disconnect();
       }
