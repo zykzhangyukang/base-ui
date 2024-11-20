@@ -109,6 +109,7 @@ export default {
           try {
             await roleFuncUpdate({ roleId: this.roleId, funcIdList }).then(async () => {
               this.backToList();
+              this.$message.success("更新成功！")
             });
           } finally {
             this.loading = false;

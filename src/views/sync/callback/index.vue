@@ -107,7 +107,7 @@
           align="center"
       >
         <template slot-scope="scope">
-          <span>
+          <span class="callback_status">
             <el-tooltip v-if="scope.row.errorMsg" :content="scope.row.errorMsg" placement="bottom" effect="light">
             <span>{{callbackStatusGName[scope.row.status]}}</span>
            </el-tooltip>
@@ -311,6 +311,9 @@ export default {
 }
 .link{
   color: #2d8cf0;
+  cursor: pointer;
+}
+.callback_status{
   cursor: pointer;
 }
 </style>

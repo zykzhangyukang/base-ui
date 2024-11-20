@@ -238,6 +238,16 @@ export function roleFuncUpdate(data) {
     })
 }
 
+
+export function exportRoleList(data) {
+    return request({
+        url: '/auth/role/export',
+        method: 'post',
+        data,
+        responseType: 'arraybuffer'
+    })
+}
+
 export function roleFuncUpdateCheck(data) {
     return request({
         url: '/auth/role/func/update/check',

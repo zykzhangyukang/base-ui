@@ -9,6 +9,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_role_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_role_add'">新增</el-button>
+        <el-button  @click="handleExport" v-permission="'auth_role_export'">列表导出</el-button>
       </el-form-item>
     </el-form>
     <!-- 表格栏 -->
@@ -39,7 +40,7 @@
           align="center"
       >
         <template slot-scope="scope">
-          <span class="userVOList">{{scope.row.userVOList.map(e=>e.realName).join(',') || '暂未分配'}}</span>
+          <span class="userVOList">{{scope.row.userVOList.map(e=>e.realName).join(',') || '-'}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -92,7 +93,8 @@ import RoleAdd from "@/views/auth/role/RoleAdd.vue";
 import RoleUpdate from "@/views/auth/role/RoleUpdate.vue";
 import RoleUpdateUser from "@/views/auth/role/RoleUpdateUser.vue";
 import MyTable from '@/components/MyTable/index'
-import {deleteRole, getRolePage} from "@/api/auth";
+import {deleteRole, exportRoleList, getRolePage} from "@/api/auth";
+import NProgress from "nprogress";
 
 export default {
   name: 'RoleList',
@@ -128,6 +130,16 @@ export default {
     },
     handleAdd(){
       this.$refs.addRef.handleOpen();
+    },
+    handleExport(){
+      this.downloadLoading = true;
+      NProgress.start();
+      exportRoleList(this.searchForm).then(res=>{
+        this.$exportXlsx(res.data, 'xlsx', '角色列表')
+      }).finally(()=>{
+        this.downloadLoading = false;
+        NProgress.done();
+      });
     },
     handleUpdate(id){
       this.$refs.updateRef.handleOpen(id);

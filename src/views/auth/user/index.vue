@@ -48,7 +48,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_user_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_user_add'">新增</el-button>
-        <el-button type="warning"  @click="handExcel" v-permission="'auth_user_export'" :loading="downloadLoading">列表导出</el-button>
+        <el-button @click="handExcel" v-permission="'auth_user_export'" :loading="downloadLoading">列表导出</el-button>
       </el-form-item>
       <el-form-item>
         <el-dropdown @command="handleCommand" trigger="click">
