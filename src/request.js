@@ -110,7 +110,7 @@ service.interceptors.response.use(
         } else if (code === 404) {
             messageOnce.error({type: 'error', message: '请求接口不存在'});
         } else if (code === 403) {
-            messageOnce.error({type: 'error', message: '很抱歉，您暂无该操作权限'})
+            messageOnce.error({type: 'error', message: '您暂无该操作权限'})
         }else if (code === 500) {
             messageOnce.error({type: 'error', message: '服务器未知异常，请联系管理员处理'});
         }else {
