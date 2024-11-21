@@ -25,7 +25,7 @@ export default {
     return {
       currentVersion: "", // 当前版本号
       timer: null, // 定时器句柄
-      visible: true, // 是否显示提示框
+      visible: false, // 是否显示提示框
     };
   },
   mounted() {
