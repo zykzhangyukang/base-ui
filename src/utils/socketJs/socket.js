@@ -29,7 +29,7 @@ class MyWebSock {
         this.stompClient.connect(headers, () => {
                 this.reconnectAttempts = 0;
                 this.subscribeToTopics();
-                this.startHeartbeat();
+                // this.startHeartbeat();
             },
             err => {
                 this.handleReconnect();
@@ -41,7 +41,7 @@ class MyWebSock {
         if (this.timer) clearInterval(this.timer);
         this.timer = setInterval(() => {
             this.sendHeartbeat();
-        }, 5000);
+        }, 10000);
     }
 
     sendHeartbeat() {
