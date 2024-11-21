@@ -170,7 +170,7 @@ import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
           this.settingVisible = false;
           this.fetchData();
         }).finally(()=>{
-          this.saveLoading = true;
+          this.saveLoading = false;
         })
       },
       async fetchData() {
