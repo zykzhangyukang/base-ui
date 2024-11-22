@@ -121,6 +121,7 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addSetting">新增一行</el-button>
+        <el-button @click="exportSetting">导出配置</el-button>
         <el-button type="primary" @click="saveSetting" :loading="saveLoading">保存设置</el-button>
       </span>
     </el-dialog>
@@ -162,6 +163,9 @@ import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
       },
       addSetting(){
         this.settingData.push({})
+      },
+      exportSetting(){
+        this.$message.success("导出配置");
       },
       saveSetting(){
         this.saveLoading = true;

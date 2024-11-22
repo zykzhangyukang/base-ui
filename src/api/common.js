@@ -68,6 +68,13 @@ export function saveFundSetting(data) {
     })
 }
 
+export function exportFundSetting() {
+    return request({
+        url: '/trade/fund/export/setting',
+        method: 'get',
+    })
+}
+
 export function getFundSetting() {
     return request({
         url: '/trade/fund/get/setting',

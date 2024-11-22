@@ -80,7 +80,7 @@ service.interceptors.response.use(
                         filename = disposition.substring(index2 + 7);
                     }
                     if (index1 > 0) {
-                        filename = disposition.substring(index1 + 7);
+                        filename = disposition.substring(index1 + 9);
                     }
                     return {
                         data: response.data, filename: filename
