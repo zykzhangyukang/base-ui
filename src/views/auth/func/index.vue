@@ -17,13 +17,14 @@
               :props="defaultProps"
               @node-click="handleNodeClick"
               :filter-node-method="filterNode"
+              :highlight-current="false"
               v-loading="treeLoading"
               :default-expanded-keys="defaultExpandedKeys"
               :expand-on-click-node="false"
               node-key="funcId"
           >
             <template #default="{ node, data }">
-              <span class="custom-tree-node">
+              <span class="custom-tree-node" :id="'customer-tree-node-'+data.funcId">
                 <el-icon
                     v-if="data.funcType === 'dir' && !node.expanded"
                     class="el-icon-folder icon">
@@ -49,10 +50,10 @@
             <el-input v-model="searchForm.funcName" placeholder="功能名称"></el-input>
           </el-form-item>
           <el-form-item label="功能标识" prop="funcKey">
-            <el-input v-model="searchForm.funcKey" placeholder="功能标识" ></el-input>
+            <el-input v-model="searchForm.funcKey" placeholder="功能标识"></el-input>
           </el-form-item>
           <el-form-item label="资源url" prop="rescUrl">
-            <el-input v-model="searchForm.rescUrl" placeholder="资源url" ></el-input>
+            <el-input v-model="searchForm.rescUrl" placeholder="资源url"></el-input>
           </el-form-item>
           <el-form-item label="开始时间" prop="startTime">
             <el-date-picker
@@ -85,9 +86,12 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading" v-permission="'auth_func_page'">查询</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading" v-permission="'auth_func_page'">查询
+            </el-button>
             <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-            <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_func_add'">新增</el-button>
+            <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_func_add'">新增
+            </el-button>
+            <el-button plain @click="positionTreeNode()" icon="el-icon-aim">节点定位</el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown @command="handleCommand">
@@ -96,7 +100,8 @@
               </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="clearResc" v-permission="'auth_func_resc_remove'">
-                  <el-icon class="el-icon-folder-delete"></el-icon>清空资源
+                  <el-icon class="el-icon-folder-delete"></el-icon>
+                  清空资源
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -135,9 +140,10 @@
               label="资源列表"
               align="center"
           >
-            <template  slot-scope="scope">
+            <template slot-scope="scope">
               <div class="ellipsis">
-                <el-button type="text" size="mini" class="ellipsis-button" @click="showRescVoList(scope.row.rescVOList)">
+                <el-button type="text" size="mini" class="ellipsis-button"
+                           @click="showRescVoList(scope.row.rescVOList)">
                   {{ scope.row.rescVOList.map(e => e.rescUrl).join(',') || '-' }}
                 </el-button>
               </div>
@@ -149,10 +155,10 @@
               align="center"
               sortable
           >
-            <template  slot-scope="scope">
+            <template slot-scope="scope">
               <el-icon v-if="scope.row.funcType === 'dir'" class="el-icon-folder-opened "></el-icon>
               <el-icon v-if="scope.row.funcType === 'btn'" class="el-icon-document "></el-icon>
-              {{funcTypeGName[scope.row.funcType]}}
+              {{ funcTypeGName[scope.row.funcType] }}
             </template>
           </el-table-column>
           <el-table-column
@@ -161,8 +167,8 @@
               align="center"
               sortable
           >
-            <template  slot-scope="scope">
-              {{funcHideGName[scope.row.hide]}}
+            <template slot-scope="scope">
+              {{ funcHideGName[scope.row.hide] }}
             </template>
           </el-table-column>
           <el-table-column
@@ -183,8 +189,12 @@
               label="操作"
           >
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="handleUpdate(scope.row.funcId)" v-permission="'auth_func_update'">编辑</el-button>
-              <el-button size="mini" type="text" @click="handleDel(scope.row.funcId)" v-permission="'auth_func_delete'">删除</el-button>
+              <el-button size="mini" type="text" @click="handleUpdate(scope.row.funcId)"
+                         v-permission="'auth_func_update'">编辑
+              </el-button>
+              <el-button size="mini" type="text" @click="handleDel(scope.row.funcId)" v-permission="'auth_func_delete'">
+                删除
+              </el-button>
             </template>
           </el-table-column>
         </my-table>
@@ -238,7 +248,7 @@ export default {
         children: 'children',
         label: 'funcName',
       },
-      searchForm:{
+      searchForm: {
         currentPage: 1,
         pageSize: 20,
         funcName: '',
@@ -264,17 +274,17 @@ export default {
       this.$refs.funcTree.filter(val);
     },
   },
-  computed:{
-    funcHideG(){
+  computed: {
+    funcHideG() {
       return this.$getConst("func_hide_group")
     },
-    funcHideGName(){
+    funcHideGName() {
       return this.$formatConst(this.funcHideG);
     },
-    funcTypeG(){
+    funcTypeG() {
       return this.$getConst("func_type_group")
     },
-    funcTypeGName(){
+    funcTypeGName() {
       return this.$formatConst(this.funcTypeG);
     },
   },
@@ -282,32 +292,95 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    showRescVoList(list){
+    showRescVoList(list) {
       this.$refs.funcRescRef.handleOpen(list);
     },
-    handleDel(id){
+    handleDel(id) {
       this.$confirm('此操作将删除该功能, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteFunc(id).then(res=>{
+        deleteFunc(id).then(res => {
           this.$message.success("删除成功！");
           this.onSubmit();
         })
       });
     },
-    handAddSuccess(){
+    handAddSuccess() {
       this.onSubmit();
     },
-    handUpdateSuccess(){
+    handUpdateSuccess() {
       this.onSubmit();
     },
-    handleUpdate(id){
+    handleUpdate(id) {
       this.$refs.updateRef.handleOpen(id);
     },
-    handleAdd(){
+    handleAdd() {
       this.$refs.addRef.handleOpen(this.parentNode);
+    },
+    positionTreeNode() {
+      if (this.multipleSelection.length !== 1) {
+        return this.$message.warning("请勾选一条记录进行操作！");
+      }
+      const tree = this.$refs.funcTree;
+      if (!tree) {
+        return this.$message.error("树组件未正确绑定！");
+      }
+      const nodeId = this.multipleSelection[0].funcId;
+      const targetNode = tree.getNode(nodeId);
+      if (!targetNode) {
+        return this.$message.error("无法找到指定节点！");
+      }
+
+      // 关闭所有已展开的节点
+      this.closeAllNodes(tree.root);
+
+      // 展开目标节点及其父节点
+      this.expandParentNodes(targetNode);
+
+      // 确保目标节点本身被展开
+      if (!targetNode.expanded) {
+        targetNode.expand();
+
+        this.$nextTick(() => {
+          this.highlightNodeById(nodeId);
+        });
+      }
+    },
+    highlightNodeById(nodeId) {
+      // 清除之前所有的高亮节点
+      const allNodes = this.$refs.funcTree.$el.querySelectorAll(".custom-highlight-node");
+      allNodes.forEach((node) => node.classList.remove("custom-highlight-node"));
+
+      // 获取目标节点的 DOM 元素
+      const targetNodeElement = document.getElementById('customer-tree-node-' + nodeId);
+      if (targetNodeElement) {
+        targetNodeElement.classList.remove("custom-highlight-node");
+        targetNodeElement.offsetHeight;
+        targetNodeElement.classList.add("custom-highlight-node");
+      }
+    },
+    // 递归关闭所有节点
+    closeAllNodes(node) {
+      if (node.expanded) {
+        node.collapse();
+      }
+      if (node.childNodes) {
+        node.childNodes.forEach(child => {
+          this.closeAllNodes(child);
+        });
+      }
+    },
+    // 展开目标节点及其所有父节点
+    expandParentNodes(node) {
+      let currentNode = node.parent;
+      while (currentNode && currentNode.level > 0) {
+        if (!currentNode.expanded) {
+          currentNode.expand();
+        }
+        currentNode = currentNode.parent;
+      }
     },
     handleCommand(command) {
       if (command === 'clearResc') {
@@ -327,11 +400,11 @@ export default {
         });
       }
     },
-    sortChange({prop, order }){
-      if(order){
+    sortChange({prop, order}) {
+      if (order) {
         this.searchForm.sortField = this.$toLine(prop);
         this.searchForm.sortType = order === 'ascending' ? 'asc' : 'desc';
-      }else {
+      } else {
         this.searchForm.sortField = '';
         this.searchForm.sortType = '';
       }
@@ -380,9 +453,9 @@ export default {
       this.fetchData();
     },
     fetchData() {
-      if(this.parentNode && this.parentNode.funcId){
+      if (this.parentNode && this.parentNode.funcId) {
         this.searchForm.parentId = this.parentNode.funcId;
-      }else {
+      } else {
         this.searchForm.parentId = null;
       }
       this.tableLoading = true;
@@ -424,18 +497,21 @@ export default {
 .tree-wrapper::-webkit-scrollbar {
   width: 8px; /* 滚动条宽度 */
 }
+
 .tree-wrapper::-webkit-scrollbar-thumb {
   background-color: #c0c4cc;
   border-radius: 4px;
 }
+
 .tree-wrapper::-webkit-scrollbar-track {
   background-color: #f5f7fa;
   border-radius: 4px;
 }
 
-.pagination-wrapper{
+.pagination-wrapper {
   margin-top: 25px;
-  .el-pagination{
+
+  .el-pagination {
     float: right;
   }
 }
@@ -458,4 +534,17 @@ export default {
   color: #2d8cf0;
 }
 
+.custom-highlight-node{
+  animation-name: enterAnimation-jumpReply;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+}
+@keyframes enterAnimation-jumpReply {
+  0% {
+    background-color: #dff6fb;
+  }
+  100% {
+    background-color: #dff6fb00;
+  }
+}
 </style>
