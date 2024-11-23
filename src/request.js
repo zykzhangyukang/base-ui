@@ -70,30 +70,34 @@ service.interceptors.response.use(
         // 判断是否为下载请求
         if (response.status === 200) {
             if (response.request.responseType === 'arraybuffer') {
-                let disposition = response.headers['content-disposition']
+                let disposition = response.headers['content-disposition'];
+                let filename = 'downloaded-file';
                 if (disposition) {
-                    disposition = decodeURIComponent(disposition);
-                    const index1 = disposition.indexOf('filename');
-                    const index2 = disposition.indexOf('UTF-8');
-                    let filename = null;
-                    if (index2 > 0) {
-                        filename = disposition.substring(index2 + 7);
+                    const filenameRegex = /filename\*?=(?:(UTF-8'')?([^;]+))/i;
+                    const match = disposition.match(filenameRegex);
+                    if (match) {
+                        if (match[1]) {
+                            // UTF-8 文件名
+                            filename = decodeURIComponent(match[2]);
+                        } else {
+                            // 普通文件名
+                            filename = match[2].replace(/["']/g, '');
+                        }
                     }
-                    if (index1 > 0) {
-                        filename = disposition.substring(index1 + 9);
-                    }
-                    return {
-                        data: response.data, filename: filename
-                    }
-                } else {
-                    return response.data;
                 }
+                return {
+                    data: response.data,
+                    filename: filename
+                };
             }
         }
 
         if (code === 200) {
             return data;
-        } else if (code === 405) {
+        } else if (code === 402) {
+            messageOnce.error({type: 'error', message});
+            return Promise.reject(data);
+        }else if (code === 405) {
             messageOnce.warning({type: 'warning', message});
             return Promise.reject(data);
         }

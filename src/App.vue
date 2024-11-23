@@ -1,12 +1,12 @@
 <template>
     <div id="app">
-        <notice-new-version :pollingTime="pollingTime" @confirm="handleRefresh"></notice-new-version>
+        <notice-new-version :pollingTime="pollingTime"></notice-new-version>
         <router-view/>
     </div>
 </template>
 
 <script>
-    import NoticeNewVersion from "./components/NoticeNewVersion/NoticeNewVersion";
+    import NoticeNewVersion from "@/components/Notification/NoticeNewVersion.vue";
     export default {
         name: 'App',
         components: { NoticeNewVersion },

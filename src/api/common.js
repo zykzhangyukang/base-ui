@@ -1,6 +1,6 @@
 import request from '../request'
 
-export function getConstantAll(data) {
+export function getConstantAll() {
     return request({
         url: '/common/const/all',
         method: 'get'
@@ -72,6 +72,18 @@ export function exportFundSetting() {
     return request({
         url: '/trade/fund/export/setting',
         method: 'get',
+        responseType: 'arraybuffer'
+    })
+}
+
+export function importFundSetting(data) {
+    return request({
+        url: '/trade/fund/import/setting',
+        method: 'post',
+        headers: {
+            'content-type': 'multipart/form-data'
+        },
+        data
     })
 }
 

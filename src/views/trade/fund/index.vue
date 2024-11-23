@@ -97,6 +97,25 @@
     </el-dialog>
     <!-- 设置弹框 -->
     <el-dialog title="基金设置" :visible.sync="settingVisible" width="670px" center>
+      <el-dialog
+          class="upload-config"
+          width="500px"
+          title="导入配置"
+          :visible.sync="innerVisible"
+          append-to-body>
+        <el-upload
+            style="width: 100%;text-align: center"
+            drag
+             accept=".json"
+            :before-upload="beforeUpload"
+            :show-file-list="false"
+            :http-request="httpRequest"
+            :multiple="false">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传json文件，且不超过500kb</div>
+        </el-upload>
+      </el-dialog>
       <el-table :data="settingData" border  height="350" v-loading="tableLoading">
         <el-table-column property="date" label="基金编号" align="center">
           <template slot-scope="scope">
@@ -120,8 +139,9 @@
         </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addSetting">新增一行</el-button>
-        <el-button @click="exportSetting">导出配置</el-button>
+        <el-button @click="addSetting" icon="el-icon-plus">新增一行</el-button>
+        <el-button @click="exportSetting" :loading="downloadLoading" icon="el-icon-download">导出配置</el-button>
+        <el-button @click="importSetting" icon="el-icon-upload2">导入配置</el-button>
         <el-button type="primary" @click="saveSetting" :loading="saveLoading">保存设置</el-button>
       </span>
     </el-dialog>
@@ -129,12 +149,14 @@
 </template>
 
 <script>
-import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
+import {exportFundSetting, getFundListData, getFundSetting, importFundSetting, saveFundSetting} from "@/api/common";
 
-  export default {
+export default {
     name: "TradeFund",
     data() {
       return {
+        downloadLoading: false,
+        innerVisible: false,
         loading: false,
         saveLoading: false,
         tableLoading: false,
@@ -146,6 +168,26 @@ import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
       };
     },
     methods: {
+      beforeUpload(file){
+        const isJSON = file.type === 'application/json';
+        if (!isJSON) {
+          this.$message.error('只能上传 JSON 文件!');
+        }
+        return isJSON;
+      },
+      async httpRequest(option) {
+        let file = option.file;
+        const formData = new FormData();
+        formData.append('file', file)
+        importFundSetting(formData).then(res => {
+          this.$message.success("导入成功");
+          this.fetchData();
+          this.openSetting();
+        }).finally(() => {
+          this.innerVisible = false;
+          this.settingVisible = false;
+        })
+      },
       onCutSuccess(){
         this.$message.success("复制成功!");
       },
@@ -164,13 +206,22 @@ import {getFundListData, getFundSetting, saveFundSetting} from "@/api/common";
       addSetting(){
         this.settingData.push({})
       },
+      importSetting(){
+        this.innerVisible = true;
+      },
       exportSetting(){
-        this.$message.success("导出配置");
+        this.downloadLoading = true;
+        exportFundSetting().then(res=>{
+          this.$downloadFile(res.data, 'json', '基金配置')
+          this.$message.success("导出成功！")
+        }).finally(()=>{
+          this.downloadLoading = false;
+        })
       },
       saveSetting(){
         this.saveLoading = true;
         saveFundSetting(this.settingData).then(res=>{
-          this.$message.success("设置成功");
+          this.$message.success("更新成功");
           this.settingVisible = false;
           this.fetchData();
         }).finally(()=>{

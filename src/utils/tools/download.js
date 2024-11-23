@@ -17,13 +17,13 @@ export function downloadFromBlob(blob, filename) {
 
 /**
  * 导出表格公共方法
- * @param content
- * @param format
- * @param name
+ * @param content 文件内容
+ * @param format 文件格式（如 xlsx, txt 等）
+ * @param name 文件名（默认使用时间戳）
  */
-export function toXlsx(content, format, name = Date.now() + '') {
+export function downloadFile(content, format, name = Date.now() + '') {
     const blob = new Blob([content]);
-    const fileName = `${name}.` + format;
+    const fileName = `${name}.${format}`;
 
     if ('download' in document.createElement('a')) {
         // 非IE下载
@@ -33,10 +33,13 @@ export function toXlsx(content, format, name = Date.now() + '') {
         link.href = URL.createObjectURL(blob);
         document.body.appendChild(link);
         link.click();
-        URL.revokeObjectURL(link.href);
-        document.removeChild(link);
-    } else {
+        document.body.removeChild(link); // 正确删除节点
+        URL.revokeObjectURL(link.href); // 在删除后释放 URL
+    } else if (navigator.msSaveBlob) {
         // IE10+下载
-        navigator.msSaveBlob(fileName)
+        navigator.msSaveBlob(blob, fileName);
+    } else {
+        console.error('当前浏览器不支持文件下载功能！');
     }
 }
+
