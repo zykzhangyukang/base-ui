@@ -89,9 +89,9 @@
             <el-button type="primary" icon="el-icon-search" @click="onSubmit" :loading="loading" v-permission="'auth_func_page'">查询
             </el-button>
             <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
-            <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_func_add'">新增
-            </el-button>
-            <el-button plain @click="positionTreeNode()" icon="el-icon-aim">树中定位</el-button>
+            <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_func_add'">新增</el-button>
+            <el-button plain @click="handleExcel" :loading="downloadLoading" v-permission="'auth_func_export'">导出列表</el-button>
+            <el-button plain @click="positionTreeNode()">树中定位</el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown @command="handleCommand">
@@ -222,7 +222,8 @@ import FuncAdd from "@/views/auth/func/FuncAdd.vue";
 import FuncUpdate from "@/views/auth/func/FuncUpdate.vue";
 import FuncResc from "@/views/auth/func/FuncResc.vue";
 import MyTable from '@/components/MyTable/index'
-import {deleteFunc, funcRescRemove, getFuncPage, getFuncTree} from "@/api/auth";
+import {deleteFunc, exportFuncList, exportRescList, funcRescRemove, getFuncPage, getFuncTree} from "@/api/auth";
+import NProgress from "nprogress";
 
 export default {
   name: 'FuncList',
@@ -234,6 +235,7 @@ export default {
   },
   data() {
     return {
+      downloadLoading: false,
       filterText: '',
       treeData: [],
       defaultExpandedKeys: [],
@@ -313,6 +315,18 @@ export default {
     },
     handleAdd() {
       this.$refs.addRef.handleOpen(this.parentNode);
+    },
+    handleExcel(){
+      this.downloadLoading = true;
+      NProgress.start();
+      this.searchForm.idList = this.multipleSelection.map(e=>e.funcId);
+      exportFuncList(this.searchForm).then(res=>{
+        this.$downloadFile(res.data, 'xlsx', '资源列表')
+        this.$message.success("导出成功！")
+      }).finally(()=>{
+        this.downloadLoading = false;
+        NProgress.done();
+      });
     },
     positionTreeNode() {
       if (this.multipleSelection.length !== 1) {
@@ -452,6 +466,7 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      this.searchForm.idList = [];
       if (this.parentNode && this.parentNode.funcId) {
         this.searchForm.parentId = this.parentNode.funcId;
       } else {

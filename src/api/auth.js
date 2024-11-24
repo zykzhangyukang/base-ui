@@ -55,6 +55,15 @@ export function getFuncPage(data) {
     })
 }
 
+export function exportFuncList(data) {
+    return request({
+        url: '/auth/func/export',
+        method: 'post',
+        data,
+        responseType: 'arraybuffer'
+    })
+}
+
 export function getFuncDetail(id) {
     return request({
         url: '/auth/func/detail?funcId='+id,
