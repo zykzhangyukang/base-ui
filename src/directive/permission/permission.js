@@ -1,16 +1,13 @@
 import store from '@/store'
 
 function checkPermission(el, binding) {
-  if(1==1){
-    return;
-  }
   const { value } = binding
   try {
     let btnName = value
     if (typeof value === 'object') {
       btnName = value[0]
     }
-    const btnPermissions = store.getters['permission/btnPermissions'] || []
+    const btnPermissions = store.getters['permission/getPermissionList'] || []
 
     const hasPermission = btnPermissions.includes(btnName)
     if (!hasPermission) {

@@ -45,6 +45,7 @@
         <el-button type="primary" icon="el-icon-search" @click="onSubmit" v-permission="'auth_resc_page'" :loading="loading">查询</el-button>
         <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
         <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_resc_add'">新增</el-button>
+        <el-button plain @click="handleExcel" :loading="downloadLoading" v-permission="'auth_resc_export'">列表导出</el-button>
         <el-button plain @click="handleRefresh" :loading="refreshLoading" v-permission="'auth_resc_refresh'">刷新资源</el-button>
       </el-form-item>
     </el-form>
@@ -139,7 +140,8 @@
 import RescAdd from "@/views/auth/resc/RescAdd.vue";
 import RescUpdate from "@/views/auth/resc/RescUpdate.vue";
 import MyTable from '@/components/MyTable/index'
-import {deleteResc, getRescPage, refreshResc} from "@/api/auth";
+import {deleteResc, exportRescList, exportUserList, getRescPage, refreshResc} from "@/api/auth";
+import NProgress from "nprogress";
 
 
 export default {
@@ -151,6 +153,7 @@ export default {
   },
   data() {
     return {
+      downloadLoading: false,
       loading: false,
       refreshLoading: false,
       addModalVisible: false,
@@ -200,6 +203,17 @@ export default {
         }).finally(()=>{
           this.refreshLoading = false;
         })
+      });
+    },
+    handleExcel(){
+      this.downloadLoading = true;
+      NProgress.start();
+      exportRescList(this.searchForm).then(res=>{
+        this.$downloadFile(res.data, 'xlsx', '资源列表')
+        this.$message.success("导出成功！")
+      }).finally(()=>{
+        this.downloadLoading = false;
+        NProgress.done();
       });
     },
     handleAdd(){

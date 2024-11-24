@@ -355,6 +355,7 @@ export default {
       NProgress.start();
       exportUserList(this.searchForm).then(res=>{
         this.$downloadFile(res.data, 'xlsx', '用户列表')
+        this.$message.success("导出成功！")
       }).finally(()=>{
         this.downloadLoading = false;
         NProgress.done();

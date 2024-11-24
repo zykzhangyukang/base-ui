@@ -141,6 +141,15 @@ export function saveResc(data) {
     })
 }
 
+export function exportRescList(data) {
+    return request({
+        url: '/auth/resc/export',
+        method: 'post',
+        data,
+        responseType: 'arraybuffer'
+    })
+}
+
 export function updateResc(data) {
     return request({
         url: '/auth/resc/update',

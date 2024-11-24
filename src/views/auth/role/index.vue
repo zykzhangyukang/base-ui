@@ -63,7 +63,7 @@
         <template slot-scope="scope">
           <el-button size="mini" type="text" @click="handleUpdate(scope.row.roleId)" v-permission="'auth_role_update'">编辑</el-button>
           <el-button size="mini" type="text" @click="handleDel(scope.row.roleId)" v-permission="'auth_role_delete'">删除</el-button>
-          <el-button size="mini" type="text" @click="toUpdateRoleFunc(scope.row.roleId)">设置功能</el-button>
+          <el-button size="mini" type="text" @click="toUpdateRoleFunc(scope.row.roleId)" v-permission="'auth_role_func_view'">分配功能</el-button>
         </template>
       </el-table-column>
     </my-table>
@@ -136,6 +136,7 @@ export default {
       NProgress.start();
       exportRoleList(this.searchForm).then(res=>{
         this.$downloadFile(res.data, 'xlsx', '角色列表')
+        this.$message.success("导出成功！")
       }).finally(()=>{
         this.downloadLoading = false;
         NProgress.done();

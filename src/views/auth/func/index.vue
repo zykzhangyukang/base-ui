@@ -91,7 +91,7 @@
             <el-button type="info" icon="el-icon-refresh-right" @click="resetForm('searchForm')">重置</el-button>
             <el-button type="success" icon="el-icon-plus" @click="handleAdd" v-permission="'auth_func_add'">新增
             </el-button>
-            <el-button plain @click="positionTreeNode()" icon="el-icon-aim">节点定位</el-button>
+            <el-button plain @click="positionTreeNode()" icon="el-icon-aim">树中定位</el-button>
           </el-form-item>
           <el-form-item>
             <el-dropdown @command="handleCommand">
@@ -124,14 +124,12 @@
               prop="funcName"
               label="功能名称"
               align="center"
-              sortable
           >
           </el-table-column>
           <el-table-column
               prop="funcKey"
               label="功能标识"
               align="center"
-              sortable
               show-overflow-tooltip
           >
           </el-table-column>
@@ -142,10 +140,9 @@
           >
             <template slot-scope="scope">
               <div class="ellipsis">
-                <el-button type="text" size="mini" class="ellipsis-button"
-                           @click="showRescVoList(scope.row.rescVOList)">
+                <span class="ellipsis-button" @click="showRescVoList(scope.row.rescVOList)">
                   {{ scope.row.rescVOList.map(e => e.rescUrl).join(',') || '-' }}
-                </el-button>
+                </span>
               </div>
             </template>
           </el-table-column>
@@ -153,7 +150,6 @@
               prop="funcType"
               label="功能类型"
               align="center"
-              sortable
           >
             <template slot-scope="scope">
               <el-icon v-if="scope.row.funcType === 'dir'" class="el-icon-folder-opened "></el-icon>
@@ -165,7 +161,6 @@
               prop="hide"
               label="是否显示"
               align="center"
-              sortable
           >
             <template slot-scope="scope">
               {{ funcHideGName[scope.row.hide] }}
@@ -348,10 +343,13 @@ export default {
         });
       }
     },
-    highlightNodeById(nodeId) {
-      // 清除之前所有的高亮节点
+    clearNodeClassName(){
       const allNodes = this.$refs.funcTree.$el.querySelectorAll(".custom-highlight-node");
       allNodes.forEach((node) => node.classList.remove("custom-highlight-node"));
+    },
+    highlightNodeById(nodeId) {
+      // 清除之前所有的高亮节点
+      this.clearNodeClassName();
 
       // 获取目标节点的 DOM 元素
       const targetNodeElement = document.getElementById('customer-tree-node-' + nodeId);
@@ -419,6 +417,7 @@ export default {
       this.fetchData()
     },
     handleNodeClick(data) {
+      this.clearNodeClassName();
       this.parentNode = data;
       this.onSubmit();
     },
@@ -522,6 +521,8 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .ellipsis-button {
