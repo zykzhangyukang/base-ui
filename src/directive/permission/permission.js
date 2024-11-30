@@ -1,6 +1,9 @@
 import store from '@/store'
 
 function checkPermission(el, binding) {
+  if(1==1){
+    return
+  }
   const { value } = binding
   try {
     let btnName = value

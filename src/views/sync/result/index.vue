@@ -119,7 +119,14 @@
           align="center"
       >
         <template slot-scope="scope">
-          <a :title="scope.row.errorMsg" :class="[scope.row.status === 'success' ?'success':'fail']">{{resultStatusGName[scope.row.status] }}</a> <small>{{' ('+((new Date(scope.row.syncTime).getTime())  - (new Date(scope.row.msgCreateTime).getTime()) ) / 1000+'s)'}}</small>
+          <span>
+            <span  v-if="scope.row.status === 'success'">
+             <a class="success">{{resultStatusGName[scope.row.status] }}</a><small>{{' ('+((new Date(scope.row.syncTime).getTime())  - (new Date(scope.row.msgCreateTime).getTime()) ) / 1000+'s)'}}</small>
+          </span>
+          <span v-else>
+             <a class="fail" @click="showErrorMsg(scope.row.errorMsg)">{{resultStatusGName[scope.row.status] }}</a><small>{{' ('+((new Date(scope.row.syncTime).getTime())  - (new Date(scope.row.msgCreateTime).getTime()) ) / 1000+'s)'}}</small>
+          </span>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -199,6 +206,20 @@
     <msg-content ref="msgContentRef"></msg-content>
     <!-- 数据校验 -->
     <valid-result ref="validResultRef"></valid-result>
+    <!-- 错误信息 -->
+    <el-dialog
+        title="错误信息"
+        :visible.sync="errorMsgVisible"
+        width="30%"
+        :show-close="false"
+        >
+      <div style="font-family: Consolas,serif;font-size: 12px;font-weight: bold">
+        {{errorMsg}}
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="errorMsgVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -231,6 +252,8 @@ export default {
       repeatSyncLoading: false,
       signSuccessLoading: false,
       addModalVisible: false,
+      errorMsgVisible: false,
+      errorMsg: '',
       // 数据总条数
       total: 0,
       // 表格数据数组
@@ -285,6 +308,10 @@ export default {
     },
   },
   methods: {
+    showErrorMsg(errorMsg){
+      this.errorMsg = errorMsg;
+      this.errorMsgVisible = true;
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },

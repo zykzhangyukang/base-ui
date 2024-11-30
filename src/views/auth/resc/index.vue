@@ -66,7 +66,7 @@
       <el-table-column
           prop="rescUrl"
           label="资源URL"
-          align="left"
+          align="center"
           sortable
       >
         <template slot-scope="scope">
