@@ -40,7 +40,11 @@
           align="center"
       >
         <template slot-scope="scope">
-          <span class="userVOList">{{scope.row.userVOList.map(e=>e.realName).join(',') || '-'}}</span>
+          <div class="ellipsis">
+                <span class="ellipsis-button">
+                  <el-icon class="el-icon-user"></el-icon> {{scope.row.userVOList.map(e=>e.realName).join(',') || '-'}}
+                </span>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -211,5 +215,22 @@ export default {
   .el-pagination{
     float: right;
   }
+}
+/* 容器和按钮均需要设置省略号效果 */
+.ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ellipsis-button {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
 }
 </style>

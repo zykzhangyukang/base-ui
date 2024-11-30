@@ -3,7 +3,7 @@
     <div class="header">
       <div class="role-info" @click="showRoleList">
         {{ roleName }}：
-        <span class="user-info">{{ userList.map(e => e.realName).join(', ') }}</span>
+        <span class="user-info"><el-icon class="el-icon-user"></el-icon> {{ userList.map(e => e.realName).join(', ') }}</span>
       </div>
       <div class="button-wrapper" style="display: flex; align-items: center; margin-left: auto;">
         <el-button type='primary' @click="handleSave">保存</el-button>

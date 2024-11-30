@@ -122,7 +122,7 @@
         >
         <template slot-scope="scope">
           <span>
-              {{scope.row.phone}} <el-button type="text" size="mini" @click="lookPhone(scope.row)" :loading="scope.row.phoneLoading" icon="el-icon-view">查看</el-button>
+              {{scope.row.phone}} <el-button type="text" size="mini" @click="lookPhone(scope.row)" :loading="scope.row.phoneLoading" icon="el-icon-view" v-permission="'auth_user_look_phone'">查看</el-button>
           </span>
         </template>
       </el-table-column>

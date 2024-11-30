@@ -32,9 +32,7 @@ export default {
     },
     handleOk(){
       this.$store.commit('user/REMOVE_TOKEN');
-      setTimeout(() => {
-        window.location.reload()
-      }, 100)
+      this.$router.push('/login')
     }
   },
   watch:{
