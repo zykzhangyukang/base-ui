@@ -42,7 +42,7 @@
         <template slot-scope="scope">
           <div class="ellipsis">
                 <span class="ellipsis-button">
-                  <el-icon class="el-icon-user"></el-icon> {{scope.row.userVOList.map(e=>e.realName).join(',') || '-'}}
+                  {{scope.row.userVOList.map(e=>e.realName).join(',') || '-'}}
                 </span>
           </div>
         </template>

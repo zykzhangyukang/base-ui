@@ -44,7 +44,6 @@
       </el-table-column>
       <el-table-column prop="fundName" label="基金名称" align="center" show-overflow-tooltip width="200"  />
       <el-table-column label="净值数据" align="center">
-        <el-table-column label="30天均值" prop="jz30"  align="center" />
         <el-table-column label="20天均值" prop="jz20"  align="center" />
         <el-table-column label="10天均值" prop="jz10"  align="center" />
         <el-table-column label="5天均值" prop="jz5"  align="center" />
@@ -139,9 +138,9 @@
         </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="addSetting" icon="el-icon-plus">新增一行</el-button>
-        <el-button @click="exportSetting" :loading="downloadLoading" icon="el-icon-download">导出配置</el-button>
-        <el-button @click="importSetting" icon="el-icon-upload2">导入配置</el-button>
+        <el-button @click="addSetting" >新增一行</el-button>
+        <el-button @click="exportSetting" :loading="downloadLoading">导出配置</el-button>
+        <el-button @click="importSetting" >导入配置</el-button>
         <el-button type="primary" @click="saveSetting" :loading="saveLoading">保存设置</el-button>
       </span>
     </el-dialog>
@@ -164,7 +163,7 @@ export default {
         settingVisible: false,
         url: "",
         tableData: [],
-        settingData: [{}]
+        settingData: []
       };
     },
     methods: {
