@@ -15,7 +15,7 @@
         刷新
       </el-button>
       <el-button icon="el-icon-orange" plain @click="openMarkInfo" :loading="loading"  v-permission="'trade_mark_index_info'">
-        大盘指数
+        指数
       </el-button>
       <el-button icon="el-icon-setting" plain @click="openSetting" :loading="loading" v-permission="'trade_fund_setting'">
         设置
@@ -148,12 +148,12 @@
       </span>
     </el-dialog>
     <!-- 大盘信息 -->
-    <el-dialog title="大盘信息" :visible.sync="markInfoVisible" width="670px" center>
+    <el-dialog title="大盘指数" :visible.sync="markInfoVisible" width="800px" center>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in markIndexInfo" :key="item.indexName">
           <el-card shadow="never" :class="item.changeVal > 0 ? 'red' : 'green'" v-loading="markIndexLoading">
             <div class="mark_index_wrapper" >
-              <p>{{item.indexName}}</p>
+              <strong>{{item.indexName}}</strong>
               <p>{{item.index}}</p>
               <p>{{item.changeVal}} ({{item.changeRate + '%'}})</p>
             </div>
@@ -319,16 +319,22 @@ export default {
 
 <style scoped lang="less">
   .mark_index_wrapper{
+    cursor: pointer;
     p {
       margin-top: 5px;
-      font-weight: bold;
+      font-weight: 600;
+      font-family: 宋体,serif;
     }
   }
   .green{
-    color: green;
+    p {
+      color: green;
+    }
   }
   .red{
-    color: red;
+    p {
+      color: red;
+    }
   }
   .trade-fund-wrapper {
     .fund_code{
