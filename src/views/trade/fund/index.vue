@@ -14,6 +14,9 @@
       <el-button icon="el-icon-refresh" plain @click="fetchData" :loading="loading">
         刷新
       </el-button>
+      <el-button icon="el-icon-orange" plain @click="openMarkInfo" :loading="loading"  v-permission="'trade_mark_index_info'">
+        大盘指数
+      </el-button>
       <el-button icon="el-icon-setting" plain @click="openSetting" :loading="loading" v-permission="'trade_fund_setting'">
         设置
       </el-button>
@@ -144,11 +147,36 @@
         <el-button type="primary" @click="saveSetting" :loading="saveLoading">保存设置</el-button>
       </span>
     </el-dialog>
+    <!-- 大盘信息 -->
+    <el-dialog title="大盘信息" :visible.sync="markInfoVisible" width="670px" center>
+      <el-row :gutter="20">
+        <el-col :span="6" v-for="item in markIndexInfo" :key="item.indexName">
+          <el-card shadow="never" :class="item.changeVal > 0 ? 'red' : 'green'" v-loading="markIndexLoading">
+            <div class="mark_index_wrapper" >
+              <p>{{item.indexName}}</p>
+              <p>{{item.index}}</p>
+              <p>{{item.changeVal}} ({{item.changeRate + '%'}})</p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button  type="primary" icon="el-icon-refresh"  @click="openMarkInfo" :loading="markIndexLoading">刷新数据</el-button>
+        <el-button   @click="markInfoVisible = false" >关闭弹框</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {exportFundSetting, getFundListData, getFundSetting, importFundSetting, saveFundSetting} from "@/api/common";
+import {
+  exportFundSetting,
+  getFundListData,
+  getFundSetting,
+  getMarkIndexInfo,
+  importFundSetting,
+  saveFundSetting
+} from "@/api/common";
 
 export default {
     name: "TradeFund",
@@ -157,13 +185,16 @@ export default {
         downloadLoading: false,
         innerVisible: false,
         loading: false,
+        markIndexLoading: false,
         saveLoading: false,
         tableLoading: false,
         dialogVisible: false,
         settingVisible: false,
+        markInfoVisible: false,
         url: "",
         tableData: [],
-        settingData: []
+        settingData: [],
+        markIndexInfo: []
       };
     },
     methods: {
@@ -197,6 +228,15 @@ export default {
           this.settingData = res.result || [];
         }).finally(()=>{
           this.tableLoading = false;
+        })
+      },
+      openMarkInfo(){
+        this.markInfoVisible = true;
+        this.markIndexLoading = true;
+        getMarkIndexInfo().then(res=>{
+          this.markIndexInfo = res.result || [];
+        }).finally(()=>{
+          this.markIndexLoading = false;
         })
       },
       delSetting(index){
@@ -278,6 +318,18 @@ export default {
 </script>
 
 <style scoped lang="less">
+  .mark_index_wrapper{
+    p {
+      margin-top: 5px;
+      font-weight: bold;
+    }
+  }
+  .green{
+    color: green;
+  }
+  .red{
+    color: red;
+  }
   .trade-fund-wrapper {
     .fund_code{
       color: dodgerblue;

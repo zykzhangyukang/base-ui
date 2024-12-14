@@ -93,3 +93,10 @@ export function getFundSetting() {
         method: 'get',
     })
 }
+
+export function getMarkIndexInfo() {
+    return request({
+        url: '/trade/mark/index/info',
+        method: 'get',
+    })
+}
