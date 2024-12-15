@@ -39,9 +39,10 @@ export default {
       handleClose() {
         this.visible = false;
       },
-      handleOpen(planContent) {
+      handleOpen(planContent, description) {
         this.visible = true;
         this.codeSnippet = planContent;
+        this.description = description;
         this.highlightCode();
       },
       highlightCode() {

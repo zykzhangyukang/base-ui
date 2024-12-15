@@ -14,7 +14,7 @@
       <el-button icon="el-icon-refresh" plain @click="fetchData" :loading="loading">
         刷新
       </el-button>
-      <el-button icon="el-icon-orange" plain @click="openMarkInfo" :loading="loading"  v-permission="'trade_mark_index_info'">
+      <el-button icon="el-icon-pie-chart" plain @click="openMarkInfo" :loading="loading"  v-permission="'trade_mark_index_info'">
         指数
       </el-button>
       <el-button icon="el-icon-setting" plain @click="openSetting" :loading="loading" v-permission="'trade_fund_setting'">
@@ -32,7 +32,7 @@
             :data="tableData"
             class="table-content"
     >
-      <el-table-column prop="fundCode" label="基金编号" align="center">
+      <el-table-column prop="fundCode" label="基金编号" align="center" sortable>
         <template slot-scope="scope">
           <span>
           <el-button size="mini" type="text" @click="showImage(scope.row.fundCode)" class="fund_code">
@@ -45,7 +45,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="fundName" label="基金名称" align="center" show-overflow-tooltip width="200"  />
+      <el-table-column prop="fundName" label="基金名称" align="center" show-overflow-tooltip width="200" sortable  />
       <el-table-column label="净值数据" align="center">
         <el-table-column label="20天均值" prop="jz20"  align="center" />
         <el-table-column label="10天均值" prop="jz10"  align="center" />
@@ -55,28 +55,28 @@
         </el-table-column>
         <el-table-column label="今日估值" prop="gsz"  align="center" />
       </el-table-column>
-      <el-table-column label="估值时间" prop="gztime" align="center" width="150" />
-      <el-table-column label="估算涨跌%" prop="gszzl" align="center">
+      <el-table-column label="估值时间" prop="gztime" align="center" width="150" sortable />
+      <el-table-column label="估算涨跌%" prop="gszzl" align="center" sortable>
         <template slot-scope="scope">
             <span :style="{ color: scope.row.gszzl > 0 ? 'red' : scope.row.gszzl < 0 ? 'green' : '' }">
               {{ scope.row.gszzl > 0 ? '+' : '' }}{{ scope.row.gszzl ? scope.row.gszzl + '%' : '-' }}
             </span>
         </template>
       </el-table-column>
-      <el-table-column label="持有份额" prop="bonds" align="center" />
-      <el-table-column label="持仓成本价" prop="costPrise" align="center" />
+      <el-table-column label="持有份额" prop="bonds" align="center" sortable />
+      <el-table-column label="持仓成本价" prop="costPrise" align="center" sortable />
 
       <el-table-column label="收益率" prop="incomePercent" align="center">
         <template slot-scope="scope">
           {{ scope.row.incomePercent ? scope.row.incomePercent + '%' : '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="累计收益" prop="income" align="center">
+      <el-table-column label="累计收益" prop="income" align="center" sortable>
         <template slot-scope="scope">
           {{ formatIncome(scope.row.income) }}
         </template>
       </el-table-column>
-      <el-table-column label="今日收益" prop="todayIncome" align="center" fixed="right">
+      <el-table-column label="今日收益" prop="todayIncome" align="center" fixed="right" sortable>
         <template slot-scope="scope">
           {{ formatIncome(scope.row.todayIncome) }}
         </template>
@@ -148,7 +148,7 @@
       </span>
     </el-dialog>
     <!-- 大盘信息 -->
-    <el-dialog title="大盘指数" :visible.sync="markInfoVisible" width="800px" center>
+    <el-dialog title="大盘指数" :visible.sync="markInfoVisible" width="750px" center>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in markIndexInfo" :key="item.indexName">
           <el-card shadow="never" :class="item.changeVal > 0 ? 'red' : 'green'" v-loading="markIndexLoading">
@@ -323,7 +323,7 @@ export default {
     p {
       margin-top: 5px;
       font-weight: 600;
-      font-family: 宋体,serif;
+      font-family: 楷体,serif;
     }
   }
   .green{
