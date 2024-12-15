@@ -30,10 +30,11 @@ const mutations = {
         const expireTime = current.setTime(current.getTime() + 1000 * result.expiresIn);
         setExpiresIn(expireTime)
     },
-    REMOVE_TOKEN() {
+    REMOVE_TOKEN(state) {
         removeRefreshToken();
         removeAccessToken();
         removeExpiresIn();
+        state.userInfo = null;
     }
 }
 
