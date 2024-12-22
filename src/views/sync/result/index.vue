@@ -63,7 +63,6 @@
     </el-form>
     <!-- 表格栏 -->
     <my-table
-        fit
         stripe
         border
         ref="tableList"

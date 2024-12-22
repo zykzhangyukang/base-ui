@@ -72,7 +72,6 @@
       <el-table-column
           prop="planCode"
           label="计划编号"
-          sortable
           width="180px"
       >
         <template slot-scope="scope">
