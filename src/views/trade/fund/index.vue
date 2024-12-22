@@ -29,7 +29,7 @@
             border
             show-summary
             :summary-method="getSummaries"
-            :data="tableData"
+            :data="fundList"
             class="table-content"
     >
       <el-table-column prop="fundCode" label="基金编号" align="center" sortable>
@@ -150,7 +150,7 @@
     <!-- 大盘信息 -->
     <el-dialog title="大盘指数" :visible.sync="markInfoVisible" width="750px" center>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in markIndexInfo" :key="item.indexName">
+        <el-col :span="6" v-for="item in markIndexList" :key="item.indexName">
           <el-card shadow="never" :class="item.changeVal > 0 ? 'red' : 'green'" v-loading="markIndexLoading">
             <div class="mark_index_wrapper" >
               <strong>{{item.indexName}}</strong>
@@ -165,6 +165,7 @@
         <el-button   @click="markInfoVisible = false" >关闭弹框</el-button>
       </span>
     </el-dialog>
+    {{fundData}}
   </div>
 </template>
 
@@ -177,6 +178,7 @@ import {
   importFundSetting,
   saveFundSetting
 } from "@/api/common";
+import NProgress from "nprogress";
 
 export default {
     name: "TradeFund",
@@ -192,9 +194,9 @@ export default {
         settingVisible: false,
         markInfoVisible: false,
         url: "",
-        tableData: [],
+        fundList: [],
         settingData: [],
-        markIndexInfo: []
+        markIndexList: [],
       };
     },
     methods: {
@@ -234,7 +236,7 @@ export default {
         this.markInfoVisible = true;
         this.markIndexLoading = true;
         getMarkIndexInfo().then(res=>{
-          this.markIndexInfo = res.result || [];
+          this.markIndexList = res.result || [];
         }).finally(()=>{
           this.markIndexLoading = false;
         })
@@ -271,7 +273,7 @@ export default {
         this.loading = true;
         try {
           const res = await getFundListData();
-          this.tableData = res.result;
+          this.fundList = res.result;
         } finally {
           this.loading = false;
         }
@@ -310,6 +312,21 @@ export default {
       handleClose(done) {
         done();
       },
+    },
+    computed:{
+      refreshInfo() {
+        return this.$store.state.notification.fundData;
+      },
+    },
+    watch:{
+      refreshInfo(newVal){
+        if(newVal){
+          NProgress.start();
+          this.fundList = newVal.fundList || [];
+          this.markIndexList = newVal.markIndexList || [];
+          NProgress.done();
+        }
+      }
     },
     created() {
       this.fetchData();
