@@ -153,7 +153,7 @@
         <el-col :span="6" v-for="item in markIndexList" :key="item.indexName">
           <el-card shadow="never" :class="item.changeVal > 0 ? 'red' : 'green'" v-loading="markIndexLoading">
             <div class="mark_index_wrapper" >
-              <strong>{{item.indexName}}</strong>
+              <strong>{{item.indexName}}<el-icon class="mark-icon" :class="item.changeVal > 0 ? 'el-icon-arrow-up': 'el-icon-arrow-down'"></el-icon></strong>
               <p>{{item.index}}</p>
               <p>{{item.changeVal}} ({{item.changeRate + '%'}})</p>
             </div>
@@ -161,11 +161,10 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-        <el-button  type="primary" icon="el-icon-refresh"  @click="openMarkInfo" :loading="markIndexLoading">刷新数据</el-button>
-        <el-button   @click="markInfoVisible = false" >关闭弹框</el-button>
+        <el-button  type="primary" icon="el-icon-refresh"  @click="openMarkInfo" :loading="markIndexLoading">刷新一下</el-button>
+        <el-button  @click="markInfoVisible = false" >关闭弹框</el-button>
       </span>
     </el-dialog>
-    {{fundData}}
   </div>
 </template>
 
@@ -178,7 +177,6 @@ import {
   importFundSetting,
   saveFundSetting
 } from "@/api/common";
-import NProgress from "nprogress";
 
 export default {
     name: "TradeFund",
@@ -321,10 +319,8 @@ export default {
     watch:{
       refreshInfo(newVal){
         if(newVal){
-          NProgress.start();
           this.fundList = newVal.fundList || [];
           this.markIndexList = newVal.markIndexList || [];
-          NProgress.done();
         }
       }
     },
@@ -340,17 +336,28 @@ export default {
     p {
       margin-top: 5px;
       font-weight: 600;
-      font-family: 楷体,serif;
     }
   }
   .green{
+    background: hsl(147.69deg 48.15% 94.71%);
     p {
-      color: green;
+      color: hsl(134.53deg 38.46% 51.57%);
+    }
+    .mark-icon {
+      color: hsl(134.53deg 38.46% 51.57%);
+      font-weight: 700;
+      margin-left: 2px;
     }
   }
   .red{
+    background: hsl(0deg 70% 96.08%);
     p {
-      color: red;
+      color: hsl(354.94deg 83.84% 61.18%);
+    }
+    .mark-icon {
+      color: hsl(354.94deg 83.84% 61.18%);
+      font-weight: 700;
+      margin-left: 2px;
     }
   }
   .trade-fund-wrapper {
