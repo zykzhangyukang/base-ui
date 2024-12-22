@@ -46,7 +46,7 @@
       }).then(() => {
         logout(getAccessToken()).then(res=>{
           this.$store.commit('user/REMOVE_TOKEN');
-          this.$router.push('/login')
+          window.location.reload();
         })
       })
     }

@@ -64,7 +64,7 @@ export default {
           this.loading = true;
             this.$store.dispatch('user/LOGIN', data)
                 .then(() => {
-                    this.$router.push({ path: this.redirect || '/' })
+                  window.location.reload();
                 })
                 .catch(() => {
                     this.loading = false
