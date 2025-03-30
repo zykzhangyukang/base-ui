@@ -1,7 +1,7 @@
 <template>
   <div class="chat-gpt-wrapper">
     <el-dialog
-        title="ChatGPT 对话"
+        title="智能助手"
         :visible.sync="visible"
         :close-on-click-modal="false"
         width="50%"
@@ -46,9 +46,11 @@
               ref="inputBox"
               type="textarea"
               :rows="3"
+              maxlength="100"
+              show-word-limit
               placeholder="请输入您的问题..."
               v-model="inputMessage"
-              @keyup.enter.native="handleSend"
+              @keydown.enter.native.prevent="handleSend"
               :disabled="loading && !showStopButton"
           ></el-input>
           <div class="action-buttons">
@@ -73,6 +75,7 @@
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai-sublime.min.css';
+import {getAccessToken} from "@/utils/storage/cookie";
 
 export default {
   name: 'ChatGPT',
@@ -125,7 +128,7 @@ export default {
       this.closeSSE();
 
       const apiUrl = process.env.VUE_APP_BASE_API + '/common/chat/completion';
-      const eventSource = new EventSource(`${apiUrl}?prompt=${encodeURIComponent(prompt)}`);
+      const eventSource = new EventSource(`${apiUrl}?prompt=${encodeURIComponent(prompt)}&token=${getAccessToken()}`);
 
       this.eventSource = eventSource;
 
@@ -136,7 +139,6 @@ export default {
         }
 
         const data = event.data;
-
         if (data === '[DONE]') {
           this.finalizeResponse();
           return;
@@ -144,17 +146,15 @@ export default {
 
         try {
           const jsonData = JSON.parse(data);
-
-          if (jsonData.choices && jsonData.choices.length > 0) {
-            const choice = jsonData.choices[0];
-
+          if (jsonData.output) {
+            const choice = jsonData.output;
             if (choice?.finishReason && choice.finishReason !== "null") {
               this.finalizeResponse();
               return;
             }
 
-            if (choice.message && choice.message.content) {
-              this.currentResponse += choice.message.content;
+            if (choice.text) {
+              this.currentResponse += choice.text;
               this.$nextTick(() => {
                 this.scrollToBottom();
               });
