@@ -145,8 +145,9 @@ export default {
         }
 
         try {
-          if (data) {
-            this.currentResponse += data;
+          const jsonData = JSON.parse(data);
+          if (data && jsonData.text) {
+            this.currentResponse += jsonData.text;
             this.$nextTick(() => {
               this.scrollToBottom();
             });
@@ -234,7 +235,7 @@ export default {
   created() {
     this.md = new MarkdownIt({
       html: false,
-      linkify: true,
+      linkify: false,
       typographer: true,
       highlight: function (str, lang) {
         if (lang && hljs.getLanguage(lang)) {
