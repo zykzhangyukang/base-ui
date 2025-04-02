@@ -145,20 +145,11 @@ export default {
         }
 
         try {
-          const jsonData = JSON.parse(data);
-          if (jsonData.output) {
-            const choice = jsonData.output;
-            if (choice?.finishReason && choice.finishReason !== "null") {
-              this.finalizeResponse();
-              return;
-            }
-
-            if (choice.text) {
-              this.currentResponse += choice.text;
-              this.$nextTick(() => {
-                this.scrollToBottom();
-              });
-            }
+          if (data) {
+            this.currentResponse += data;
+            this.$nextTick(() => {
+              this.scrollToBottom();
+            });
           }
         } catch (error) {
           console.error('Error parsing SSE data:', error);
