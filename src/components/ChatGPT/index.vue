@@ -76,6 +76,7 @@ import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/monokai-sublime.min.css';
 import {getAccessToken} from "@/utils/storage/cookie";
+import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 export default {
   name: 'ChatGPT',
@@ -86,7 +87,7 @@ export default {
       messages: [],
       loading: false,
       currentResponse: '',
-      eventSource: null,
+      abortController: null,
       md: null,
       showStopButton: false,
       isStopped: false
@@ -126,41 +127,48 @@ export default {
     },
     initSSE(prompt) {
       this.closeSSE();
-
-      const apiUrl = process.env.VUE_APP_BASE_API + '/common/chat/completion';
-      const eventSource = new EventSource(`${apiUrl}?prompt=${encodeURIComponent(prompt)}&token=${getAccessToken()}`);
-
-      this.eventSource = eventSource;
-
-      eventSource.onmessage = (event) => {
-        if (this.isStopped) {
-          eventSource.close();
-          return;
-        }
-
-        const data = event.data;
-        if (data === '[DONE]') {
-          this.finalizeResponse();
-          return;
-        }
-
-        try {
-          const jsonData = JSON.parse(data);
-          if (data && jsonData.text) {
-            this.currentResponse += jsonData.text;
-            this.$nextTick(() => {
-              this.scrollToBottom();
-            });
+      this.abortController = new AbortController();
+      fetchEventSource(process.env.VUE_APP_BASE_API + '/common/chat/completion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getAccessToken()}`,
+        },
+        body: JSON.stringify({ prompt, sessionId: getAccessToken() }),
+        onopen: async (response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP 错误! 状态码: ${response.status}`);
           }
-        } catch (error) {
-          console.error('Error parsing SSE data:', error);
-        }
-      };
+        },
+        onmessage: (event) => {
+          if (this.isStopped) {
+            return;
+          }
 
-      eventSource.onerror = (error) => {
-        console.error('SSE error:', error);
-        this.finalizeResponse();
-      };
+          const data = event.data;
+          if (data === '[DONE]') {
+            this.finalizeResponse();
+            return;
+          }
+
+          try {
+            const jsonData = JSON.parse(data);
+            if (jsonData.text) {
+              this.currentResponse += jsonData.text;
+              this.$nextTick(() => {
+                this.scrollToBottom();
+              });
+            }
+          } catch (error) {
+            console.error('解析 SSE 数据出错:', error);
+          }
+        },
+        onerror: (error) => {
+          console.error('SSE 发生错误:', error);
+          this.finalizeResponse();
+        },
+        signal: this.abortController.signal,
+      });
     },
     stopGeneration() {
       this.isStopped = true;
@@ -202,9 +210,8 @@ export default {
       });
     },
     closeSSE() {
-      if (this.eventSource) {
-        this.eventSource.close();
-        this.eventSource = null;
+      if (this.abortController) {
+        this.abortController.abort();
       }
     },
     handleClear() {
