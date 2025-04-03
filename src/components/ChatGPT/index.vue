@@ -164,8 +164,9 @@ export default {
           }
         },
         onerror: (error) => {
-          console.error('SSE 发生错误:', error);
+          this.currentResponse = '🚨 网络连接异常，请稍后重试！';
           this.finalizeResponse();
+          throw error;
         },
         signal: this.abortController.signal,
       });
