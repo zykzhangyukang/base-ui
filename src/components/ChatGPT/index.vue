@@ -4,7 +4,8 @@
         title="智能助手"
         :visible.sync="visible"
         :close-on-click-modal="false"
-        width="50%"
+        top="5vh"
+        width="48%"
         @closed="handleClose"
     >
       <div class="chat-container">
@@ -101,7 +102,7 @@ export default {
       });
     },
     handleClose() {
-      this.closeSSE();
+      this.handleClear();
     },
     handleSend() {
       if (!this.inputMessage.trim() || this.loading) return;
