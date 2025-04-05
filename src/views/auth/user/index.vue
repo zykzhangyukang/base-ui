@@ -291,19 +291,12 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message.success({
-          message: ' 切换登录中',
-          iconClass: 'el-icon-loading',
-          duration: 1000,
-          onClose: function () {
-            store.dispatch('user/SWITCH_USER_LOGIN', rowData.username).then(res => {
-              if (res.code === 200) {
-                window.location.reload();
-              }
-            })
+        store.dispatch('user/SWITCH_USER_LOGIN', rowData.username).then(res => {
+          if (res.code === 200) {
+            window.location.reload();
           }
         })
-      }).catch(e=>{});
+      });
     },
     handleUpdateUserStatus(){
       if(this.multipleSelection.length !==1){
