@@ -341,6 +341,8 @@ export default {
           word-break: break-word;
           line-height: 1.4;
           font-size: 13px;
+          overflow-x: auto;
+          max-width: 100%;
 
           ::v-deep {
             p {
