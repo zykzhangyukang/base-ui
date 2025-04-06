@@ -99,6 +99,7 @@ export default {
       this.visible = true;
       this.$nextTick(() => {
         this.scrollToBottom();
+        this.$refs.inputBox.focus();
       });
     },
     handleClose() {
