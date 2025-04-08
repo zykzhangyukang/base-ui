@@ -8,15 +8,18 @@
         </template>
       </el-result>
       <ChatGPT ref="chatGptRef"></ChatGPT>
+      <UploadFile/>
   </div>
 </template>
 
 <script>
 import ChatGPT from "@/components/ChatGPT/index.vue";
+import UploadFile from "@/components/UploadFile/index.vue";
 export default {
   name: 'Dashboard',
   components:{
-    ChatGPT
+    ChatGPT,
+    UploadFile
   },
   data() {
     return {}

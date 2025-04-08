@@ -55,24 +55,27 @@ export default {
       const hash = this.spark.end();
 
       // 开始上传任务
-      const {result: uploadId} = await this._uploadStart(file);
+      const {result: uploadId} = await this._uploadStart(file,hash,chunkList.length);
 
       for (const chunk of chunkList) {
-         await this._uploadChunk(hash, chunk);
+         await this._uploadChunk(hash, chunk, uploadId);
       }
     },
     // 上传分片文件
-    async _uploadChunk(hash, chunk) {
+    async _uploadChunk(hash, chunk, uploadId) {
       const formData = new FormData();
-      formData.append('hash', hash)
+      formData.append('uploadId', uploadId)
+      formData.append('fileHash', hash)
       formData.append('file', chunk.blob)
-      formData.append('index', chunk.index)
+      formData.append('partNumber', chunk.index)
       return uploadFileChunk(formData);
     },
     // 开始上传分片
-    async _uploadStart(file) {
+    async _uploadStart(file,hash,totalParts) {
       const formData = new FormData();
       formData.append('fileName', file.name)
+      formData.append('fileHash', hash)
+      formData.append('totalParts', totalParts)
       return uploadFileChunkStart(formData);
     }
   },
