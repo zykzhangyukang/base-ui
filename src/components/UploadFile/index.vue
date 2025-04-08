@@ -58,16 +58,17 @@ export default {
       const {result: uploadId} = await this._uploadStart(file,hash,chunkList.length);
 
       for (const chunk of chunkList) {
-         await this._uploadChunk(hash, chunk, uploadId);
+         await this._uploadChunk(hash, chunk, uploadId,file.name);
       }
     },
     // 上传分片文件
-    async _uploadChunk(hash, chunk, uploadId) {
+    async _uploadChunk(hash, chunk, uploadId,fileName) {
       const formData = new FormData();
       formData.append('uploadId', uploadId)
       formData.append('fileHash', hash)
       formData.append('file', chunk.blob)
-      formData.append('partNumber', chunk.index)
+      formData.append('fileName', fileName)
+      formData.append('partNumber', chunk.index+1)
       return uploadFileChunk(formData);
     },
     // 开始上传分片
