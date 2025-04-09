@@ -55,7 +55,7 @@ export default {
       const hash = this.spark.end();
 
       // 开始上传任务
-      const {result: uploadId} = await this._uploadStart(file,hash,chunkList.length);
+      const {result: {uploadId}} = await this._uploadStart(file,hash,chunkList.length);
 
       for (const chunk of chunkList) {
          await this._uploadChunk(hash, chunk, uploadId,file.name);
