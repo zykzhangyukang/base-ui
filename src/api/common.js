@@ -42,6 +42,17 @@ export function uploadFileChunkStart(data) {
     })
 }
 
+export function uploadChunkFinish(data) {
+    return request({
+        url: '/common/file/upload/chunk/finish',
+        method: 'post',
+        headers: {
+            'content-type': 'multipart/form-data'
+        },
+        data
+    })
+}
+
 export function uploadFileChunk(formData) {
     return request({
         url: '/common/file/upload/chunk',
