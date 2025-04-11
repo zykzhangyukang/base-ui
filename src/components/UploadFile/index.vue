@@ -30,7 +30,6 @@
 
     <!-- 上传结果 -->
     <div class="upload-result" v-if="uploadedUrl">
-      <span>文件地址：</span>
       <a :href="uploadedUrl" target="_blank">{{ uploadedUrl }}</a>
       <el-button
               v-if="isPreview(uploadedUrl)"
@@ -227,13 +226,12 @@
   }
 
   .upload-progress {
-    font-size: 13px;
-    color: blue;
+    font-size: 11px;
     padding-left: 4px;
   }
 
   .upload-result {
-    font-size: 12px;
+    font-size: 11px;
     color: #333;
     word-break: break-all;
     display: flex;
@@ -244,10 +242,6 @@
   .upload-result a {
     color: #409eff;
     text-decoration: none;
-  }
-
-  .upload-result a:hover {
-    text-decoration: underline;
   }
 
   .preview-img {
