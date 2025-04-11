@@ -159,9 +159,9 @@
 </template>
 
 <script>
-import ChatGPT from "@/components/ChatGPT/index.vue";
+  import ChatGPT from "@/components/ChatGPT/index.vue";
 
-export default {
+  export default {
   name: 'Dashboard',
   components: {
     ChatGPT,

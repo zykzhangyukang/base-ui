@@ -1,11 +1,15 @@
 <template>
   <div class="trade-stock-wrapper">
-    <h3>股票管理</h3>
+    <UploadFile/>
   </div>
 </template>
 <script>
+  import UploadFile from "@/components/UploadFile/index.vue";
 export default {
-  name: "TradeStock"
+  name: "TradeStock",
+  components:{
+    UploadFile
+  },
 }
 </script>
 
