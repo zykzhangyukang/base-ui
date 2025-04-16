@@ -23,9 +23,8 @@
     </el-upload>
 
     <!-- 上传进度 -->
-    <div class="upload-progress" v-if="isUploading && uploadProgress > 0">
+    <div class="upload-progress" v-if="isUploading">
       <span>上传进度：{{ uploadProgress }}%</span>
-      <el-progress :percentage="uploadProgress" status="active" />
     </div>
 
     <!-- 上传结果 -->
@@ -84,7 +83,6 @@
         fileList: [],
         chunkList: [],
         fileHash: "",
-        uploadProgress: 0,
         isUploading: false,
         uploadId: "",
         fileName: "",
