@@ -31,9 +31,9 @@ export function maskNotificationRead(id) {
 }
 
 
-export function uploadFileChunkStart(data) {
+export function uploadFileChunkInit(data) {
     return request({
-        url: '/common/file/upload/chunk/start',
+        url: '/common/file/upload/chunk/init',
         method: 'post',
         headers: {
             'content-type': 'multipart/form-data'

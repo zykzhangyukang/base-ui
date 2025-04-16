@@ -18,7 +18,7 @@
               :loading="isUploading"
               class="upload-btn"
       >
-        {{ isUploading ? statusText : '选择文件' }}
+        选择文件
       </el-button>
     </el-upload>
 
@@ -74,7 +74,7 @@
   import {
     uploadChunkFinish,
     uploadFileChunk,
-    uploadFileChunkStart
+    uploadFileChunkInit
   } from "../../api/common";
   import SparkMD5 from "spark-md5";
 
@@ -86,7 +86,6 @@
         fileHash: "",
         uploadProgress: 0,
         isUploading: false,
-        statusText: "",
         uploadId: "",
         fileName: "",
         uploadedUrl: "",
@@ -106,7 +105,6 @@
         this.chunkList = [];
         this.uploadProgress = 0;
         this.isUploading = true;
-        this.statusText = "解析中";
         this.uploadedUrl = "";
       },
       async computeFileHash(chunkList) {
@@ -123,16 +121,19 @@
           this.fileName = file.name;
 
           this.chunkList = await cutFile(file);
-          this.statusText = "计算 Hash";
           this.fileHash = await this.computeFileHash(this.chunkList);
 
-          this.statusText = "准备上传";
           const {
-            result: { uploadId, uploaded = [] }
+            result: { uploadId, uploaded = [], isSkip, filePath }
           } = await this._uploadStart(file, this.fileHash, this.chunkList.length);
-          this.uploadId = uploadId;
 
-          this.statusText = "上传中";
+          if(isSkip && filePath){
+            this.$message.success('秒传成功')
+            this.uploadedUrl = filePath;
+            return;
+          }
+
+          this.uploadId = uploadId;
           const uploadedSet = new Set(uploaded);
           let uploadedCount = 0;
           const totalChunks = this.chunkList.length;
@@ -160,7 +161,6 @@
             await this.$nextTick();
           }
 
-          this.statusText = "合并文件";
           const { result } = await this._uploadFinish(this.fileHash);
           this.uploadedUrl = result;
         } catch (error) {
@@ -168,7 +168,6 @@
           this.$message.error("上传失败，请重试！");
         } finally {
           this.isUploading = false;
-          this.statusText = "";
           this.uploadProgress = 0;
         }
       },
@@ -186,7 +185,7 @@
         formData.append("fileName", file.name);
         formData.append("fileHash", hash);
         formData.append("totalParts", totalParts);
-        return uploadFileChunkStart(formData);
+        return uploadFileChunkInit(formData);
       },
       async _uploadFinish(fileHash) {
         const formData = new FormData();
