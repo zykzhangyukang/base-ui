@@ -66,7 +66,6 @@ export const DynamicRoutes = [
 ]
 
 const router = new VueRouter({
-    // 不适用 history 模式
     routes: constantRoutes
 });
 router.$addRoutes = (params) => {
