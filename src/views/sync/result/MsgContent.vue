@@ -17,7 +17,7 @@
 </template>
 <script>
     import hljs from 'highlight.js';
-    import 'highlight.js/styles/monokai-sublime.min.css'
+    import 'highlight.js/styles/github.css'
     export default {
         name: 'MsgContent',
         components: {},
